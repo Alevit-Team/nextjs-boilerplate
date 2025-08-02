@@ -1,4 +1,4 @@
 # Alternative format for mise (also compatible with asdf)
 # This file is optional when using .mise.toml, but provides compatibility
 node 22
-pnpm 9.14.2
+pnpm latest
