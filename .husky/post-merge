@@ -1,0 +1,16 @@
+echo "🔄 Post-merge hook: Checking for dependency changes..."
+
+# Check if package.json or pnpm-lock.yaml changed in the merge
+changed_files=$(git diff-tree -r --name-only --no-commit-id HEAD@{1} HEAD 2>/dev/null || git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD 2>/dev/null || echo "")
+
+if echo "$changed_files" | grep -E "(package\.json|pnpm-lock\.yaml)$" >/dev/null 2>&1; then
+  echo "📦 Dependencies changed, running pnpm install..."
+  pnpm install || {
+    echo "❌ pnpm install failed!"
+    echo "💡 You may need to run 'pnpm install' manually"
+    exit 1
+  }
+  echo "✅ Dependencies updated successfully!"
+else
+  echo "✅ No dependency changes detected"
+fi
