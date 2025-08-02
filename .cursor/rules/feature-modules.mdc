@@ -1,0 +1,235 @@
+---
+description: Feature module organization and domain-driven structure guidelines
+globs: src/features/**/*
+---
+
+# Feature Module Guidelines
+
+## Feature-Based Architecture
+
+Features should be organized by **business domain**, not technical layers. Each feature is a self-contained module with its own components, logic, and types.
+
+## Feature Structure
+
+```
+src/features/[domain]/
+├── components/           # Feature-specific UI components
+│   ├── component-name.tsx
+│   └── index.ts         # Barrel export
+├── hooks/               # Feature-specific custom hooks
+│   ├── use-feature-hook.ts
+│   └── index.ts         # Barrel export
+├── services/            # Business logic and external API calls
+│   ├── feature-service.ts
+│   └── index.ts         # Barrel export
+└── types.ts            # Feature-specific TypeScript types
+```
+
+## Feature Examples
+
+### Content Platform Domain Features
+
+- **`subscription/`**: Channel subscription functionality
+- **`channel/`**: Channel catalog and details
+- **`user/`**: User profile and account management
+- **`auth/`**: Authentication and authorization
+- **`content/`**: Content creation and management
+- **`search/`**: Channel search and filtering
+
+## Feature Implementation Rules
+
+### 1. Feature Components (`components/`)
+
+```typescript
+// ✅ DO: Feature-specific business logic
+export const ChannelCard = ({ channel }: { channel: Channel }) => {
+  const { subscribeToChannel } = useSubscription();
+  const { isAuthenticated } = useAuth();
+
+  const handleSubscribe = () => {
+    if (!isAuthenticated) {
+      // Redirect to login
+      return;
+    }
+    subscribeToChannel(channel);
+  };
+
+  return (
+    <Card>
+      <Button onClick={handleSubscribe}>Subscribe</Button>
+    </Card>
+  );
+};
+
+// ❌ DON'T: Generic UI components in features
+export const GenericButton = ({ children }: { children: ReactNode }) => {
+  return <button>{children}</button>; // This belongs in src/components/ui/
+};
+```
+
+### 2. Feature Hooks (`hooks/`)
+
+```typescript
+// ✅ DO: Domain-specific logic
+export const useChannelFilters = () => {
+  const [filters, setFilters] = useState<ChannelFilters>({});
+  const [channels, setChannels] = useState<Channel[]>([]);
+
+  const applyFilters = useCallback((newFilters: ChannelFilters) => {
+    // Filter logic specific to channels
+  }, []);
+
+  return { filters, channels, applyFilters };
+};
+
+// ✅ DO: Integration with feature services
+export const useSubscription = () => {
+  const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>([]);
+
+  const subscribeToChannel = async (channel: Channel) => {
+    const result = await subscriptionService.subscribe(channel);
+    setSubscriptions(result.subscriptions);
+  };
+
+  return { subscriptions, subscribeToChannel };
+};
+```
+
+### 3. Feature Services (`services/`)
+
+```typescript
+// ✅ DO: Business logic and API integration
+export const channelService = {
+  async getChannels(filters?: ChannelFilters): Promise<Channel[]> {
+    const response = await fetch("/api/channels", {
+      method: "POST",
+      body: JSON.stringify(filters),
+    });
+    return response.json();
+  },
+
+  async getChannelById(id: string): Promise<Channel> {
+    const response = await fetch(`/api/channels/${id}`);
+    return response.json();
+  },
+
+  async searchChannels(query: string): Promise<Channel[]> {
+    // Search logic
+  },
+};
+
+// ✅ DO: Complex business rules
+export const subscriptionService = {
+  calculateSubscriptionCost(subscriptions: SubscriptionItem[]): number {
+    return subscriptions.reduce((total, item) => {
+      return total + (item.channel.subscriptionFee || 0);
+    }, 0);
+  },
+
+  validateSubscriptions(subscriptions: SubscriptionItem[]): ValidationResult {
+    // Business validation logic
+  },
+};
+```
+
+### 4. Feature Types (`types.ts`)
+
+```typescript
+// ✅ DO: Feature-specific types
+export interface Channel {
+  id: string;
+  name: string;
+  description: string;
+  category: ChannelCategory;
+  isActive: boolean;
+  subscriberCount: number;
+  subscriptionFee?: number;
+}
+
+export interface ChannelFilters {
+  category?: ChannelCategory;
+  feeRange?: [number, number];
+  activeOnly?: boolean;
+  minSubscribers?: number;
+}
+
+export interface SubscriptionItem {
+  channel: Channel;
+  subscribedAt: Date;
+  notificationsEnabled: boolean;
+}
+
+// ✅ DO: Feature-specific enums
+export enum ChannelCategory {
+  TECH = "tech",
+  GAMING = "gaming",
+  EDUCATION = "education",
+  ENTERTAINMENT = "entertainment",
+}
+```
+
+## Cross-Feature Communication
+
+### ✅ DO: Use global state or services
+
+```typescript
+// In src/store/subscriptionStore.ts
+export const useSubscriptionStore = create<SubscriptionState>((set) => ({
+  subscriptions: [],
+  subscribe: (channel) =>
+    set((state) => ({
+      subscriptions: [...state.subscriptions, { channel, subscribedAt: new Date(), notificationsEnabled: true }],
+    })),
+}));
+
+// In features/channel/components/channel-card.tsx
+export const ChannelCard = ({ channel }: { channel: Channel }) => {
+  const subscribe = useSubscriptionStore((state) => state.subscribe);
+
+  return (
+    <Card>
+      <Button onClick={() => subscribe(channel)}>Subscribe</Button>
+    </Card>
+  );
+};
+```
+
+### ❌ DON'T: Direct feature imports
+
+```typescript
+// ❌ DON'T: Import one feature directly into another
+import { SubscriptionService } from "@/features/subscription/services";
+
+// ✅ DO: Use global services or state instead
+import { useSubscriptionStore } from "@/store/subscription-store";
+```
+
+## Feature Independence Rules
+
+1. **No Cross-Feature Imports**: Features should not import from other features directly
+2. **Use Global Services**: Cross-feature communication via `src/services/` or global state
+3. **Shared UI Components**: Import UI components from `@/components/ui`, not other features
+4. **Feature-Specific Types**: Keep types within the feature unless they're globally shared
+5. **Self-Contained**: Each feature should be deletable without breaking others
+
+## Barrel Export Pattern
+
+```typescript
+// src/features/channel/components/index.ts
+export { ChannelCard } from "./channel-card";
+export { ChannelGrid } from "./channel-grid";
+export { ChannelFilters } from "./channel-filters";
+
+// src/features/channel/hooks/index.ts
+export { useChannelFilters } from "./use-channel-filters";
+export { useChannelSearch } from "./use-channel-search";
+
+// src/features/channel/services/index.ts
+export { channelService } from "./channel-service";
+
+// Main feature export: src/features/channel/index.ts
+export * from "./components";
+export * from "./hooks";
+export * from "./services";
+export * from "./types";
+```

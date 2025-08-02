@@ -1,0 +1,333 @@
+---
+description: File and folder naming conventions and patterns
+alwaysApply: true
+---
+
+# File Naming Conventions
+
+## General Naming Rules
+
+### Universal File Naming Rule
+
+**ALL FILES MUST USE kebab-case naming convention**
+
+```
+✅ DO:
+component-name.tsx
+user-service.ts
+use-auth.ts
+product-types.ts
+api-client.ts
+
+❌ DON'T:
+ComponentName.tsx
+userService.ts
+useAuth.ts
+productTypes.ts
+apiClient.ts
+```
+
+### File Extensions
+
+- **React Components**: `.tsx` for JSX components
+- **TypeScript**: `.ts` for non-JSX TypeScript files
+- **Stylesheets**: `.css` for CSS files (prefer global in Next.js)
+- **Configuration**: `.js`, `.ts`, `.json` as appropriate
+
+### Case Conventions
+
+#### kebab-case (All Files)
+
+```
+✅ DO:
+product-card.tsx
+user-profile.tsx
+payment-form.tsx
+auth-layout.tsx
+use-auth.ts
+use-product-filters.ts
+user-service.ts
+api-client.ts
+format-currency.ts
+
+❌ DON'T:
+ProductCard.tsx
+userProfile.tsx
+payment_form.tsx
+useAuth.ts
+UserService.ts
+api_client.ts
+```
+
+#### kebab-case (Pages in App Router)
+
+```
+✅ DO:
+src/app/user-profile/page.tsx
+src/app/product-details/page.tsx
+src/app/checkout-success/page.tsx
+
+❌ DON'T:
+src/app/userProfile/page.tsx
+src/app/ProductDetails/page.tsx
+```
+
+## Directory Structure Naming
+
+### Feature Directories
+
+```
+✅ DO: (singular, lowercase)
+src/features/product/
+src/features/user/
+src/features/cart/
+src/features/auth/
+
+❌ DON'T: (plural or mixed case)
+src/features/products/
+src/features/User/
+src/features/shopping-cart/
+```
+
+### Component Directories
+
+```
+✅ DO:
+src/components/ui/button.tsx
+src/components/layout/header.tsx
+src/features/product/components/product-card.tsx
+
+❌ DON'T:
+src/components/UI/Button.tsx
+src/components/Layout/Header.tsx
+src/components/ui/ProductCard.tsx
+```
+
+### Service and Utility Directories
+
+```
+✅ DO:
+src/services/user-service.ts
+src/lib/utils.ts
+src/hooks/use-auth.ts
+src/store/user-store.ts
+
+❌ DON'T:
+src/services/UserService.ts
+src/services/userService.ts
+src/lib/Utils.ts
+src/hooks/UseAuth.ts
+src/hooks/useAuth.ts
+```
+
+## Specific Naming Patterns
+
+### Components
+
+```typescript
+// ✅ DO: Component files use kebab-case, exports use PascalCase
+// File: product-card.tsx
+export const ProductCard = () => {
+  return <div>Product Card</div>;
+};
+
+// File: modal.tsx
+export const Modal = () => {
+  return <div>Modal</div>;
+};
+```
+
+### Hooks
+
+```typescript
+// ✅ DO: Start with 'use' prefix, use kebab-case file names
+// File: use-auth.ts
+export const useAuth = () => {
+  // Hook logic
+};
+
+// File: use-product-filters.ts
+export const useProductFilters = () => {
+  // Hook logic
+};
+```
+
+### Services
+
+```typescript
+// ✅ DO: End with 'service' suffix, use kebab-case file names
+// File: user-service.ts
+export const userService = {
+  getUser: () => {},
+  updateUser: () => {},
+};
+
+// File: api-service.ts
+export const apiService = {
+  get: () => {},
+  post: () => {},
+};
+```
+
+### Types
+
+```typescript
+// ✅ DO: Match the domain they represent, use kebab-case file names
+// File: user-types.ts
+export interface User {
+  id: string;
+  name: string;
+}
+
+// File: product-types.ts
+export interface Product {
+  id: string;
+  name: string;
+}
+
+// File: api-types.ts
+export interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+}
+```
+
+### Stores (State Management)
+
+```typescript
+// ✅ DO: End with 'store' suffix, use kebab-case file names
+// File: user-store.ts
+export const useUserStore = create(() => ({
+  user: null,
+}));
+
+// File: cart-store.ts
+export const useCartStore = create(() => ({
+  items: [],
+}));
+```
+
+## Next.js Specific Naming
+
+### App Router Files
+
+```
+✅ DO: (Required Next.js conventions)
+page.tsx          # Route page
+layout.tsx        # Layout wrapper
+loading.tsx       # Loading UI
+error.tsx         # Error boundary
+not-found.tsx     # 404 page
+route.ts          # API route
+
+❌ DON'T: (Won't work with Next.js)
+index.tsx
+Page.tsx
+Layout.tsx
+```
+
+### API Routes
+
+```
+✅ DO:
+src/app/api/products/route.ts
+src/app/api/products/[id]/route.ts
+src/app/api/auth/login/route.ts
+
+❌ DON'T:
+src/app/api/products/index.ts
+src/app/api/products/[id]/products.ts
+```
+
+### Dynamic Routes
+
+```
+✅ DO:
+src/app/products/[id]/page.tsx
+src/app/categories/[...slug]/page.tsx
+src/app/blog/[year]/[month]/page.tsx
+
+❌ DON'T:
+src/app/products/productId/page.tsx
+src/app/products/[productId]/page.tsx (prefer shorter names)
+```
+
+## Index Files and Barrel Exports
+
+### Barrel Export Naming
+
+```
+✅ DO: Always name them 'index.ts'
+src/components/ui/index.ts
+src/features/product/components/index.ts
+src/services/index.ts
+src/types/index.ts
+
+❌ DON'T:
+src/components/ui/exports.ts
+src/components/ui/main.ts
+```
+
+### Barrel Export Content
+
+```typescript
+// ✅ DO: Clean, organized exports with kebab-case file names
+// src/components/ui/index.ts
+export { Button } from "./button";
+export { Card } from "./card";
+export { Input } from "./input";
+export { Modal } from "./modal";
+
+// Export types
+export type { ButtonProps } from "./button";
+export type { CardProps } from "./card";
+```
+
+## Configuration Files
+
+### Root Level Config
+
+```
+✅ DO: (Standard conventions)
+next.config.ts
+tsconfig.json
+tailwind.config.ts
+eslint.config.mjs
+prettier.config.mjs
+package.json
+
+❌ DON'T:
+Next.config.ts
+TSConfig.json
+tailwind.config.ts
+```
+
+## Asset Naming
+
+### Images and Icons
+
+```
+✅ DO: (Descriptive, kebab-case)
+src/assets/images/hero-banner.jpg
+src/assets/images/product-placeholder.png
+src/assets/icons/arrow-right.svg
+public/logo.svg
+
+❌ DON'T:
+src/assets/images/HeroBanner.jpg
+src/assets/images/image1.png
+src/assets/icons/ArrowRight.svg
+```
+
+## Consistency Rules
+
+1. **All Files**: Always use kebab-case for file names (component-name.tsx, user-service.ts)
+2. **Component Exports**: Use PascalCase for exported component names (export const ComponentName)
+3. **Feature Directories**: Always singular, lowercase
+4. **Type Files**: Match the domain they serve with kebab-case (user-types.ts, product-types.ts)
+5. **Service Files**: End with '-service' suffix in kebab-case (user-service.ts)
+6. **Hook Files**: Start with 'use-' prefix in kebab-case (use-auth.ts, use-product-filters.ts)
+7. **Store Files**: End with '-store' suffix in kebab-case (user-store.ts)
+8. **Index Files**: Always named 'index.ts' for barrel exports
+9. **Next.js Files**: Follow exact Next.js conventions (page.tsx, layout.tsx, etc.)
+10. **API Routes**: Use 'route.ts' in appropriately named directories

@@ -1,0 +1,87 @@
+---
+description: Main project structure and architecture guidelines for Next.js 13+ with feature-based organization
+alwaysApply: true
+---
+
+# Project Structure Guidelines
+
+This project follows a **feature-based architecture** with Next.js 13+ App Router. Follow this structure strictly:
+
+## Core Directory Structure
+
+### `src/app/` - Next.js App Router
+
+- **Purpose**: Next.js 13+ App Router pages and layouts
+- **Contains**: `layout.tsx`, `page.tsx`, route-specific files
+- **Rules**:
+  - Use App Router conventions (not Pages Router)
+  - Each route should have its own directory
+  - Keep route files minimal - delegate complex logic to features
+
+### `src/components/` - Reusable UI Components
+
+- **`ui/`**: Basic UI primitives (buttons, inputs, cards, modals)
+- **`layout/`**: Layout-specific components (header, footer, navigation)
+- **Export barrel**: Use `index.ts` for clean imports
+
+### `src/features/` - Domain-Specific Modules
+
+- **Structure per feature**:
+  ```
+  src/features/[domain]/
+  ├── components/    # Feature-specific UI
+  ├── hooks/        # Feature-specific hooks
+  ├── services/     # Feature business logic
+  └── types.ts      # Feature-specific types
+  ```
+- **Examples**: `cart/`, `product/`, `user/`, `auth/`
+- **Rule**: Each feature should be self-contained
+
+### `src/lib/` - Shared Libraries
+
+- **`api/`**: API clients and helpers
+- **`auth/`**: Authentication utilities
+- **`prisma/`**: Database utilities (if using Prisma)
+- **`utils.ts`**: General utility functions
+
+### `src/services/` - Global Business Logic
+
+- Cross-feature business logic
+- External API integrations
+- Named as `[domain]-service.ts`
+
+### `src/hooks/` - Global Reusable Hooks
+
+- Custom hooks used across multiple features
+- Export via `index.ts`
+
+### `src/store/` - Global State Management
+
+- State management (Zustand, Redux, etc.)
+- Named as `[domain]-store.ts`
+
+### `src/types/` - Global TypeScript Types
+
+- Shared type definitions
+- Export via `index.ts`
+
+### `src/constants/` - App-wide Constants
+
+- **`api.ts`**: API endpoints and configuration
+- **`routes.ts`**: Application routes
+- **`config.ts`**: App configuration
+- **Export barrel**: Use `index.ts`
+
+### `src/assets/` - Static Assets
+
+- **`images/`**: Image files
+- **`icons/`**: Icon files and SVGs
+- Organize by type and feature when needed
+
+## Key Architecture Principles
+
+1. **Feature-First**: Group by business domain, not technical type
+2. **Separation of Concerns**: Keep UI, logic, and data separate
+3. **Barrel Exports**: Use `index.ts` files for clean imports
+4. **Next.js Best Practices**: Follow App Router conventions
+5. **Self-Contained Features**: Each feature should be independent

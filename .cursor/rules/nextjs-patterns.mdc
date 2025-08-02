@@ -1,0 +1,383 @@
+---
+description: Next.js 13+ App Router patterns and conventions
+globs: src/app/**/*,*.tsx,*.ts
+---
+
+# Next.js 13+ App Router Guidelines
+
+## App Router Structure
+
+Follow Next.js 13+ App Router conventions:
+
+```
+src/app/
+├── layout.tsx           # Root layout (required)
+├── page.tsx            # Home page
+├── loading.tsx         # Loading UI
+├── error.tsx           # Error UI
+├── not-found.tsx       # 404 page
+├── globals.css         # Global styles
+├── favicon.ico         # App favicon
+│
+├── (routes)/           # Route groups (optional)
+│   ├── dashboard/
+│   │   ├── layout.tsx  # Dashboard layout
+│   │   ├── page.tsx    # Dashboard page
+│   │   └── settings/
+│   │       └── page.tsx
+│   └── auth/
+│       ├── login/
+│       │   └── page.tsx
+│       └── register/
+│           └── page.tsx
+│
+└── api/                # API routes
+    ├── channels/
+    │   ├── route.ts    # GET/POST /api/channels
+    │   └── [id]/
+    │       └── route.ts # GET/PUT/DELETE /api/channels/[id]
+    └── auth/
+        └── route.ts
+```
+
+## Page Components
+
+### Root Layout
+
+```typescript
+// src/app/layout.tsx
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "My App",
+  description: "App description",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
+```
+
+### Page Components
+
+```typescript
+// src/app/page.tsx
+import { Button } from "@/components/ui";
+import { ChannelGrid } from "@/features/channel/components";
+
+export default function HomePage() {
+  return (
+    <main className="container mx-auto px-4 py-8">
+      <h1>Welcome to My App</h1>
+      <ChannelGrid />
+    </main>
+  );
+}
+
+// ✅ DO: Keep pages simple, delegate to feature components
+// ❌ DON'T: Put complex business logic directly in page components
+```
+
+### Dynamic Routes
+
+```typescript
+// src/app/channels/[id]/page.tsx
+import { ChannelDetails } from "@/features/channel/components";
+import { channelService } from "@/services/channel-service";
+
+interface ChannelPageProps {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default async function ChannelPage({ params }: ChannelPageProps) {
+  const channel = await channelService.getChannelById(params.id);
+
+  return <ChannelDetails channel={channel} />;
+}
+
+// Generate static params for static generation
+export async function generateStaticParams() {
+  const channels = await channelService.getChannels();
+
+  return channels.map((channel) => ({
+    id: channel.id,
+  }));
+}
+```
+
+## Loading and Error States
+
+### Loading UI
+
+```typescript
+// src/app/loading.tsx or src/app/channels/loading.tsx
+export default function Loading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+    </div>
+  );
+}
+```
+
+### Error Handling
+
+```typescript
+// src/app/error.tsx
+"use client";
+
+interface ErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export default function Error({ error, reset }: ErrorProps) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h2>Something went wrong!</h2>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  );
+}
+```
+
+## API Routes
+
+### RESTful API Patterns
+
+```typescript
+// src/app/api/channels/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { channelService } from "@/services/channel-service";
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get("category");
+
+    const channels = await channelService.getChannels({ category });
+
+    return NextResponse.json(channels);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch channels" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const channel = await channelService.createChannel(body);
+
+    return NextResponse.json(channel, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to create channel" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### Dynamic API Routes
+
+```typescript
+// src/app/api/channels/[id]/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { channelService } from "@/services/channel-service";
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const channel = await channelService.getChannelById(params.id);
+
+    if (!channel) {
+      return NextResponse.json({ error: "Channel not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(channel);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch channel" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Metadata and SEO
+
+### Static Metadata
+
+```typescript
+// src/app/channels/page.tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Channels | My App",
+  description: "Browse our amazing channels",
+  keywords: ["channels", "streaming", "content"],
+};
+```
+
+### Dynamic Metadata
+
+```typescript
+// src/app/channels/[id]/page.tsx
+import type { Metadata } from "next";
+import { channelService } from "@/services/channel-service";
+
+interface Props {
+  params: { id: string };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const channel = await channelService.getChannelById(params.id);
+
+  return {
+    title: `${channel.name} | My App`,
+    description: channel.description,
+    openGraph: {
+      title: channel.name,
+      description: channel.description,
+      images: [{ url: channel.imageUrl }],
+    },
+  };
+}
+```
+
+## Server Components vs Client Components
+
+### Server Components (Default)
+
+```typescript
+// ✅ DO: Use server components for data fetching
+import { channelService } from "@/services/channel-service";
+
+export default async function ChannelsPage() {
+  const channels = await channelService.getChannels();
+
+  return (
+    <div>
+      {channels.map((channel) => (
+        <div key={channel.id}>{channel.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Client Components
+
+```typescript
+// ✅ DO: Use 'use client' for interactivity
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui";
+
+export default function InteractiveComponent() {
+  const [count, setCount] = useState(0);
+
+  return <Button onClick={() => setCount(count + 1)}>Count: {count}</Button>;
+}
+```
+
+## Route Groups and Layouts
+
+### Route Groups
+
+```typescript
+// src/app/(dashboard)/dashboard/layout.tsx
+import { DashboardSidebar } from "@/components/layout";
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex">
+      <DashboardSidebar />
+      <main className="flex-1">{children}</main>
+    </div>
+  );
+}
+```
+
+### Parallel Routes
+
+```typescript
+// src/app/dashboard/@analytics/page.tsx
+export default function Analytics() {
+  return <div>Analytics Dashboard</div>;
+}
+
+// src/app/dashboard/@stats/page.tsx
+export default function Stats() {
+  return <div>Stats Overview</div>;
+}
+
+// src/app/dashboard/layout.tsx
+export default function DashboardLayout({
+  children,
+  analytics,
+  stats,
+}: {
+  children: React.ReactNode;
+  analytics: React.ReactNode;
+  stats: React.ReactNode;
+}) {
+  return (
+    <div>
+      {children}
+      <div className="grid grid-cols-2 gap-4">
+        {analytics}
+        {stats}
+      </div>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+### Page Organization
+
+1. **Keep pages minimal** - Delegate complex logic to feature components
+2. **Use proper TypeScript types** - Define props interfaces for dynamic routes
+3. **Handle loading and error states** - Use loading.tsx and error.tsx files
+4. **Optimize metadata** - Use generateMetadata for dynamic SEO
+5. **Leverage server components** - Use for data fetching when possible
+
+### API Route Organization
+
+1. **Follow RESTful conventions** - Use proper HTTP methods
+2. **Handle errors gracefully** - Return appropriate status codes
+3. **Validate inputs** - Use schema validation for request bodies
+4. **Keep logic in services** - API routes should be thin wrappers
+5. **Use proper TypeScript** - Type request/response objects
+
+### Performance
+
+1. **Use static generation** - Implement generateStaticParams when possible
+2. **Optimize images** - Use Next.js Image component
+3. **Code splitting** - Use dynamic imports for heavy components
+4. **Streaming** - Use Suspense boundaries for incremental loading

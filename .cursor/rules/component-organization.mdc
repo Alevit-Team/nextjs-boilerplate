@@ -1,0 +1,130 @@
+---
+description: Component organization, naming, and structure guidelines
+globs: *.tsx,*.ts
+---
+
+# Component Organization Guidelines
+
+## Component Categories
+
+### 1. UI Components (`src/components/ui/`)
+
+- **Purpose**: Basic, reusable UI primitives
+- **Examples**: `Button`, `Input`, `Card`, `Modal`, `Select`
+- **Rules**:
+  - Keep components generic and unopinionated
+  - Use compound component patterns when appropriate
+  - Accept standard HTML props via spread
+  - Export from `src/components/ui/index.ts`
+
+```typescript
+// ✅ DO: Generic, reusable UI component
+export const Button = ({
+  children,
+  variant = "primary",
+  ...props
+}: ButtonProps) => {
+  return (
+    <button className={cn(buttonVariants({ variant }))} {...props}>
+      {children}
+    </button>
+  );
+};
+
+// ❌ DON'T: Business logic in UI components
+export const SubmitOrderButton = ({ order }: { order: Order }) => {
+  const { submitOrder } = useOrderService();
+  // Business logic doesn't belong here
+};
+```
+
+### 2. Layout Components (`src/components/layout/`)
+
+- **Purpose**: App-wide layout and navigation
+- **Examples**: `Header`, `Footer`, `Sidebar`, `Navigation`
+- **Rules**:
+  - Handle app-wide UI structure
+  - Can contain navigation logic
+  - Should be responsive by default
+
+### 3. Feature Components (`src/features/[domain]/components/`)
+
+- **Purpose**: Domain-specific UI components
+- **Rules**:
+  - Encapsulate feature-specific business logic
+  - Can use feature-specific hooks and services
+  - Should import UI components from `@/components/ui`
+
+## Naming Conventions
+
+### File Naming
+
+- **Components**: kebab-case (e.g., `button.tsx`, `user-profile.tsx`)
+- **Hooks**: kebab-case starting with "use-" (e.g., `use-auth.ts`, `use-user-filters.ts`)
+- **Services**: kebab-case ending with "-service" (e.g., `user-service.ts`, `message-service.ts`)
+- **Types**: kebab-case ending with "-types" (e.g., `user-types.ts`, `api-types.ts`)
+
+### Component Structure
+
+```typescript
+// ✅ DO: Proper component structure
+interface ComponentProps {
+  // Props interface
+}
+
+export const ComponentName = ({ prop1, prop2, ...rest }: ComponentProps) => {
+  // Component logic
+  return <div {...rest}>{/* JSX */}</div>;
+};
+
+// Export types if needed
+export type { ComponentProps };
+```
+
+## Import Organization
+
+### Import Order
+
+1. React imports
+2. Third-party libraries
+3. Internal components (UI, then layout)
+4. Feature-specific imports
+5. Types
+6. Relative imports
+
+```typescript
+// ✅ DO: Organized imports
+import React from "react";
+import { NextPage } from "next";
+import { Button } from "@/components/ui";
+import { Header } from "@/components/layout";
+import { ProductCard } from "@/features/product/components";
+import { Product } from "@/types";
+import { useLocalState } from "./hooks";
+```
+
+## Export Patterns
+
+### Barrel Exports (`index.ts`)
+
+```typescript
+// ✅ DO: Clean barrel exports in src/components/ui/index.ts
+export { Button } from "./button";
+export { Input } from "./input";
+export { Card } from "./card";
+
+// Export types too
+export type { ButtonProps } from "./button";
+export type { InputProps } from "./input";
+```
+
+### Component Co-location
+
+```
+product-card/
+├── product-card.tsx      # Main component
+├── product-card.test.tsx # Tests
+├── product-card.stories.tsx # Storybook (if used)
+├── hooks.ts             # Component-specific hooks
+└── index.ts             # Export
+```
