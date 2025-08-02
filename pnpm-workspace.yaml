@@ -1,3 +1,7 @@
+# pnpm workspace configuration
+packages:
+  - "."
+
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - sharp

@@ -64,23 +64,22 @@ updates:
       - 'dependencies'
       - 'javascript'
 
-    # Reasonable PR limits
-    open-pull-requests-limit: 10
+    # Conservative PR limits to reduce conflicts
+    open-pull-requests-limit: 5
 
-    # Cooldown period to avoid too frequent updates
+    # Cooldown period to avoid too frequent updates and conflicts
     cooldown:
-      default-days: 7
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
+      default-days: 14
+      semver-major-days: 60
+      semver-minor-days: 14
+      semver-patch-days: 7
 
     # Versioning strategy for this project type
     versioning-strategy: 'increase-if-necessary'
 
-    # Allow both direct and indirect dependencies
+    # Allow only direct dependencies to reduce conflicts
     allow:
       - dependency-type: 'direct'
-      - dependency-type: 'indirect'
 
     # Ignore certain updates that might be problematic
     ignore:
@@ -89,12 +88,20 @@ updates:
         versions: ['>19.0.0-0']
       - dependency-name: 'react-dom'
         versions: ['>19.0.0-0']
+      
+      # Ignore beta/experimental packages that might cause resolution issues
+      - dependency-name: 'tailwindcss'
+        versions: ['>=4.0.0-alpha.0 <5.0.0']
+      - dependency-name: '@tailwindcss/*'
+        versions: ['>=4.0.0-alpha.0 <5.0.0']
 
       # Ignore major version updates for these critical packages
       # (they will be handled by the major-updates group)
       - dependency-name: 'next'
         update-types: ['version-update:semver-major']
       - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint'
         update-types: ['version-update:semver-major']
 
   # GitHub Actions ecosystem
