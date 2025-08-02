@@ -1,0 +1,128 @@
+# Dependabot configuration for Next.js project with pnpm workspaces
+# Using latest Dependabot features and best practices for 2024/2025
+
+version: 2
+
+updates:
+  # NPM ecosystem for JavaScript/TypeScript dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'UTC'
+
+    # Dependency groups to reduce PR noise
+    groups:
+      # Frontend dependencies group
+      frontend:
+        applies-to: version-updates
+        patterns:
+          - 'react*'
+          - 'next*'
+          - '@types/react*'
+          - 'typescript'
+          - 'eslint*'
+          - 'prettier*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+      # UI/Styling dependencies group
+      ui-styling:
+        applies-to: version-updates
+        patterns:
+          - '@radix-ui/*'
+          - 'tailwind*'
+          - '@tailwindcss/*'
+          - 'class-variance-authority'
+          - 'clsx'
+          - 'tailwind-merge'
+          - 'lucide-react'
+          - 'tw-animate-css'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+      # Major updates group (separate PRs for careful review)
+      major-updates:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        update-types:
+          - 'major'
+
+    # Commit message customization
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'deps-dev'
+      include: 'scope'
+
+    # PR customization
+    labels:
+      - 'dependencies'
+      - 'javascript'
+
+    # Reasonable PR limits
+    open-pull-requests-limit: 10
+
+    # Cooldown period to avoid too frequent updates
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+
+    # Versioning strategy for this project type
+    versioning-strategy: 'increase-if-necessary'
+
+    # Allow both direct and indirect dependencies
+    allow:
+      - dependency-type: 'direct'
+      - dependency-type: 'indirect'
+
+    # Ignore certain updates that might be problematic
+    ignore:
+      # Ignore React 18+ canary/beta versions
+      - dependency-name: 'react'
+        versions: ['18.0.0-*', '19.0.0-*']
+      - dependency-name: 'react-dom'
+        versions: ['18.0.0-*', '19.0.0-*']
+
+      # Ignore major version updates for these critical packages
+      # (they will be handled by the major-updates group)
+      - dependency-name: 'next'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+
+  # GitHub Actions ecosystem
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '10:00'
+      timezone: 'UTC'
+
+    # Group GitHub Actions updates
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        update-types:
+          - 'major'
+          - 'minor'
+          - 'patch'
+
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+
+    labels:
+      - 'github-actions'
+      - 'ci'
+
+    open-pull-requests-limit: 5
