@@ -7,11 +7,10 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
-
-  "mise.configureExtensionsUseSymLinks": true,
-
-  // Use mise-managed Node.js for debugging (compatible with symlinks)
+  // Prevent mise vscode extension to automatically configure extensions
+  "mise.configureExtensionsAutomatically": false,
+  // Use mise-managed Node.js for debugging
   "debug.javascript.defaultRuntimeExecutable": {
-    "pwa-node": "${workspaceFolder}\\.vscode\\mise-tools\\node"
+    "pwa-node": "node"
   }
 }
