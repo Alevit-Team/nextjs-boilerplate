@@ -12,20 +12,6 @@ NODE_OPTIONS = "--max-old-space-size=4096"
 # Set environment for development
 NODE_ENV = "development"
 
-[tasks]
-# Common development tasks
-dev = "pnpm dev"
-build = "pnpm build"
-start = "pnpm start"
-lint = "pnpm lint"
-format = "pnpm format"
-install = "pnpm install"
-
-# Setup task for new developers
-setup = [
-  "pnpm install",
-  "echo 'Project setup complete! Run mise run dev to start development.'",
-]
 
 [settings]
 # Auto-install missing tools

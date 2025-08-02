@@ -21,109 +21,89 @@ A modern Next.js boilerplate with TypeScript, TailwindCSS, and essential develop
 3. **Open in browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 🔧 Using mise (Recommended)
+## 🔧 Tool Version Management
 
-This project is configured to use [mise](https://mise.jdx.dev/) for managing tool versions (Node.js, pnpm, etc.).
+This project uses [mise](https://mise.jdx.dev/) to automatically manage Node.js and pnpm versions. The tool versions are defined in `.mise.toml` and will be automatically installed when you navigate to the project directory.
 
-### Setup with mise
+### Installing mise
 
-1. **Install mise** (if not already installed):
+Choose the installation method for your platform:
 
-   **macOS/Linux:**
-
-   ```bash
-   # Via install script
-   curl https://mise.jdx.dev/install.sh | sh
-
-   # Or via package manager
-   brew install mise
-   ```
-
-   **Windows:**
-
-   ```powershell
-   # Via Scoop (recommended)
-   scoop install mise
-
-   # Or via Chocolatey
-   choco install mise
-
-   # Or via WinGet
-   winget install jdx.mise
-
-   # Manual installation: Download from GitHub releases
-   # https://github.com/jdx/mise/releases
-   ```
-
-2. **Activate mise** in your shell:
-
-   **Unix/Linux/macOS:**
-
-   ```bash
-   # For bash
-   echo 'eval "$(mise activate bash)"' >> ~/.bashrc
-
-   # For zsh
-   echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
-
-   # For fish
-   echo 'mise activate fish | source' >> ~/.config/fish/config.fish
-   ```
-
-   **Windows:**
-
-   ```powershell
-   # For PowerShell
-   Add-Content $PROFILE 'Invoke-Expression (&mise activate powershell)'
-
-   # For Command Prompt (requires manual setup each session)
-   # mise activate cmd
-   ```
-
-3. **Install project tools** automatically:
-
-   ```bash
-   cd nextjs-boilerplate
-   mise install  # Installs Node.js 22 and pnpm automatically
-   ```
-
-4. **Run setup task**:
-   ```bash
-   mise run setup  # Installs dependencies and sets up the project
-   ```
-
-### mise Commands
+#### Quick Install (Linux/macOS)
 
 ```bash
-# Install all tools defined in .mise.toml
-mise install
-
-# Run development server
-mise run dev
-
-# Build project
-mise run build
-
-# Format code
-mise run format
-
-# Show current tool versions
-mise list
+curl https://mise.run | sh
 ```
 
-### VSCode Integration
+#### Platform-Specific Installation
 
-The project includes VSCode settings for seamless mise integration:
+**macOS:**
 
-- **Debugging**: Uses mise-managed Node.js automatically (via PATH)
-- **Terminal**: Uses system PowerShell with mise activation
-- **Zero setup**: Works immediately after `mise install` - no symlinks needed
+```bash
+# Via Homebrew (recommended)
+brew install mise
 
-**Configuration in `.vscode/settings.json`:**
+# Via MacPorts
+sudo port install mise
+```
 
-- ✅ Portable across all team members
-- ✅ No manual symlink creation required
-- ✅ Automatic Node.js version detection via mise
+**Linux (Debian/Ubuntu):**
+
+```bash
+sudo apt update -y && sudo apt install -y gpg sudo wget curl
+sudo install -dm 755 /etc/apt/keyrings
+wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+sudo apt update
+sudo apt install -y mise
+```
+
+**Windows:**
+
+```powershell
+# Via WinGet (recommended)
+winget install jdx.mise
+
+# Via Scoop
+scoop install mise
+
+# Via Chocolatey
+choco install mise
+```
+
+### Activate mise in your shell
+
+After installation, add mise to your shell:
+
+**Bash:**
+
+```bash
+echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+```
+
+**Zsh:**
+
+```bash
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+```
+
+**PowerShell (Windows):**
+
+```powershell
+Add-Content $PROFILE 'mise activate pwsh | Out-String | Invoke-Expression'
+```
+
+### Using mise with this project
+
+Once mise is installed and activated:
+
+1. **Navigate to the project directory** - mise will automatically install the required Node.js and pnpm versions
+2. **Verify installation:**
+   ```bash
+   mise doctor  # Check for any issues
+   node -v      # Should show Node.js 22.18.0
+   pnpm -v      # Should show pnpm 10.14.0
+   ```
 
 ## 📦 What's Included
 
