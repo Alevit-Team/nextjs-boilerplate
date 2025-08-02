@@ -1,0 +1,1 @@
+c:/users/alexandros/appdata/local/mise/shims/node.cmd

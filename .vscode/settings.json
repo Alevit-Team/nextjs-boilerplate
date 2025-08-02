@@ -1,9 +1,17 @@
 {
+  // TailwindCSS configuration
   "tailwindCSS.classFunctions": ["tw", "clsx", "cn", "cva", "tw\\.[a-z-]+"],
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "editor.quickSuggestions": {
     "strings": "on"
+  },
+
+  "mise.configureExtensionsUseSymLinks": true,
+
+  // Use mise-managed Node.js for debugging (compatible with symlinks)
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "${workspaceFolder}\\.vscode\\mise-tools\\node"
   }
 }

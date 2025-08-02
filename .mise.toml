@@ -1,0 +1,35 @@
+[tools]
+# Node.js version - using LTS version 22
+node = "22"
+
+# pnpm package manager
+pnpm = "latest"
+
+[env]
+# Ensure Node.js options for development
+NODE_OPTIONS = "--max-old-space-size=4096"
+
+# Set environment for development
+NODE_ENV = "development"
+
+[tasks]
+# Common development tasks
+dev = "pnpm dev"
+build = "pnpm build"
+start = "pnpm start"
+lint = "pnpm lint"
+format = "pnpm format"
+install = "pnpm install"
+
+# Setup task for new developers
+setup = [
+  "pnpm install",
+  "echo 'Project setup complete! Run mise run dev to start development.'",
+]
+
+[settings]
+# Auto-install missing tools
+auto_install = true
+
+# Show mise status in shell prompt
+status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = false }
