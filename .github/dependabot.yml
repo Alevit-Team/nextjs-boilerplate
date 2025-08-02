@@ -84,11 +84,11 @@ updates:
 
     # Ignore certain updates that might be problematic
     ignore:
-      # Ignore React 18+ canary/beta versions
+      # Ignore React pre-release versions (alpha, beta, rc, canary)
       - dependency-name: 'react'
-        versions: ['18.0.0-*', '19.0.0-*']
+        versions: ['>19.0.0-0']
       - dependency-name: 'react-dom'
-        versions: ['18.0.0-*', '19.0.0-*']
+        versions: ['>19.0.0-0']
 
       # Ignore major version updates for these critical packages
       # (they will be handled by the major-updates group)
