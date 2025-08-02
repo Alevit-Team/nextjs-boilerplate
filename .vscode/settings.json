@@ -1,9 +1,16 @@
 {
+  // TailwindCSS configuration
   "tailwindCSS.classFunctions": ["tw", "clsx", "cn", "cva", "tw\\.[a-z-]+"],
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "editor.quickSuggestions": {
     "strings": "on"
+  },
+  // Prevent mise vscode extension to automatically configure extensions
+  "mise.configureExtensionsAutomatically": false,
+  // Use mise-managed Node.js for debugging
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "node"
   }
 }

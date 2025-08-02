@@ -3,6 +3,7 @@
     "bradlc.vscode-tailwindcss",
     "esbenp.prettier-vscode",
     "dsznajder.es7-react-js-snippets",
-    "prisma.prisma"
+    "prisma.prisma",
+    "hverlin.mise-vscode"
   ]
 }
