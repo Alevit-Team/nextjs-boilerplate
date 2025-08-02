@@ -1,9 +1,9 @@
 [tools]
 # Node.js version - using LTS version 22
-node = "22"
+node = "22.18.0"
 
 # pnpm package manager
-pnpm = "latest"
+pnpm = "10.14.0"
 
 [env]
 # Ensure Node.js options for development
