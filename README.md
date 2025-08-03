@@ -48,7 +48,7 @@ git push upstream HEAD:main    # Opens a PR on the boilerplate repo
 ## One-liner Alias (Optional Quality-of-Life)
 
 ```bash
-git config alias.sync-template '!git fetch upstream && git merge upstream/main --allow-unrelated-histories'
+git config alias.sync-template '!git fetch upstream && git diff --quiet HEAD upstream/main && echo "Already up to date" || git merge upstream/main --allow-unrelated-histories'
 ```
 
 Now `git sync-template` pulls the latest boilerplate in one go.
