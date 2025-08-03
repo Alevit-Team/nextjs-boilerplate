@@ -1,160 +1,163 @@
 # Next.js Boilerplate
 
-A modern Next.js boilerplate with TypeScript, TailwindCSS, and essential development tools.
+A modern, production-ready Next.js boilerplate with TypeScript, TailwindCSS, and essential development tools. Perfect for rapid application development and team projects.
 
-## 🚀 Quick Setup
-
-1. **Clone and install dependencies:**
-
-   ```bash
-   git clone <your-repo-url>
-   cd nextjs-boilerplate
-   pnpm install
-   ```
-
-2. **Start development server:**
-
-   ```bash
-   pnpm dev
-   ```
-
-3. **Open in browser:**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 🔧 Tool Version Management
-
-This project uses [mise](https://mise.jdx.dev/) to automatically manage Node.js and pnpm versions. The tool versions are defined in `.mise.toml` and will be automatically installed when you navigate to the project directory.
-
-### Installing mise
-
-Choose the installation method for your platform:
-
-#### Quick Install (Linux/macOS)
+## 🚀 Create a Project from this Template
 
 ```bash
-curl https://mise.run | sh
+# 1 · Create a brand-new repo based on the template and clone it
+gh repo create <your-new-project> \
+  --template Alevit-Team/nextjs-boilerplate \
+  --private --clone
+
+# 2 · Wire this boilerplate back in as "upstream"
+git remote add upstream https://github.com/Alevit-Team/nextjs-boilerplate.git
 ```
 
-#### Platform-Specific Installation
-
-**macOS:**
+That's it! Your project is now ready to run:
 
 ```bash
-# Via Homebrew (recommended)
-brew install mise
-
-# Via MacPorts
-sudo port install mise
+cd <your-new-project>
+pnpm install           # Install dependencies
+pnpm dev              # Start development server
 ```
 
-**Linux (Debian/Ubuntu):**
+Open [http://localhost:3000](http://localhost:3000) to see your new project.
+
+## 🔄 Pull Template Updates Later
+
+Whenever the boilerplate ships improvements:
 
 ```bash
-sudo apt update -y && sudo apt install -y gpg sudo wget curl
-sudo install -dm 755 /etc/apt/keyrings
-wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
-echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
-sudo apt update
-sudo apt install -y mise
+git fetch upstream
+git merge upstream/main          # or: git merge upstream/v1.3.0
 ```
 
-**Windows:**
+> **Tip:** We tag stable releases (`v1.2.0`, `v1.3.0`…), so you can merge a known-good state instead of whatever is on `main`.
 
-```powershell
-# Via WinGet (recommended)
-winget install jdx.mise
+## ⬆️ Send Fixes Back Upstream (Optional)
 
-# Via Scoop
-scoop install mise
-
-# Via Chocolatey
-choco install mise
-```
-
-### Activate mise in your shell
-
-After installation, add mise to your shell:
-
-**Bash:**
+If you improve something that belongs in the template:
 
 ```bash
-echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+# Commit your changes first, then
+git push upstream HEAD:main    # Opens a PR on the boilerplate repo
 ```
 
-**Zsh:**
+## One-liner Alias (Optional Quality-of-Life)
 
 ```bash
-echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+git config alias.sync-template '!git fetch upstream && git merge upstream/main'
 ```
 
-**PowerShell (Windows):**
+Now `git sync-template` pulls the latest boilerplate in one go.
 
-```powershell
-Add-Content $PROFILE 'mise activate pwsh | Out-String | Invoke-Expression'
-```
-
-### Using mise with this project
-
-Once mise is installed and activated:
-
-1. **Navigate to the project directory** - mise will automatically install the required Node.js and pnpm versions
-2. **Verify installation:**
-   ```bash
-   mise doctor  # Check for any issues
-   node -v      # Should show Node.js 22.18.0
-   pnpm -v      # Should show pnpm 10.14.0
-   ```
+---
 
 ## 📦 What's Included
 
-- **Next.js 15** with App Router and Turbopack
-- **TypeScript** for type safety
-- **TailwindCSS** for styling
-- **Radix UI** components
-- **Lucide React** icons
-- **ESLint & Prettier** for code quality
+- **[Next.js 15](https://nextjs.org/)** with App Router and Turbopack
+- **[TypeScript](https://www.typescriptlang.org/)** for type safety
+- **[TailwindCSS](https://tailwindcss.com/)** for styling
+- **[Radix UI](https://www.radix-ui.com/)** components
+- **[Lucide React](https://lucide.dev/)** icons
+- **[ESLint](https://eslint.org/) & [Prettier](https://prettier.io/)** for code quality
+- **[mise](https://mise.jdx.dev/)** for tool version management
+- **Feature-based architecture** for scalability
+
+## 🏃 Quick Start (Alternative to Template)
+
+If you prefer to clone directly:
+
+```bash
+git clone https://github.com/Alevit-Team/nextjs-boilerplate.git my-project
+cd my-project
+pnpm install
+pnpm dev
+```
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](./docs/) folder:
+
+- **[Template Usage](./docs/template-usage.md)** - Using this repo as a template
+- **[Getting Started](./docs/getting-started.md)** - Complete setup guide
+- **[Project Structure](./docs/project-structure.md)** - Architecture and organization
+- **[Development Guide](./docs/development.md)** - Development workflow and tools
+- **[Deployment Guide](./docs/deployment.md)** - Production deployment
 
 ## 🛠️ Development Commands
 
 ```bash
-# Start development server with Turbopack
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
-
-# Run linting
-pnpm lint
-
-# Format code with Prettier
-pnpm format
+pnpm dev      # Start development server with Turbopack
+pnpm build    # Build for production
+pnpm start    # Start production server
+pnpm lint     # Run linting
+pnpm format   # Format code with Prettier
 ```
 
-## 📁 Project Structure
+## 🔧 Tool Version Management
+
+This project uses [mise](https://mise.jdx.dev/) to automatically manage Node.js and pnpm versions:
+
+- **Node.js:** 22.18.0
+- **pnpm:** 10.14.0
+
+See the [Getting Started guide](./docs/getting-started.md) for mise installation instructions.
+
+## 🏗️ Project Structure
 
 ```
 src/
-├── app/           # App Router pages and layouts
+├── app/           # Next.js App Router pages and layouts
 ├── components/    # Reusable React components
 │   └── ui/        # UI components (buttons, etc.)
 └── lib/           # Utility functions
 ```
 
-## 🔧 Maintenance
+This follows a **feature-based architecture** designed to scale from simple projects to complex applications. See the [Project Structure guide](./docs/project-structure.md) for detailed information.
 
-- **Update dependencies:** `pnpm update`
-- **Check for outdated packages:** `pnpm outdated`
-- **Format code:** `pnpm format` (runs automatically on save)
-- **Lint code:** `pnpm lint` (runs before commits)
+## 🚀 Deploy
 
-## 🚀 Deployment
+Deploy easily to any hosting platform that supports Node.js:
 
-Deploy easily on [Vercel](https://vercel.com/new) or any hosting platform that supports Node.js.
+**Vercel (Recommended):**
 
-```bash
-pnpm build    # Build for production
-pnpm start    # Start production server
-```
+- Connect your GitHub repository to [Vercel](https://vercel.com/new)
+- Automatic deployment on every push
+
+**Other platforms:**
+
+- Build: `pnpm build`
+- Start: `pnpm start`
+- Port: `3000`
+
+See the [Deployment Guide](./docs/deployment.md) for platform-specific instructions.
+
+## 🤝 Contributing
+
+We welcome contributions to improve this boilerplate! Whether it's:
+
+- 🐛 Bug fixes
+- ✨ New features
+- 📚 Documentation improvements
+- 🎨 UI/UX enhancements
+
+Please see our contributing guidelines in the documentation and feel free to open issues or pull requests.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+**Why these steps work:**
+
+1. **Template repositories** let anyone create a fresh repo with no shared Git history—perfect for boilerplates
+2. The GitHub CLI's `gh repo create --template` flag performs that creation (and `--clone` pulls it locally)
+3. Adding `upstream` with `git remote add` is the standard way to track the original source of a template
+4. A normal `git fetch` + `git merge` pulls updates whenever you want
+
+This gives you an ultra-lightweight, zero-surprise workflow for using and maintaining projects based on this template.
+
+**Happy coding!** 🎉
