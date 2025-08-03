@@ -10,14 +10,15 @@ gh repo create <your-new-project> \
   --template Alevit-Team/nextjs-boilerplate \
   --private --clone
 
-# 2 · Wire this boilerplate back in as "upstream"
+# 2 · Navigate to your new project and wire the boilerplate as "upstream"
+cd <your-new-project>
 git remote add upstream https://github.com/Alevit-Team/nextjs-boilerplate.git
 ```
 
 That's it! Your project is now ready to run:
 
 ```bash
-cd <your-new-project>
+# You're already in <your-new-project> from step 2
 pnpm install           # Install dependencies
 pnpm dev              # Start development server
 ```
@@ -47,7 +48,7 @@ git push upstream HEAD:main    # Opens a PR on the boilerplate repo
 ## One-liner Alias (Optional Quality-of-Life)
 
 ```bash
-git config alias.sync-template '!git fetch upstream && git merge upstream/main'
+git config alias.sync-template '!git fetch upstream && git merge upstream/main --allow-unrelated-histories'
 ```
 
 Now `git sync-template` pulls the latest boilerplate in one go.
