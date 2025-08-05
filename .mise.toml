@@ -9,10 +9,6 @@ pnpm = "10.14.0"
 # Ensure Node.js options for development
 NODE_OPTIONS = "--max-old-space-size=4096"
 
-# Set environment for development
-NODE_ENV = "development"
-
-
 [settings]
 # Auto-install missing tools
 auto_install = true
