@@ -6,4 +6,5 @@ export const env = createEnv({
     // DATABASE_URL: z.url(),
   },
   experimental__runtimeEnv: process.env,
+  emptyStringAsUndefined: true,
 });
