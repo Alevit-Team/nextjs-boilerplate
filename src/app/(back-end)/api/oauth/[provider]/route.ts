@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 async function getOAuth(
   request: NextRequest,
-  { params }: { params: { provider: string } }
+  context: { params: Promise<{ provider: string }> }
 ) {
-  const { provider } = params;
+  const { provider } = await context.params;
   const code = request.nextUrl.searchParams.get('code');
 
   const { access_token } = await (

@@ -5,9 +5,9 @@ import { NextResponse } from 'next/server';
 
 async function getUserById(
   _request: Request,
-  { params }: { params: { userId: string } }
+  context: { params: Promise<{ userId: string }> }
 ) {
-  const { userId } = params;
+  const { userId } = await context.params;
   const users = await db.query.UserTable.findMany({
     where: eq(UserTable.id, userId),
     columns: {

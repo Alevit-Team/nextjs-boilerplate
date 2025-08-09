@@ -8,10 +8,6 @@ console.log('POSTGRES_PASSWORD:', env.POSTGRES_PASSWORD);
 console.log('POSTGRES_DB:', env.POSTGRES_DB);
 console.log('REDIS_URL:', env.REDIS_URL);
 console.log('REDIS_PASSWORD:', env.REDIS_PASSWORD);
-console.log(
-  'SESSION_TOUCH_INTERVAL_SECONDS:',
-  env.SESSION_TOUCH_INTERVAL_SECONDS
-);
 
 console.log('\n🔍 Raw process.env values:');
 console.log('DATABASE_URL:', process.env.DATABASE_URL);
