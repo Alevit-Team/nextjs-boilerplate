@@ -13,13 +13,6 @@ export const env = createEnv({
     REDIS_URL: z.url(),
     REDIS_PASSWORD: z.string().optional(),
     REDIS_TOKEN: z.string().optional(),
-
-    // Session
-    SESSION_TOUCH_INTERVAL_SECONDS: z.coerce
-      .number()
-      .int()
-      .positive()
-      .optional(),
   },
   experimental__runtimeEnv: process.env,
   emptyStringAsUndefined: true,

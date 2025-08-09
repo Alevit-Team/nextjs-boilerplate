@@ -2,13 +2,11 @@ import { userRoles } from '@/db/schema';
 import { randomBytes } from 'crypto';
 import z from 'zod';
 import redisClient from '@/redis';
-import { env } from '@/env/server';
 
 export const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // 7 days
 export const COOKIE_SESSION_KEY = 'sessionId';
 // Throttle interval for session expiration refresh; defaults to 5 minutes
-export const SESSION_TOUCH_INTERVAL_SECONDS =
-  env.SESSION_TOUCH_INTERVAL_SECONDS ?? 60 * 5;
+export const SESSION_TOUCH_INTERVAL_SECONDS = 60 * 5;
 export const COOKIE_SESSION_TOUCH_KEY = 'sessionTouchAt';
 
 const sessionSchema = z.object({

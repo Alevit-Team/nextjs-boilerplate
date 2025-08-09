@@ -6,5 +6,6 @@ export default async function ProtectedLayout({
   children: React.ReactNode;
 }) {
   await getCurrentUser({ redirectIfNotFound: true });
+
   return <>{children}</>;
 }
