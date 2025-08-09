@@ -13,12 +13,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useActionState } from 'react';
 import { signUpSchema } from '../schemas';
 import Link from 'next/link';
 
 export function SignUpForm() {
-  const [error, setError] = useState<string>();
+  const [state, action, pending] = useActionState(signUp, null);
   const form = useForm<z.infer<typeof signUpSchema>>({
     defaultValues: {
       name: '',
@@ -27,14 +27,9 @@ export function SignUpForm() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof signUpSchema>) {
-    const error = await signUp(data);
-    setError(error);
-  }
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form action={action} className='space-y-8'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -90,10 +85,12 @@ export function SignUpForm() {
           )}
         />
         <div className='flex justify-end gap-4'>
-          <Button asChild variant='link'>
+          <Button asChild variant='link' disabled={pending}>
             <Link href='/sign-in'>Sign In</Link>
           </Button>
-          <Button type='submit'>Sign Up</Button>
+          <Button type='submit' disabled={pending}>
+            {pending ? 'Signing up...' : 'Sign Up'}
+          </Button>
         </div>
       </form>
     </Form>

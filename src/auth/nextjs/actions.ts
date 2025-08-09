@@ -15,7 +15,9 @@ import { cookies } from 'next/headers';
 import { createUserSession, removeUserFromSession } from '../core/session';
 // import { getOAuthClient } from '../core/oauth/base';
 
-export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
+export async function signIn(previousState: unknown, formData: FormData) {
+  const unsafeData = Object.fromEntries(formData);
+
   const { success, data } = signInSchema.safeParse(unsafeData);
 
   if (!success) return 'Unable to log you in';
@@ -42,7 +44,9 @@ export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
   redirect('/');
 }
 
-export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
+export async function signUp(previousState: unknown, formData: FormData) {
+  const unsafeData = Object.fromEntries(formData);
+
   const { success, data } = signUpSchema.safeParse(unsafeData);
 
   if (!success) return 'Unable to create account';
@@ -50,7 +54,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
   const existingUser = await db.query.UserTable.findFirst({
     where: eq(UserTable.email, data.email),
   });
-
+  console.log(existingUser);
   if (existingUser != null) return 'Account already exists for this email';
 
   try {
