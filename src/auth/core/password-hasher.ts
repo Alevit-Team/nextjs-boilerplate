@@ -1,4 +1,4 @@
-import { randomBytes, scrypt } from 'crypto';
+import { randomBytes, scrypt, timingSafeEqual } from 'crypto';
 
 export async function hashPassword(
   password: string,
@@ -10,6 +10,23 @@ export async function hashPassword(
       resolve(hash.toString('hex').normalize());
     });
   });
+}
+
+export async function comparePasswords({
+  password,
+  salt,
+  hashedPassword,
+}: {
+  password: string;
+  salt: string;
+  hashedPassword: string;
+}) {
+  const inputHashedPassword = await hashPassword(password, salt);
+
+  return timingSafeEqual(
+    Buffer.from(inputHashedPassword, 'hex'),
+    Buffer.from(hashedPassword, 'hex')
+  );
 }
 
 export function generateSalt() {

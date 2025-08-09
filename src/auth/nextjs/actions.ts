@@ -1,13 +1,12 @@
 'use server';
 
-import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signInSchema, signUpSchema } from './schemas';
 import { db } from '@/db';
 import { OAuthProvider, UserTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import {
-  // comparePasswords,
+  comparePasswords,
   generateSalt,
   hashPassword,
 } from '../core/password-hasher';
@@ -31,13 +30,13 @@ export async function signIn(previousState: unknown, formData: FormData) {
     return 'Unable to log you in';
   }
 
-  // const isCorrectPassword = await comparePasswords({
-  //   hashedPassword: user.password,
-  //   password: data.password,
-  //   salt: user.salt,
-  // });
+  const isCorrectPassword = await comparePasswords({
+    hashedPassword: user.password,
+    password: data.password,
+    salt: user.salt,
+  });
 
-  // if (!isCorrectPassword) return 'Unable to log you in';
+  if (!isCorrectPassword) return 'Unable to log you in';
 
   await createUserSession(user, await cookies());
 
