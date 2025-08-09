@@ -313,6 +313,10 @@ Create `.env.local` for local development:
 NEXT_PUBLIC_API_URL=http://localhost:3001
 DATABASE_URL=postgresql://user:password@localhost:5432/db
 NEXTAUTH_SECRET=your-secret-key
+# Redis
+REDIS_URL=redis://localhost:6379
+# Optional: throttle session refreshes (seconds); default is 300 (5 minutes)
+SESSION_TOUCH_INTERVAL_SECONDS=300
 ```
 
 **Usage in code:**

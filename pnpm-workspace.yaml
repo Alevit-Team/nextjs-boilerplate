@@ -1,8 +1,8 @@
-# pnpm workspace configuration
 packages:
-  - "."
+  - .
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
+  - esbuild
   - sharp
   - unrs-resolver
