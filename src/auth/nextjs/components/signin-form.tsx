@@ -14,7 +14,7 @@ import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
-import { useActionState, useState } from 'react';
+import { useActionState } from 'react';
 import { signInSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -24,7 +24,7 @@ const defaultValues = {
 };
 
 export function SignInForm() {
-  const [state, action, pending] = useActionState(signIn, null);
+  const [_state, action, pending] = useActionState(signIn, null);
   const form = useForm<z.infer<typeof signInSchema>>({
     defaultValues,
     resolver: zodResolver(signInSchema),

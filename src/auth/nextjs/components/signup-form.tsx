@@ -25,7 +25,7 @@ const defaultValues = {
 };
 
 export function SignUpForm() {
-  const [state, action, pending] = useActionState(signUp, null);
+  const [_state, action, pending] = useActionState(signUp, null);
   const form = useForm<z.infer<typeof signUpSchema>>({
     defaultValues,
     resolver: zodResolver(signUpSchema),

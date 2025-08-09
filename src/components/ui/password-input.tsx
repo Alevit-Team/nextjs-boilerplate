@@ -1,15 +1,14 @@
 'use client';
 
-import * as React from 'react';
+import { ComponentProps, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
 
-interface PasswordInputProps
-  extends Omit<React.ComponentProps<'input'>, 'type'> {}
+type PasswordInputProps = Omit<ComponentProps<'input'>, 'type'>;
 
 function PasswordInput({ className, ...props }: PasswordInputProps) {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
