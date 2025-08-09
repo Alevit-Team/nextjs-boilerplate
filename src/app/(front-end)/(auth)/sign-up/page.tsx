@@ -7,7 +7,7 @@ export default function SignUpPage() {
       <section>
         <div className='flex gap-4 pb-4'>
           <Link href='/sign-in'>Sign In</Link>
-          <p className='text-muted-foreground'>Sign Up</p>
+          <p>Sign Up</p>
         </div>
         <SignUpForm />
       </section>{' '}
