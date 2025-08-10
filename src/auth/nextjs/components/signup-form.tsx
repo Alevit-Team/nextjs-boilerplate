@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { useActionState } from 'react';
 import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
 
 const defaultValues = {
   name: '',
@@ -25,7 +26,7 @@ const defaultValues = {
 };
 
 export function SignUpForm() {
-  const [_state, action, pending] = useActionState(signUp, null);
+  const [state, action, pending] = useActionState(signUp, null);
   const form = useForm<z.infer<typeof signUpSchema>>({
     defaultValues,
     resolver: zodResolver(signUpSchema),
@@ -50,6 +51,12 @@ export function SignUpForm() {
             GitHub
           </Button>
         </div> */}
+        {state?.ok === false && (
+          <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
+            {getAuthErrorMessage(state.errorCode)}
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name='name'
