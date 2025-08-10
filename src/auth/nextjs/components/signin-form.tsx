@@ -16,6 +16,7 @@ import { useActionState } from 'react';
 import { signInSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
+import Link from 'next/link';
 
 const defaultValues = {
   email: '',
@@ -66,19 +67,29 @@ export function SignInForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div>
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <PasswordInput {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className='flex justify-end pt-1'>
+            <Link
+              href='/forgot-password'
+              className='text-muted-foreground text-sm'
+            >
+              Forgot Password?
+            </Link>
+          </div>
+        </div>
         <div>
           <Button
             type='submit'
