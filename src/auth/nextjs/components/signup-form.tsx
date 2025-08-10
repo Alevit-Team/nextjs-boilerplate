@@ -23,6 +23,7 @@ const defaultValues = {
   name: '',
   email: '',
   password: '',
+  confirmPassword: '',
 };
 
 export function SignUpForm() {
@@ -96,8 +97,25 @@ export function SignUpForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name='confirmPassword'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <PasswordInput {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div>
-          <Button type='submit' className='w-full' disabled={pending}>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={pending || !form.formState.isValid}
+          >
             {pending ? 'Signing up...' : 'Sign Up'}
           </Button>
         </div>

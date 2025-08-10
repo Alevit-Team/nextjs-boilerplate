@@ -80,11 +80,14 @@ export function SignInForm() {
           )}
         />
         <div>
-          <Button type='submit' className='w-full' disabled={pending}>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={pending || !form.formState.isValid}
+          >
             {pending ? 'Signing in...' : 'Sign In'}
           </Button>
         </div>
-        <Divider label='Or continue with' className='my-4' />
       </form>
     </Form>
   );

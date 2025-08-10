@@ -11,7 +11,6 @@ const validation = {
   },
 };
 
-// Concise, user-friendly error messages following UX best practices
 const errorMessages = {
   email: {
     invalid: 'Please enter a valid email',
@@ -20,6 +19,13 @@ const errorMessages = {
   password: {
     tooShort: `Password must be at least ${validation.password.min} characters`,
     required: 'Password is required',
+    mismatch: 'Passwords do not match',
+    noNumber: 'Password must contain at least one number',
+    noUppercase: 'Password must contain at least one uppercase letter',
+    noSpecialChar: 'Password must contain at least one special character',
+  },
+  confirmPassword: {
+    mismatch: 'Passwords do not match',
   },
   name: {
     tooShort: `Name must be at least ${validation.name.min} characters`,
@@ -27,20 +33,28 @@ const errorMessages = {
   },
 };
 
-// Enhanced email validation with better error messages
 const emailValidation = z
   .email({
     message: errorMessages.email.invalid,
   })
   .min(1, errorMessages.email.required);
 
-// Enhanced password validation with helpful messaging and security checks
 const passwordValidation = z
   .string()
   .min(1, errorMessages.password.required)
-  .min(validation.password.min, errorMessages.password.tooShort);
+  .min(validation.password.min, errorMessages.password.tooShort)
+  .regex(/(?=.*[0-9])/, errorMessages.password.noNumber)
+  .regex(/(?=.*[A-Z])/, errorMessages.password.noUppercase)
+  .regex(
+    /(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+    errorMessages.password.noSpecialChar
+  );
 
-// Enhanced name validation
+const confirmPasswordValidation = z
+  .string()
+  .min(1, errorMessages.confirmPassword.mismatch)
+  .min(validation.password.min, errorMessages.confirmPassword.mismatch);
+
 const nameValidation = z
   .string()
   .min(1, errorMessages.name.required)
@@ -51,11 +65,16 @@ export const signInSchema = z.object({
   password: passwordValidation,
 });
 
-export const signUpSchema = z.object({
-  name: nameValidation,
-  email: emailValidation,
-  password: passwordValidation,
-});
+export const signUpSchema = z
+  .object({
+    name: nameValidation,
+    email: emailValidation,
+    password: passwordValidation,
+    confirmPassword: confirmPasswordValidation,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: errorMessages.password.mismatch,
+    path: ['confirmPassword'],
+  });
 
-// Export validation constants for use in components
 export { validation, errorMessages };
