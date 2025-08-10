@@ -11,9 +11,7 @@ import {
 import { signIn } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
-import { Button } from '@/components/ui/button';
+import { Input, PasswordInput, Button, Divider } from '@/components';
 import { useActionState } from 'react';
 import { signInSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,7 +32,7 @@ export function SignInForm() {
 
   return (
     <Form {...form}>
-      <form action={action} className='min-w-xs space-y-2'>
+      <form action={action} className='w-full space-y-2'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -86,6 +84,7 @@ export function SignInForm() {
             {pending ? 'Signing in...' : 'Sign In'}
           </Button>
         </div>
+        <Divider label='Or continue with' className='my-4' />
       </form>
     </Form>
   );

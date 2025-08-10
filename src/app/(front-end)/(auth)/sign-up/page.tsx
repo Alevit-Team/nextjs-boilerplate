@@ -3,14 +3,14 @@ import Link from 'next/link';
 
 export default function SignUpPage() {
   return (
-    <div className='flex h-screen items-center justify-center'>
-      <section>
-        <div className='flex gap-4 pb-4'>
-          <Link href='/sign-in'>Sign In</Link>
-          <p>Sign Up</p>
-        </div>
+    <section className='flex h-screen w-full items-center justify-center'>
+      <div className='w-full max-w-xs px-4'>
+        <h1 className='mb-8 text-center text-2xl font-bold'>Sign Up</h1>
+        <p className='text-muted-foreground mb-8 text-center text-sm'>
+          Create an account to get started
+        </p>
         <SignUpForm />
-      </section>{' '}
-    </div>
+      </div>
+    </section>
   );
 }
