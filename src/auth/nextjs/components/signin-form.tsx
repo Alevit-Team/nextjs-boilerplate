@@ -32,7 +32,7 @@ export function SignInForm() {
 
   return (
     <Form {...form}>
-      <form action={action} className='w-full space-y-2'>
+      <form action={action} className='w-full space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button

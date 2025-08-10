@@ -35,7 +35,7 @@ export function SignUpForm() {
 
   return (
     <Form {...form}>
-      <form action={action} className='min-w-xs space-y-2'>
+      <form action={action} className='min-w-xs space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
