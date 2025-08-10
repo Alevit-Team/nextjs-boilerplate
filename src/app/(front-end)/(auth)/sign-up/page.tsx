@@ -1,5 +1,6 @@
 import { SignUpForm } from '@/auth/nextjs/components/signup-form';
-import Link from 'next/link';
+import { SocialLogin } from '@/auth/nextjs/components/social-login';
+import { Divider } from '@/components';
 
 export default function SignUpPage() {
   return (
@@ -10,6 +11,8 @@ export default function SignUpPage() {
           Create an account to get started
         </p>
         <SignUpForm />
+        <Divider label='Or continue with' className='my-6' />
+        <SocialLogin />
       </div>
     </section>
   );
