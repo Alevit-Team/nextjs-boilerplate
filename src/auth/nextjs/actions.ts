@@ -53,7 +53,6 @@ export async function signUp(previousState: unknown, formData: FormData) {
   const existingUser = await db.query.UserTable.findFirst({
     where: eq(UserTable.email, data.email),
   });
-  console.log(existingUser);
   if (existingUser != null) return 'Account already exists for this email';
 
   try {
