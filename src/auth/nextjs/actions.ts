@@ -116,9 +116,7 @@ export async function forgotPassword(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  const unsafeData = Object.fromEntries(formData);
-
-  const { success, data } = forgotPasswordSchema.safeParse(unsafeData);
+  const { success, data } = forgotPasswordSchema.safeParse(formData);
 
   if (!success) {
     return { ok: false, errorCode: ErrorCode.INVALID_FORM };
