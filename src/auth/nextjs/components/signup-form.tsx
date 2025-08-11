@@ -18,12 +18,12 @@ import { useActionState } from 'react';
 import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
+import { PasswordValidation } from './password-validation';
 
 const defaultValues = {
   name: '',
   email: '',
   password: '',
-  confirmPassword: '',
 };
 
 export function SignUpForm() {
@@ -88,26 +88,15 @@ export function SignUpForm() {
           control={form.control}
           name='password'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='confirmPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <>
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <PasswordInput {...field} showValidation={false} />
+                </FormControl>
+              </FormItem>
+              <PasswordValidation password={field.value} />
+            </>
           )}
         />
         <div>
