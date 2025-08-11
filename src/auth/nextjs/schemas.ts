@@ -63,4 +63,8 @@ export const signUpSchema = z.object({
   password: passwordValidation,
 });
 
+export const forgotPasswordSchema = z.object({
+  email: emailValidation,
+});
+
 export { validation, errorMessages };
