@@ -8,7 +8,7 @@ export default function SignUpPage() {
     <section className='flex h-full w-full items-center justify-center'>
       <div className='w-full max-w-sm px-4'>
         <h1 className='mb-8 text-center text-2xl font-bold'>Sign Up</h1>
-        <p className='text-muted-foreground mb-8 text-center text-sm'>
+        <p className='text-muted-foreground text-center text-sm'>
           Create an account to get started
         </p>
         <SignUpForm />

@@ -36,7 +36,12 @@ export function SignInForm() {
 
   return (
     <Form {...form}>
-      <form action={action} className='w-full space-y-4'>
+      <div className='my-3 h-9'>
+        {state?.ok === false && (
+          <FormError label={getFormErrorMessage(state.errorCode)} />
+        )}
+      </div>
+      <form action={action} className='w-full space-y-5'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -52,9 +57,7 @@ export function SignInForm() {
             GitHub
           </Button>
         </div> */}
-        {state?.ok === false && (
-          <FormError label={getFormErrorMessage(state.errorCode)} />
-        )}
+
         <FormField
           control={form.control}
           name='email'

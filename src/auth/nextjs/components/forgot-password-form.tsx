@@ -33,10 +33,12 @@ export function ForgotPasswordForm() {
 
   return (
     <Form {...form}>
-      <form action={action} className='w-full space-y-8'>
+      <div className='my-3 h-9'>
         {state?.ok === false && (
           <FormError label={getFormErrorMessage(state.errorCode)} />
         )}
+      </div>
+      <form action={action} className='w-full space-y-4'>
         <FormField
           control={form.control}
           name='email'
