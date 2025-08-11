@@ -7,15 +7,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+  FormError,
+  Input,
+  Button,
+} from '@/components';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input, Button } from '@/components';
 import { useActionState } from 'react';
 import { forgotPassword } from '../actions';
 import { forgotPasswordSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ErrorCode } from '../types';
+import { getFormErrorMessage } from '@/lib/get-form-error-message';
 
 const defaultValues = {
   email: '',
@@ -33,11 +35,7 @@ export function ForgotPasswordForm() {
     <Form {...form}>
       <form action={action} className='w-full space-y-8'>
         {state?.ok === false && (
-          <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
-            {state.errorCode === ErrorCode.USER_NOT_FOUND
-              ? 'User not found. Please check your email.'
-              : 'Something went wrong. Please try again.'}
-          </div>
+          <FormError label={getFormErrorMessage(state.errorCode)} />
         )}
         <FormField
           control={form.control}

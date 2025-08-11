@@ -7,17 +7,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+  FormError,
+  PasswordInput,
+  Button,
+  Input,
+} from '@/components';
 import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
-import { Button } from '@/components/ui/button';
 import { useActionState } from 'react';
 import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
+import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { PasswordValidation } from './password-validation';
 
 const defaultValues = {
@@ -53,11 +54,8 @@ export function SignUpForm() {
           </Button>
         </div> */}
         {state?.ok === false && (
-          <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
-            {getAuthErrorMessage(state.errorCode)}
-          </div>
+          <FormError label={getFormErrorMessage(state.errorCode)} />
         )}
-
         <FormField
           control={form.control}
           name='name'
