@@ -11,7 +11,7 @@ import {
 import { signIn } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input, PasswordInput, Button, Divider } from '@/components';
+import { Input, PasswordInput, Button } from '@/components';
 import { useActionState } from 'react';
 import { signInSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';

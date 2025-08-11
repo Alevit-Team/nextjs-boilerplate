@@ -15,6 +15,7 @@ import { useActionState } from 'react';
 import { forgotPassword } from '../actions';
 import { forgotPasswordSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ErrorCode } from '../types';
 
 const defaultValues = {
   email: '',
@@ -33,7 +34,9 @@ export function ForgotPasswordForm() {
       <form action={action} className='w-full space-y-8'>
         {state?.ok === false && (
           <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
-            Something went wrong. Please try again.
+            {state.errorCode === ErrorCode.USER_NOT_FOUND
+              ? 'User not found. Please check your email.'
+              : 'Something went wrong. Please try again.'}
           </div>
         )}
         <FormField

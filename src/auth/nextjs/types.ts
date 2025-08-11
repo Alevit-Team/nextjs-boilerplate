@@ -3,6 +3,7 @@ export const ErrorCode = {
   INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
   EXISTING_EMAIL: 'EXISTING_EMAIL',
   UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
