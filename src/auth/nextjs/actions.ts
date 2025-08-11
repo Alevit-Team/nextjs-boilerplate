@@ -19,9 +19,7 @@ export async function signIn(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  const unsafeData = Object.fromEntries(formData);
-
-  const { success, data } = signInSchema.safeParse(unsafeData);
+  const { success, data } = signInSchema.safeParse(formData);
 
   if (!success) {
     return {
@@ -69,9 +67,7 @@ export async function signUp(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult | never> {
-  const unsafeData = Object.fromEntries(formData);
-
-  const { success, data } = signUpSchema.safeParse(unsafeData);
+  const { success, data } = signUpSchema.safeParse(formData);
 
   if (!success) {
     return { ok: false, errorCode: ErrorCode.INVALID_FORM };
