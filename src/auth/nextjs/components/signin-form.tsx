@@ -11,29 +11,29 @@ import {
 import { signIn } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { Input, PasswordInput, Button, Divider } from '@/components';
+import { useActionState } from 'react';
 import { signInSchema } from '../schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
 import Link from 'next/link';
 
-export function SignInForm() {
-  const [error, setError] = useState<string>();
-  const form = useForm<z.infer<typeof signInSchema>>({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
+const defaultValues = {
+  email: '',
+  password: '',
+};
 
-  async function onSubmit(data: z.infer<typeof signInSchema>) {
-    const error = await signIn(data);
-    setError(error);
-  }
+export function SignInForm() {
+  const [state, action, pending] = useActionState(signIn, null);
+  const form = useForm<z.infer<typeof signInSchema>>({
+    defaultValues,
+    resolver: zodResolver(signInSchema),
+    mode: 'onTouched',
+  });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form action={action} className='w-full space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -49,6 +49,11 @@ export function SignInForm() {
             GitHub
           </Button>
         </div> */}
+        {state?.ok === false && (
+          <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
+            {getAuthErrorMessage(state.errorCode)}
+          </div>
+        )}
         <FormField
           control={form.control}
           name='email'
@@ -62,24 +67,37 @@ export function SignInForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type='password' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className='flex justify-end gap-4'>
-          <Button asChild variant='link'>
-            <Link href='/sign-up'>Sign Up</Link>
+        <div>
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <PasswordInput {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className='flex justify-end pt-1'>
+            <Link
+              href='/forgot-password'
+              className='text-muted-foreground text-sm'
+            >
+              Forgot Password?
+            </Link>
+          </div>
+        </div>
+        <div>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={pending || !form.formState.isValid}
+          >
+            {pending ? 'Signing in...' : 'Sign In'}
           </Button>
-          <Button type='submit'>Sign In</Button>
         </div>
       </form>
     </Form>

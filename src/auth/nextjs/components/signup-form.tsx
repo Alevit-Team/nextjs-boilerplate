@@ -12,29 +12,31 @@ import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useActionState } from 'react';
 import { signUpSchema } from '../schemas';
-import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
+
+const defaultValues = {
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 
 export function SignUpForm() {
-  const [error, setError] = useState<string>();
+  const [state, action, pending] = useActionState(signUp, null);
   const form = useForm<z.infer<typeof signUpSchema>>({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
+    defaultValues,
+    resolver: zodResolver(signUpSchema),
+    mode: 'onTouched',
   });
-
-  async function onSubmit(data: z.infer<typeof signUpSchema>) {
-    const error = await signUp(data);
-    setError(error);
-  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form action={action} className='min-w-xs space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -50,6 +52,12 @@ export function SignUpForm() {
             GitHub
           </Button>
         </div> */}
+        {state?.ok === false && (
+          <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
+            {getAuthErrorMessage(state.errorCode)}
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name='name'
@@ -83,17 +91,33 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type='password' {...field} />
+                <PasswordInput {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className='flex justify-end gap-4'>
-          <Button asChild variant='link'>
-            <Link href='/sign-in'>Sign In</Link>
+        <FormField
+          control={form.control}
+          name='confirmPassword'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <PasswordInput {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={pending || !form.formState.isValid}
+          >
+            {pending ? 'Signing up...' : 'Sign Up'}
           </Button>
-          <Button type='submit'>Sign Up</Button>
         </div>
       </form>
     </Form>
