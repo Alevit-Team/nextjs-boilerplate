@@ -19,6 +19,7 @@ import { useActionState } from 'react';
 import { signInSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
+import { ErrorCode } from '../types';
 import Link from 'next/link';
 
 const defaultValues = {
@@ -104,6 +105,26 @@ export function SignInForm() {
           </Button>
         </div>
       </form>
+
+      {/* Show verification help if email not verified */}
+      {state?.ok === false &&
+        state.errorCode === ErrorCode.EMAIL_NOT_VERIFIED && (
+          <div className='mt-4 rounded-lg bg-blue-50 p-4'>
+            <div className='text-sm'>
+              <p className='font-medium text-blue-900'>
+                Need to verify your email?
+              </p>
+              <p className='mt-1 text-blue-700'>
+                <Link
+                  href='/verify-email'
+                  className='text-blue-600 hover:underline'
+                >
+                  Click here to resend verification email
+                </Link>
+              </p>
+            </div>
+          </div>
+        )}
     </Form>
   );
 }
