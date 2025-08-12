@@ -7,23 +7,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+  FormError,
+  PasswordInput,
+  Button,
+  Input,
+} from '@/components';
 import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
-import { Button } from '@/components/ui/button';
 import { useActionState } from 'react';
 import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getAuthErrorMessage } from '@/lib/get-auth-error-message';
+import { getFormErrorMessage } from '@/lib/get-form-error-message';
+import { PasswordValidation } from './password-validation';
 
 const defaultValues = {
   name: '',
   email: '',
   password: '',
-  confirmPassword: '',
 };
 
 export function SignUpForm() {
@@ -36,6 +37,11 @@ export function SignUpForm() {
 
   return (
     <Form {...form}>
+      <div className='my-3 h-9'>
+        {state?.ok === false && (
+          <FormError label={getFormErrorMessage(state.errorCode)} />
+        )}
+      </div>
       <form action={action} className='min-w-xs space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
@@ -52,12 +58,6 @@ export function SignUpForm() {
             GitHub
           </Button>
         </div> */}
-        {state?.ok === false && (
-          <div className='text-destructive bg-destructive/10 rounded-md p-2 text-center text-sm'>
-            {getAuthErrorMessage(state.errorCode)}
-          </div>
-        )}
-
         <FormField
           control={form.control}
           name='name'
@@ -88,26 +88,15 @@ export function SignUpForm() {
           control={form.control}
           name='password'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='confirmPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <>
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <PasswordInput {...field} showValidation={false} />
+                </FormControl>
+              </FormItem>
+              <PasswordValidation password={field.value} />
+            </>
           )}
         />
         <div>

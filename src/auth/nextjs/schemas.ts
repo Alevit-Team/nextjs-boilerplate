@@ -24,9 +24,6 @@ const errorMessages = {
     noUppercase: 'Password must contain at least one uppercase letter',
     noSpecialChar: 'Password must contain at least one special character',
   },
-  confirmPassword: {
-    mismatch: 'Passwords do not match',
-  },
   name: {
     tooShort: `Name must be at least ${validation.name.min} characters`,
     required: 'Name is required',
@@ -50,11 +47,6 @@ const passwordValidation = z
     errorMessages.password.noSpecialChar
   );
 
-const confirmPasswordValidation = z
-  .string()
-  .min(1, errorMessages.confirmPassword.mismatch)
-  .min(validation.password.min, errorMessages.confirmPassword.mismatch);
-
 const nameValidation = z
   .string()
   .min(1, errorMessages.name.required)
@@ -65,16 +57,14 @@ export const signInSchema = z.object({
   password: passwordValidation,
 });
 
-export const signUpSchema = z
-  .object({
-    name: nameValidation,
-    email: emailValidation,
-    password: passwordValidation,
-    confirmPassword: confirmPasswordValidation,
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: errorMessages.password.mismatch,
-    path: ['confirmPassword'],
-  });
+export const signUpSchema = z.object({
+  name: nameValidation,
+  email: emailValidation,
+  password: passwordValidation,
+});
+
+export const forgotPasswordSchema = z.object({
+  email: emailValidation,
+});
 
 export { validation, errorMessages };

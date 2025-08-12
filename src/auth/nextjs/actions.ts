@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { signInSchema, signUpSchema } from './schemas';
+import { forgotPasswordSchema, signInSchema, signUpSchema } from './schemas';
 import { db } from '@/db';
 import { OAuthProvider, UserTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -19,9 +19,8 @@ export async function signIn(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  const unsafeData = Object.fromEntries(formData);
-
-  const { success, data } = signInSchema.safeParse(unsafeData);
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = signInSchema.safeParse(data);
 
   if (!success) {
     return {
@@ -39,7 +38,7 @@ export async function signIn(
         email: true,
         role: true,
       },
-      where: eq(UserTable.email, data.email),
+      where: eq(UserTable.email, parsedData.email),
     });
 
     if (user == null || user.password == null || user.salt == null) {
@@ -48,7 +47,7 @@ export async function signIn(
 
     const isCorrectPassword = await comparePasswords({
       hashedPassword: user.password,
-      password: data.password,
+      password: parsedData.password,
       salt: user.salt,
     });
 
@@ -69,9 +68,8 @@ export async function signUp(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult | never> {
-  const unsafeData = Object.fromEntries(formData);
-
-  const { success, data } = signUpSchema.safeParse(unsafeData);
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = signUpSchema.safeParse(data);
 
   if (!success) {
     return { ok: false, errorCode: ErrorCode.INVALID_FORM };
@@ -79,7 +77,7 @@ export async function signUp(
 
   try {
     const existingUser = await db.query.UserTable.findFirst({
-      where: eq(UserTable.email, data.email),
+      where: eq(UserTable.email, parsedData.email),
     });
 
     if (existingUser != null) {
@@ -87,13 +85,13 @@ export async function signUp(
     }
 
     const salt = generateSalt();
-    const hashedPassword = await hashPassword(data.password, salt);
+    const hashedPassword = await hashPassword(parsedData.password, salt);
 
     const [user] = await db
       .insert(UserTable)
       .values({
-        name: data.name,
-        email: data.email,
+        name: parsedData.name,
+        email: parsedData.email,
         password: hashedPassword,
         salt,
       })
@@ -114,6 +112,33 @@ export async function signUp(
 export async function logOut() {
   await removeUserFromSession(await cookies());
   redirect('/');
+}
+
+export async function forgotPassword(
+  _previousState: unknown,
+  formData: FormData
+): Promise<ActionResult> {
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = forgotPasswordSchema.safeParse(data);
+
+  if (!success) {
+    return { ok: false, errorCode: ErrorCode.INVALID_FORM };
+  }
+
+  try {
+    const user = await db.query.UserTable.findFirst({
+      where: eq(UserTable.email, parsedData.email),
+    });
+
+    if (user == null) {
+      return { ok: false, errorCode: ErrorCode.USER_NOT_FOUND };
+    }
+
+    // TODO: Send password reset email here
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
+  }
 }
 
 // export async function oAuthSignIn(provider: OAuthProvider) {
