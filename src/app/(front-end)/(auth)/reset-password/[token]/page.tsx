@@ -43,8 +43,8 @@ export default async function ResetPasswordTokenPage({
                   <p className='font-medium text-red-900'>What you can do:</p>
                   <ul className='mt-2 space-y-1 text-red-700'>
                     <li>• Request a new password reset link</li>
-                    <li>• Make sure you're using the latest email</li>
-                    <li>• Check that the link hasn't expired (15 minutes)</li>
+                    <li>• Make sure you’re using the latest email</li>
+                    <li>• Check that the link hasn’t expired (15 minutes)</li>
                   </ul>
                 </div>
               </div>

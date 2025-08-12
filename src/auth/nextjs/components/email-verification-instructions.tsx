@@ -52,7 +52,7 @@ export function EmailVerificationInstructions() {
         <h1 className='mb-2 text-2xl font-bold'>Check your email</h1>
 
         <p className='text-muted-foreground mb-6 text-sm'>
-          We've sent a verification link to your email address. Please click the
+          We’ve sent a verification link to your email address. Please click the
           link to verify your account and complete the registration process.
         </p>
 
@@ -73,7 +73,7 @@ export function EmailVerificationInstructions() {
         {!showResendForm ? (
           <div className='space-y-4'>
             <p className='text-muted-foreground text-sm'>
-              Didn't receive the email?
+              Didn’t receive the email?
             </p>
             <Button
               variant='outline'

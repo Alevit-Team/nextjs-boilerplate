@@ -48,7 +48,7 @@ export function ForgotPasswordForm() {
           </h2>
 
           <p className='text-muted-foreground mb-6 text-sm'>
-            If an account with that email exists, we've sent you a password
+            If an account with that email exists, we’ve sent you a password
             reset link. Please check your inbox and follow the instructions.
           </p>
 
@@ -124,7 +124,7 @@ export function ForgotPasswordForm() {
           <ul className='mt-2 space-y-1 text-amber-700'>
             <li>• Reset links expire in 15 minutes</li>
             <li>• Only verified email addresses will receive reset links</li>
-            <li>• Check your spam folder if you don't see the email</li>
+            <li>• Check your spam folder if you don’t see the email</li>
           </ul>
         </div>
       </div>
