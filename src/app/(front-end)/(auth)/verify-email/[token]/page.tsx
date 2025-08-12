@@ -5,13 +5,16 @@ import { CheckCircleIcon, XCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
 interface VerifyEmailTokenPageProps {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 }
 
 export default async function VerifyEmailTokenPage({
   params,
 }: VerifyEmailTokenPageProps) {
-  const result = await verifyEmail(params.token);
+  // Await the params promise
+  const { token } = await params;
+
+  const result = await verifyEmail(token);
 
   return (
     <section className='flex h-full w-full items-center justify-center'>

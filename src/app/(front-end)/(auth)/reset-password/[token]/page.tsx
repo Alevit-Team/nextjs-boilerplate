@@ -5,16 +5,17 @@ import { XCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
 interface ResetPasswordTokenPageProps {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 }
 
 export default async function ResetPasswordTokenPage({
   params,
 }: ResetPasswordTokenPageProps) {
+  // Await the params promise
+  const { token } = await params;
+
   // Validate the token before showing the form
-  const validation = await tokenService.validatePasswordResetToken(
-    params.token
-  );
+  const validation = await tokenService.validatePasswordResetToken(token);
 
   if (!validation.isValid) {
     return (
@@ -79,7 +80,7 @@ export default async function ResetPasswordTokenPage({
         <p className='text-muted-foreground mb-6 text-center text-sm'>
           Enter your new password below
         </p>
-        <ResetPasswordForm token={params.token} />
+        <ResetPasswordForm token={token} />
         <div className='mt-4 flex justify-center'>
           <Link
             href='/sign-in'

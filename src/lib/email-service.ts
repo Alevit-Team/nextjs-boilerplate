@@ -1,5 +1,3 @@
-import { randomBytes } from 'crypto';
-
 export interface EmailTemplate {
   to: string;
   subject: string;

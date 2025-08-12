@@ -7,7 +7,7 @@ import {
   type NewEmailVerificationToken,
   type NewPasswordResetToken,
 } from '@/db/schema';
-import { eq, and, lt } from 'drizzle-orm';
+import { eq, and, lt, gt, isNull } from 'drizzle-orm';
 
 export interface TokenValidationResult {
   isValid: boolean;
@@ -116,10 +116,10 @@ class TokenService {
     token: string
   ): Promise<TokenValidationResult> {
     try {
-      const hashedToken = this.hashToken(token);
-
-      const tokenRecord = await db.query.EmailVerificationTokenTable.findFirst({
-        where: eq(EmailVerificationTokenTable.token, hashedToken),
+      // Fetch all non-expired tokens (we'll compare them securely)
+      const now = new Date();
+      const tokenRecords = await db.query.EmailVerificationTokenTable.findMany({
+        where: gt(EmailVerificationTokenTable.expiresAt, now),
         with: {
           user: {
             columns: {
@@ -130,25 +130,34 @@ class TokenService {
         },
       });
 
-      if (!tokenRecord) {
+      // Find matching token using constant-time comparison
+      let matchingRecord = null;
+      for (const record of tokenRecords) {
+        if (this.compareTokens(record.token, token)) {
+          matchingRecord = record;
+          break;
+        }
+      }
+
+      if (!matchingRecord) {
         return { isValid: false, error: 'NOT_FOUND' };
       }
 
       // Check if token is expired
-      if (new Date() > tokenRecord.expiresAt) {
+      if (new Date() > matchingRecord.expiresAt) {
         // Clean up expired token
         await db
           .delete(EmailVerificationTokenTable)
-          .where(eq(EmailVerificationTokenTable.id, tokenRecord.id));
+          .where(eq(EmailVerificationTokenTable.id, matchingRecord.id));
         return { isValid: false, error: 'EXPIRED' };
       }
 
       // Check if email is already verified
-      if (tokenRecord.user.emailVerified) {
+      if (matchingRecord.user.emailVerified) {
         return { isValid: false, error: 'ALREADY_USED' };
       }
 
-      return { isValid: true, userId: tokenRecord.userId };
+      return { isValid: true, userId: matchingRecord.userId };
     } catch (error) {
       console.error('Error validating email verification token:', error);
       return { isValid: false, error: 'INVALID' };
@@ -162,31 +171,43 @@ class TokenService {
     token: string
   ): Promise<TokenValidationResult> {
     try {
-      const hashedToken = this.hashToken(token);
-
-      const tokenRecord = await db.query.PasswordResetTokenTable.findFirst({
-        where: eq(PasswordResetTokenTable.token, hashedToken),
+      // Fetch all non-expired, non-used tokens (we'll compare them securely)
+      const now = new Date();
+      const tokenRecords = await db.query.PasswordResetTokenTable.findMany({
+        where: and(
+          gt(PasswordResetTokenTable.expiresAt, now),
+          isNull(PasswordResetTokenTable.usedAt)
+        ),
       });
 
-      if (!tokenRecord) {
+      // Find matching token using constant-time comparison
+      let matchingRecord = null;
+      for (const record of tokenRecords) {
+        if (this.compareTokens(record.token, token)) {
+          matchingRecord = record;
+          break;
+        }
+      }
+
+      if (!matchingRecord) {
         return { isValid: false, error: 'NOT_FOUND' };
       }
 
       // Check if token is expired
-      if (new Date() > tokenRecord.expiresAt) {
+      if (new Date() > matchingRecord.expiresAt) {
         // Clean up expired token
         await db
           .delete(PasswordResetTokenTable)
-          .where(eq(PasswordResetTokenTable.id, tokenRecord.id));
+          .where(eq(PasswordResetTokenTable.id, matchingRecord.id));
         return { isValid: false, error: 'EXPIRED' };
       }
 
       // Check if token was already used
-      if (tokenRecord.usedAt) {
+      if (matchingRecord.usedAt) {
         return { isValid: false, error: 'ALREADY_USED' };
       }
 
-      return { isValid: true, userId: tokenRecord.userId };
+      return { isValid: true, userId: matchingRecord.userId };
     } catch (error) {
       console.error('Error validating password reset token:', error);
       return { isValid: false, error: 'INVALID' };
@@ -204,7 +225,22 @@ class TokenService {
         return false;
       }
 
-      const hashedToken = this.hashToken(token);
+      // Find the token record to delete using secure comparison
+      const tokenRecords = await db.query.EmailVerificationTokenTable.findMany({
+        where: eq(EmailVerificationTokenTable.userId, validation.userId!),
+      });
+
+      let tokenRecordId = null;
+      for (const record of tokenRecords) {
+        if (this.compareTokens(record.token, token)) {
+          tokenRecordId = record.id;
+          break;
+        }
+      }
+
+      if (!tokenRecordId) {
+        return false;
+      }
 
       // Start a transaction to ensure atomicity
       await db.transaction(async (tx) => {
@@ -217,7 +253,7 @@ class TokenService {
         // Delete the verification token
         await tx
           .delete(EmailVerificationTokenTable)
-          .where(eq(EmailVerificationTokenTable.token, hashedToken));
+          .where(eq(EmailVerificationTokenTable.id, tokenRecordId));
       });
 
       return true;
@@ -234,17 +270,32 @@ class TokenService {
     try {
       const validation = await this.validatePasswordResetToken(token);
 
-      if (!validation.isValid) {
+      if (!validation.isValid || !validation.userId) {
         return false;
       }
 
-      const hashedToken = this.hashToken(token);
+      // Find the token record to update using secure comparison
+      const tokenRecords = await db.query.PasswordResetTokenTable.findMany({
+        where: eq(PasswordResetTokenTable.userId, validation.userId),
+      });
+
+      let tokenRecordId = null;
+      for (const record of tokenRecords) {
+        if (this.compareTokens(record.token, token)) {
+          tokenRecordId = record.id;
+          break;
+        }
+      }
+
+      if (!tokenRecordId) {
+        return false;
+      }
 
       // Mark token as used
       await db
         .update(PasswordResetTokenTable)
         .set({ usedAt: new Date() })
-        .where(eq(PasswordResetTokenTable.token, hashedToken));
+        .where(eq(PasswordResetTokenTable.id, tokenRecordId));
 
       return true;
     } catch (error) {
