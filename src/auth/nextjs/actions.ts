@@ -19,7 +19,8 @@ export async function signIn(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  const { success, data } = signInSchema.safeParse(formData);
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = signInSchema.safeParse(data);
 
   if (!success) {
     return {
@@ -37,7 +38,7 @@ export async function signIn(
         email: true,
         role: true,
       },
-      where: eq(UserTable.email, data.email),
+      where: eq(UserTable.email, parsedData.email),
     });
 
     if (user == null || user.password == null || user.salt == null) {
@@ -46,7 +47,7 @@ export async function signIn(
 
     const isCorrectPassword = await comparePasswords({
       hashedPassword: user.password,
-      password: data.password,
+      password: parsedData.password,
       salt: user.salt,
     });
 
@@ -67,7 +68,8 @@ export async function signUp(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult | never> {
-  const { success, data } = signUpSchema.safeParse(formData);
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = signUpSchema.safeParse(data);
 
   if (!success) {
     return { ok: false, errorCode: ErrorCode.INVALID_FORM };
@@ -75,7 +77,7 @@ export async function signUp(
 
   try {
     const existingUser = await db.query.UserTable.findFirst({
-      where: eq(UserTable.email, data.email),
+      where: eq(UserTable.email, parsedData.email),
     });
 
     if (existingUser != null) {
@@ -83,13 +85,13 @@ export async function signUp(
     }
 
     const salt = generateSalt();
-    const hashedPassword = await hashPassword(data.password, salt);
+    const hashedPassword = await hashPassword(parsedData.password, salt);
 
     const [user] = await db
       .insert(UserTable)
       .values({
-        name: data.name,
-        email: data.email,
+        name: parsedData.name,
+        email: parsedData.email,
         password: hashedPassword,
         salt,
       })
@@ -116,7 +118,8 @@ export async function forgotPassword(
   _previousState: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-  const { success, data } = forgotPasswordSchema.safeParse(formData);
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = forgotPasswordSchema.safeParse(data);
 
   if (!success) {
     return { ok: false, errorCode: ErrorCode.INVALID_FORM };
@@ -124,7 +127,7 @@ export async function forgotPassword(
 
   try {
     const user = await db.query.UserTable.findFirst({
-      where: eq(UserTable.email, data.email),
+      where: eq(UserTable.email, parsedData.email),
     });
 
     if (user == null) {
