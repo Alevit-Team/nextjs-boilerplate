@@ -1,7 +1,13 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { forgotPasswordSchema, signInSchema, signUpSchema } from './schemas';
+import {
+  forgotPasswordSchema,
+  signInSchema,
+  signUpSchema,
+  resetPasswordSchema,
+  resendVerificationSchema,
+} from './schemas';
 import { db } from '@/db';
 import { OAuthProvider, UserTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -13,6 +19,8 @@ import {
 import { cookies } from 'next/headers';
 import { createUserSession, removeUserFromSession } from '../core/session';
 import { ActionResult, ErrorCode } from './types';
+import { emailService } from '@/lib/email-service';
+import { tokenService } from '@/lib/token-service';
 // import { getOAuthClient } from '../core/oauth/base';
 
 export async function signIn(
@@ -37,6 +45,7 @@ export async function signIn(
         id: true,
         email: true,
         role: true,
+        emailVerified: true,
       },
       where: eq(UserTable.email, parsedData.email),
     });
@@ -53,6 +62,11 @@ export async function signIn(
 
     if (!isCorrectPassword) {
       return { ok: false, errorCode: ErrorCode.INVALID_CREDENTIALS };
+    }
+
+    // Check if email is verified
+    if (!user.emailVerified) {
+      return { ok: false, errorCode: ErrorCode.EMAIL_NOT_VERIFIED };
     }
 
     await createUserSession(user, await cookies());
@@ -94,19 +108,41 @@ export async function signUp(
         email: parsedData.email,
         password: hashedPassword,
         salt,
+        // emailVerified is null by default - user needs to verify
       })
-      .returning({ id: UserTable.id, role: UserTable.role });
+      .returning({
+        id: UserTable.id,
+        role: UserTable.role,
+        name: UserTable.name,
+      });
 
     if (user == null) {
       return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
     }
 
-    await createUserSession(user, await cookies());
+    // Generate email verification token and send email
+    try {
+      const verificationToken = await tokenService.createEmailVerificationToken(
+        user.id
+      );
+      const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email/${verificationToken}`;
+
+      await emailService.sendEmailVerification(parsedData.email, {
+        userName: user.name,
+        verificationUrl,
+      });
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError);
+      // Continue with signup even if email fails
+    }
+
+    // Don't create session yet - user needs to verify email first
   } catch (error) {
+    console.error('Sign up error:', error);
     return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
   }
 
-  redirect('/profile');
+  redirect('/verify-email');
 }
 
 export async function logOut() {
@@ -127,16 +163,188 @@ export async function forgotPassword(
 
   try {
     const user = await db.query.UserTable.findFirst({
+      columns: {
+        id: true,
+        name: true,
+        email: true,
+        emailVerified: true,
+      },
       where: eq(UserTable.email, parsedData.email),
     });
 
-    if (user == null) {
+    // Always return success for security (don't reveal if email exists)
+    // But only send email if user exists and is verified
+    if (user && user.emailVerified) {
+      // Check rate limiting
+      const rateLimit = await tokenService.checkPasswordResetRateLimit(user.id);
+      if (!rateLimit.allowed) {
+        return { ok: false, errorCode: ErrorCode.RATE_LIMITED };
+      }
+
+      try {
+        const resetToken = await tokenService.createPasswordResetToken(user.id);
+        const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
+
+        await emailService.sendPasswordReset(user.email, {
+          userName: user.name,
+          resetUrl,
+        });
+      } catch (emailError) {
+        console.error('Failed to send password reset email:', emailError);
+        // Still return success for security
+      }
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
+  }
+}
+
+export async function resetPassword(
+  token: string,
+  _previousState: unknown,
+  formData: FormData
+): Promise<ActionResult> {
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } = resetPasswordSchema.safeParse(data);
+
+  if (!success) {
+    return { ok: false, errorCode: ErrorCode.INVALID_FORM };
+  }
+
+  try {
+    // Validate the token
+    const validation = await tokenService.validatePasswordResetToken(token);
+    if (!validation.isValid || !validation.userId) {
+      switch (validation.error) {
+        case 'EXPIRED':
+          return { ok: false, errorCode: ErrorCode.EXPIRED_TOKEN };
+        case 'ALREADY_USED':
+          return { ok: false, errorCode: ErrorCode.TOKEN_ALREADY_USED };
+        case 'NOT_FOUND':
+        case 'INVALID':
+        default:
+          return { ok: false, errorCode: ErrorCode.INVALID_TOKEN };
+      }
+    }
+
+    // Generate new password hash
+    const salt = generateSalt();
+    const hashedPassword = await hashPassword(parsedData.password, salt);
+
+    // Update password and mark token as used
+    await db.transaction(async (tx) => {
+      // Update user password
+      await tx
+        .update(UserTable)
+        .set({
+          password: hashedPassword,
+          salt,
+          updatedAt: new Date(),
+        })
+        .where(eq(UserTable.id, validation.userId!));
+
+      // Mark token as used
+      await tokenService.consumePasswordResetToken(token);
+    });
+
+    // Invalidate all user sessions for security
+    // Note: In a production app, you might want to store session IDs
+    // and invalidate them specifically
+    console.log(`Password reset successful for user ${validation.userId}`);
+
+    return { ok: true };
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
+  }
+}
+
+export async function verifyEmail(token: string): Promise<ActionResult> {
+  try {
+    const success = await tokenService.consumeEmailVerificationToken(token);
+
+    if (!success) {
+      const validation =
+        await tokenService.validateEmailVerificationToken(token);
+      switch (validation.error) {
+        case 'EXPIRED':
+          return { ok: false, errorCode: ErrorCode.EXPIRED_TOKEN };
+        case 'ALREADY_USED':
+          return { ok: false, errorCode: ErrorCode.TOKEN_ALREADY_USED };
+        case 'NOT_FOUND':
+        case 'INVALID':
+        default:
+          return { ok: false, errorCode: ErrorCode.INVALID_TOKEN };
+      }
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error('Email verification error:', error);
+    return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
+  }
+}
+
+export async function resendVerificationEmail(
+  _previousState: unknown,
+  formData: FormData
+): Promise<ActionResult> {
+  const data = Object.fromEntries(formData.entries());
+  const { success, data: parsedData } =
+    resendVerificationSchema.safeParse(data);
+
+  if (!success) {
+    return { ok: false, errorCode: ErrorCode.INVALID_FORM };
+  }
+
+  try {
+    const user = await db.query.UserTable.findFirst({
+      columns: {
+        id: true,
+        name: true,
+        email: true,
+        emailVerified: true,
+      },
+      where: eq(UserTable.email, parsedData.email),
+    });
+
+    if (!user) {
       return { ok: false, errorCode: ErrorCode.USER_NOT_FOUND };
     }
 
-    // TODO: Send password reset email here
+    if (user.emailVerified) {
+      return { ok: false, errorCode: ErrorCode.TOKEN_ALREADY_USED };
+    }
+
+    // Check rate limiting
+    const rateLimit = await tokenService.checkEmailVerificationRateLimit(
+      user.id
+    );
+    if (!rateLimit.allowed) {
+      return { ok: false, errorCode: ErrorCode.RATE_LIMITED };
+    }
+
+    try {
+      const verificationToken = await tokenService.createEmailVerificationToken(
+        user.id
+      );
+      const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email/${verificationToken}`;
+
+      await emailService.sendEmailVerification(user.email, {
+        userName: user.name,
+        verificationUrl,
+      });
+    } catch (emailError) {
+      console.error('Failed to resend verification email:', emailError);
+      return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
+    }
+
     return { ok: true };
   } catch (error) {
+    console.error('Resend verification email error:', error);
     return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
   }
 }

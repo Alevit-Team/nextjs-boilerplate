@@ -28,10 +28,6 @@ export const UserTable = pgTable('users', {
     .$onUpdate(() => new Date()),
 });
 
-export const userRelations = relations(UserTable, ({ many }) => ({
-  oAuthAccounts: many(UserOAuthAccountTable),
-}));
-
 export const oAuthProviders = ['discord', 'github'] as const;
 export type OAuthProvider = (typeof oAuthProviders)[number];
 export const oAuthProviderEnum = pgEnum('oauth_provides', oAuthProviders);
@@ -63,7 +59,66 @@ export const userOauthAccountRelationships = relations(
   })
 );
 
+// Email verification tokens table
+export const EmailVerificationTokenTable = pgTable(
+  'email_verification_tokens',
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    userId: uuid()
+      .notNull()
+      .references(() => UserTable.id, { onDelete: 'cascade' }),
+    token: text().notNull().unique(),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  }
+);
+
+export const emailVerificationTokenRelations = relations(
+  EmailVerificationTokenTable,
+  ({ one }) => ({
+    user: one(UserTable, {
+      fields: [EmailVerificationTokenTable.userId],
+      references: [UserTable.id],
+    }),
+  })
+);
+
+// Password reset tokens table
+export const PasswordResetTokenTable = pgTable('password_reset_tokens', {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: uuid()
+    .notNull()
+    .references(() => UserTable.id, { onDelete: 'cascade' }),
+  token: text().notNull().unique(),
+  expiresAt: timestamp({ withTimezone: true }).notNull(),
+  usedAt: timestamp({ withTimezone: true }),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+});
+
+export const passwordResetTokenRelations = relations(
+  PasswordResetTokenTable,
+  ({ one }) => ({
+    user: one(UserTable, {
+      fields: [PasswordResetTokenTable.userId],
+      references: [UserTable.id],
+    }),
+  })
+);
+
+// Update user relations to include tokens
+export const userRelations = relations(UserTable, ({ many }) => ({
+  oAuthAccounts: many(UserOAuthAccountTable),
+  emailVerificationTokens: many(EmailVerificationTokenTable),
+  passwordResetTokens: many(PasswordResetTokenTable),
+}));
+
 export type User = typeof UserTable.$inferSelect;
 export type NewUser = typeof UserTable.$inferInsert;
 export type UserOAuthAccount = typeof UserOAuthAccountTable.$inferSelect;
 export type NewUserOAuthAccount = typeof UserOAuthAccountTable.$inferInsert;
+export type EmailVerificationToken =
+  typeof EmailVerificationTokenTable.$inferSelect;
+export type NewEmailVerificationToken =
+  typeof EmailVerificationTokenTable.$inferInsert;
+export type PasswordResetToken = typeof PasswordResetTokenTable.$inferSelect;
+export type NewPasswordResetToken = typeof PasswordResetTokenTable.$inferInsert;
