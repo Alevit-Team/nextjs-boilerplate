@@ -6,3 +6,5 @@ export * from './ui/input';
 export * from './ui/label';
 export * from './ui/password-input';
 export * from './ui/divider';
+export * from './ui/form-header';
+export * from './ui/form-badge';

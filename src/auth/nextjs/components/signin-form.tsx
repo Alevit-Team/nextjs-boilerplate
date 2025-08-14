@@ -87,12 +87,9 @@ export function SignInForm() {
             )}
           />
           <div className='flex justify-end pt-1'>
-            <Link
-              href='/forgot-password'
-              className='text-muted-foreground text-sm'
-            >
-              Forgot Password?
-            </Link>
+            <Button variant='link' asChild>
+              <Link href='/forgot-password'>Forgot Password?</Link>
+            </Button>
           </div>
         </div>
         <div>

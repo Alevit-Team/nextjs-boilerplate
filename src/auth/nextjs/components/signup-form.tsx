@@ -20,6 +20,7 @@ import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { PasswordValidation } from './password-validation';
+import Link from 'next/link';
 
 const defaultValues = {
   name: '',
@@ -42,7 +43,7 @@ export function SignUpForm() {
           <FormError label={getFormErrorMessage(state.errorCode)} />
         )}
       </div>
-      <form action={action} className='min-w-xs space-y-4'>
+      <form action={action} className='w-full space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -107,6 +108,12 @@ export function SignUpForm() {
           >
             {pending ? 'Signing up...' : 'Sign Up'}
           </Button>
+          <p className='text-muted-foreground my-5 text-center text-sm'>
+            Already have an account?{' '}
+            <Link href='/sign-in' className='text-primary'>
+              Sign in
+            </Link>
+          </p>
         </div>
       </form>
     </Form>

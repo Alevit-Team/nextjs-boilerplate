@@ -67,15 +67,9 @@ export const forgotPasswordSchema = z.object({
   email: emailValidation,
 });
 
-export const resetPasswordSchema = z
-  .object({
-    password: passwordValidation,
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: errorMessages.password.mismatch,
-    path: ['confirmPassword'],
-  });
+export const resetPasswordSchema = z.object({
+  password: passwordValidation,
+});
 
 export const resendVerificationSchema = z.object({
   email: emailValidation,
