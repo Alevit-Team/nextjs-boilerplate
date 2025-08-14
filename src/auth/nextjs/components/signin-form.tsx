@@ -96,7 +96,7 @@ export function SignInForm() {
           <Button
             type='submit'
             className='w-full'
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || pending}
             isLoading={pending}
           >
             {pending ? 'Signing in' : 'Sign in'}

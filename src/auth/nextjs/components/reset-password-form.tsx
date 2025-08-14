@@ -101,9 +101,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
               <Button
                 type='submit'
                 className='w-full'
-                disabled={pending || !form.formState.isValid}
+                disabled={!form.formState.isValid || pending}
+                isLoading={pending}
               >
-                {pending ? 'Resetting Password...' : 'Reset Password'}
+                {pending ? 'Resetting password' : 'Reset password'}
               </Button>
               <Link
                 href='/sign-in'

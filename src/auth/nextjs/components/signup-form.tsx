@@ -104,15 +104,16 @@ export function SignUpForm() {
           <Button
             type='submit'
             className='w-full'
-            disabled={pending || !form.formState.isValid}
+            disabled={!form.formState.isValid || pending}
+            isLoading={pending}
           >
-            {pending ? 'Signing up...' : 'Sign up'}
+            {pending ? 'Signing up' : 'Sign up'}
           </Button>
           <p className='text-muted-foreground my-5 text-center text-sm'>
-            Already have an account?{' '}
-            <Link href='/sign-in' className='text-primary'>
-              Sign in
-            </Link>
+            Already have an account?
+            <Button variant='link' asChild>
+              <Link href='/sign-in'>Sign in</Link>
+            </Button>
           </p>
         </div>
       </form>

@@ -98,9 +98,10 @@ export function ForgotPasswordForm() {
               <Button
                 type='submit'
                 className='w-full'
-                disabled={pending || !form.formState.isValid}
+                disabled={!form.formState.isValid || pending}
+                isLoading={pending}
               >
-                {pending ? 'Sending reset email...' : 'Send reset email'}
+                {pending ? 'Sending reset email' : 'Send reset email'}
               </Button>
               <Link
                 href='/sign-in'
