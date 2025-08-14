@@ -7,7 +7,7 @@ export default function SignUpPage() {
     <section className='flex min-h-full w-full flex-col items-center justify-center py-8'>
       <div className='w-full max-w-sm px-4'>
         <FormHeader
-          title='Sign Up'
+          title='Sign up'
           description='Create an account to get started'
         />
         <SignUpForm />

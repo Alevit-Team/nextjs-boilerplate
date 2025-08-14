@@ -45,6 +45,7 @@ export function ForgotPasswordForm() {
           <p className='text-muted-foreground text-center text-sm'>
             We've sent you a reset link to{' '}
             <span className='font-medium'>{form.getValues('email')}</span>.
+            <br />
             Please check your inbox and follow the instructions.
           </p>
         </FormHeader>
@@ -70,8 +71,8 @@ export function ForgotPasswordForm() {
       </FormBadge>
       <div>
         <FormHeader
-          title='Forgot Password'
-          description='Please enter your email and we will send you a link to reset your password'
+          title='Forgot password'
+          description='Please enter your email and we will send you a link to reset your password.'
         />
         <Form {...form}>
           <div className='my-3 h-9'>
@@ -105,7 +106,7 @@ export function ForgotPasswordForm() {
                 href='/sign-in'
                 className='text-muted-foreground my-5 inline-flex items-center gap-2 text-sm hover:text-gray-900'
               >
-                <ArrowLeftIcon className='h-4 w-4' /> Back to Sign In
+                <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
               </Link>
             </div>
           </form>

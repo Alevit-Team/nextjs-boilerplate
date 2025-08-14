@@ -106,7 +106,7 @@ export function SignUpForm() {
             className='w-full'
             disabled={pending || !form.formState.isValid}
           >
-            {pending ? 'Signing up...' : 'Sign Up'}
+            {pending ? 'Signing up...' : 'Sign up'}
           </Button>
           <p className='text-muted-foreground my-5 text-center text-sm'>
             Already have an account?{' '}
