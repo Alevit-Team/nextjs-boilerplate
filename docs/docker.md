@@ -84,8 +84,8 @@ docker compose logs redis
 
 The project includes a sample schema with:
 
-- **Users table:** Basic user information
-- **Posts table:** Blog posts with author relationships
+- **Users table**: Basic user information
+- **Posts table**: Blog posts with author relationships
 
 ### Example Usage
 
@@ -222,16 +222,7 @@ pnpm db:seed
 
 ## 📚 Additional Resources
 
-- [Drizzle ORM Documentation](https://orm.drizzle.team/)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-- [Redis Documentation](https://redis.io/documentation)
-- [Docker Compose Documentation](https://docs.docker.com/compose/)
-
-## 🤝 Contributing
-
-When adding new database changes:
-
-1. Update the schema in `src/db/schema.ts`
-2. Generate and test migrations locally
-3. Update seed data if necessary
-4. Document any breaking changes
+- Drizzle ORM Documentation: https://orm.drizzle.team/
+- PostgreSQL Documentation: https://www.postgresql.org/docs/
+- Redis Documentation: https://redis.io/documentation
+- Docker Compose Documentation: https://docs.docker.com/compose/

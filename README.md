@@ -1,164 +1,38 @@
-# Next.js Boilerplate
+# **APP_NAME** (Next.js Starter)
 
-A modern, production-ready Next.js boilerplate with TypeScript, TailwindCSS, and essential development tools. Perfect for rapid application development and team projects.
-
-## 🚀 Create a Project from this Template
+## Quick start
 
 ```bash
-# 1 · Create a brand-new repo based on the template and clone it
-gh repo create <your-new-project> \
-  --template Alevit-Team/nextjs-boilerplate \
-  --private --clone
-
-# 2 · Navigate to your new project and wire the boilerplate as "upstream"
-cd <your-new-project>
-git remote add upstream https://github.com/Alevit-Team/nextjs-boilerplate.git
-```
-
-That's it! Your project is now ready to run:
-
-```bash
-# You're already in <your-new-project> from step 2
-pnpm install           # Install dependencies
-pnpm dev              # Start development server
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see your new project.
-
-## 🔄 Pull Template Updates Later
-
-Whenever the boilerplate ships improvements:
-
-```bash
-git fetch upstream
-git merge upstream/main          # or: git merge upstream/v1.3.0
-```
-
-> **Tip:** We tag stable releases (`v1.2.0`, `v1.3.0`…), so you can merge a known-good state instead of whatever is on `main`.
-
-## ⬆️ Send Fixes Back Upstream (Optional)
-
-If you improve something that belongs in the template:
-
-```bash
-# Commit your changes first, then
-git push upstream HEAD:main    # Opens a PR on the boilerplate repo
-```
-
-## One-liner Alias (Optional Quality-of-Life)
-
-```bash
-git config alias.sync-template '!git fetch upstream && git diff --quiet HEAD upstream/main && echo "Already up to date" || git merge upstream/main --allow-unrelated-histories'
-```
-
-Now `git sync-template` pulls the latest boilerplate in one go.
-
----
-
-## 📦 What's Included
-
-- **[Next.js 15](https://nextjs.org/)** with App Router and Turbopack
-- **[TypeScript](https://www.typescriptlang.org/)** for type safety
-- **[TailwindCSS](https://tailwindcss.com/)** for styling
-- **[Radix UI](https://www.radix-ui.com/)** components
-- **[Lucide React](https://lucide.dev/)** icons
-- **[ESLint](https://eslint.org/) & [Prettier](https://prettier.io/)** for code quality
-- **[mise](https://mise.jdx.dev/)** for tool version management
-- **Feature-based architecture** for scalability
-
-## 🏃 Quick Start (Alternative to Template)
-
-If you prefer to clone directly:
-
-```bash
-git clone https://github.com/Alevit-Team/nextjs-boilerplate.git my-project
-cd my-project
 pnpm install
+pnpm run init:project <your-app-name>
 pnpm dev
 ```
 
-## 📚 Documentation
+## Upstream updates
 
-Comprehensive documentation is available in the [`docs/`](./docs/) folder:
+- Weekly PRs labeled `template-sync` bring changes from `Alevit-Team/nextjs-boilerplate`.
+- This template ships with a default `.templatesyncignore` excluding `docs/**` and legacy READMEs from child repos. Adjust in the child if needed.
+- Optional: define an Actions secret `TEMPLATE_SYNC_TOKEN` (org-level recommended). If present, the workflow will use it; otherwise it falls back to the built-in `GITHUB_TOKEN`.
 
-- **[Template Usage](./docs/template-usage.md)** - Using this repo as a template
-- **[Getting Started](./docs/getting-started.md)** - Complete setup guide
-- **[Project Structure](./docs/project-structure.md)** - Architecture and organization
-- **[Development Guide](./docs/development.md)** - Development workflow and tools
-- **[Deployment Guide](./docs/deployment.md)** - Production deployment
+### Optional: Personal Access Token for template sync
 
-## 🛠️ Development Commands
+Use a PAT only if you need broader permissions (e.g., syncing from a private upstream).
 
-```bash
-pnpm dev      # Start development server with Turbopack
-pnpm build    # Build for production
-pnpm start    # Start production server
-pnpm lint     # Run linting
-pnpm format   # Format code with Prettier
-```
+1. Create a PAT
+   - Prefer a Fine‑grained PAT with:
+     - Access to this repository: Contents (Read/Write), Pull requests (Read/Write)
+     - Access to the upstream (if private): Contents (Read)
+   - Or a classic PAT with `repo` scope.
+2. Add it as a secret named `TEMPLATE_SYNC_TOKEN`
+   - Recommended at the organization level; repository-level also works.
+3. Enable PAT usage (optional)
+   - Edit `.github/workflows/template-sync.yml` and replace the `source_gh_token: ${{ github.token }}` line with `source_gh_token: ${{ secrets.TEMPLATE_SYNC_TOKEN }}`.
+   - Commit the change. The workflow will now use the PAT.
 
-## 🔧 Tool Version Management
+## Scripts
 
-This project uses [mise](https://mise.jdx.dev/) to automatically manage Node.js and pnpm versions:
+- dev · build · start · lint · typecheck
 
-- **Node.js:** 22.18.0
-- **pnpm:** 10.14.0
+## Documentation
 
-See the [Getting Started guide](./docs/getting-started.md) for mise installation instructions.
-
-## 🏗️ Project Structure
-
-```
-src/
-├── app/           # Next.js App Router pages and layouts
-├── components/    # Reusable React components
-│   └── ui/        # UI components (buttons, etc.)
-└── lib/           # Utility functions
-```
-
-This follows a **feature-based architecture** designed to scale from simple projects to complex applications. See the [Project Structure guide](./docs/project-structure.md) for detailed information.
-
-## 🚀 Deploy
-
-Deploy easily to any hosting platform that supports Node.js:
-
-**Vercel (Recommended):**
-
-- Connect your GitHub repository to [Vercel](https://vercel.com/new)
-- Automatic deployment on every push
-
-**Other platforms:**
-
-- Build: `pnpm build`
-- Start: `pnpm start`
-- Port: `3000`
-
-See the [Deployment Guide](./docs/deployment.md) for platform-specific instructions.
-
-## 🤝 Contributing
-
-We welcome contributions to improve this boilerplate! Whether it's:
-
-- 🐛 Bug fixes
-- ✨ New features
-- 📚 Documentation improvements
-- 🎨 UI/UX enhancements
-
-Please see our contributing guidelines in the documentation and feel free to open issues or pull requests.
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-**Why these steps work:**
-
-1. **Template repositories** let anyone create a fresh repo with no shared Git history—perfect for boilerplates
-2. The GitHub CLI's `gh repo create --template` flag performs that creation (and `--clone` pulls it locally)
-3. Adding `upstream` with `git remote add` is the standard way to track the original source of a template
-4. A normal `git fetch` + `git merge` pulls updates whenever you want
-
-This gives you an ultra-lightweight, zero-surprise workflow for using and maintaining projects based on this template.
-
-**Happy coding!** 🎉
+- Detailed docs live in `docs/` within this template. They are excluded from child repos by default; copy what you need.

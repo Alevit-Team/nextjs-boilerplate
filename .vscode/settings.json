@@ -7,6 +7,10 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "always" },
+  "files.eol": "\n",
+  "typescript.tsdk": "node_modules/typescript/lib",
   // Prevent mise vscode extension to automatically configure extensions
   "mise.configureExtensionsAutomatically": false,
   // Use mise-managed Node.js for debugging
