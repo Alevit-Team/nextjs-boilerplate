@@ -1,6 +1,2 @@
 # Exclude detailed documentation and legacy READMEs from child repos by default
-docs/**
-EMAIL_VERIFICATION_README.md
-README-docker.md
-
 
