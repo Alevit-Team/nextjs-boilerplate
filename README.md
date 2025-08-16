@@ -31,7 +31,11 @@ Use a PAT only if you need broader permissions (e.g., syncing from a private ups
 
 ## Scripts
 
-- dev · build · start · lint · typecheck
+- dev
+- build
+- start
+- lint
+- typecheck
 
 ## Documentation
 
