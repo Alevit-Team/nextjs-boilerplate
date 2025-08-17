@@ -1,0 +1,25 @@
+name: Sync from template
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC (~09:00 Athens)
+  workflow_dispatch:
+
+jobs:
+  sync:
+    if: ${{ github.repository != 'Alevit-Team/nextjs-boilerplate' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Template sync
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: Alevit-Team/nextjs-boilerplate
+          upstream_branch: main
+          pr_labels: template-sync
+          # To use a Personal Access Token (PAT), replace the next line with:
+          # source_gh_token: ${{ secrets.TEMPLATE_SYNC_TOKEN }}
+          source_gh_token: ${{ github.token }}
