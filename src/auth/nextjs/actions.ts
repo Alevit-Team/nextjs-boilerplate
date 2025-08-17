@@ -9,7 +9,7 @@ import {
   resendVerificationSchema,
 } from './schemas';
 import { db } from '@/db';
-import { OAuthProvider, UserTable } from '@/db/schema';
+import { UserTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import {
   comparePasswords,
