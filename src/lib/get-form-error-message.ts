@@ -13,11 +13,11 @@ export const getFormErrorMessage = (errorCode: string) => {
     case ErrorCode.EMAIL_NOT_VERIFIED:
       return 'Please verify your email address before signing in. Check your inbox for a verification link.';
     case ErrorCode.INVALID_TOKEN:
-      return 'Invalid or malformed verification link. Please request a new one.';
+      return 'Your verification link is invalid or malformed. Please request a new one.';
     case ErrorCode.EXPIRED_TOKEN:
       return 'This verification link has expired. Please request a new one.';
     case ErrorCode.TOKEN_ALREADY_USED:
-      return 'This verification link has already been used or your email is already verified.';
+      return 'Link was already used or email verified.';
     case ErrorCode.RATE_LIMITED:
       return 'Too many requests. Please wait before trying again.';
     case ErrorCode.UNKNOWN_ERROR:

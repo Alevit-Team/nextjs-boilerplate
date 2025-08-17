@@ -7,7 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormError,
+  FormStatus,
   Input,
   PasswordInput,
   Button,
@@ -39,7 +39,10 @@ export function SignInForm() {
     <Form {...form}>
       <div className='my-3 h-9'>
         {state?.ok === false && (
-          <FormError label={getFormErrorMessage(state.errorCode)} />
+          <FormStatus
+            variant='error'
+            label={getFormErrorMessage(state.errorCode)}
+          />
         )}
       </div>
       <form action={action} className='w-full space-y-5'>
@@ -87,21 +90,19 @@ export function SignInForm() {
             )}
           />
           <div className='flex justify-end pt-1'>
-            <Link
-              href='/forgot-password'
-              className='text-muted-foreground text-sm'
-            >
-              Forgot Password?
-            </Link>
+            <Button variant='link' asChild>
+              <Link href='/forgot-password'>Forgot Password?</Link>
+            </Button>
           </div>
         </div>
         <div>
           <Button
             type='submit'
             className='w-full'
-            disabled={pending || !form.formState.isValid}
+            disabled={!form.formState.isValid || pending}
+            isLoading={pending}
           >
-            {pending ? 'Signing in...' : 'Sign In'}
+            {pending ? 'Signing in' : 'Sign in'}
           </Button>
         </div>
       </form>

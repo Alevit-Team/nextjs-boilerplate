@@ -7,7 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormError,
+  FormStatus,
   PasswordInput,
   Button,
   Input,
@@ -20,6 +20,7 @@ import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { PasswordValidation } from './password-validation';
+import Link from 'next/link';
 
 const defaultValues = {
   name: '',
@@ -39,10 +40,13 @@ export function SignUpForm() {
     <Form {...form}>
       <div className='my-3 h-9'>
         {state?.ok === false && (
-          <FormError label={getFormErrorMessage(state.errorCode)} />
+          <FormStatus
+            variant='error'
+            label={getFormErrorMessage(state.errorCode)}
+          />
         )}
       </div>
-      <form action={action} className='min-w-xs space-y-4'>
+      <form action={action} className='w-full space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -103,10 +107,17 @@ export function SignUpForm() {
           <Button
             type='submit'
             className='w-full'
-            disabled={pending || !form.formState.isValid}
+            disabled={!form.formState.isValid || pending}
+            isLoading={pending}
           >
-            {pending ? 'Signing up...' : 'Sign Up'}
+            {pending ? 'Signing up' : 'Sign up'}
           </Button>
+          <p className='text-muted-foreground my-5 text-center text-sm'>
+            Already have an account?
+            <Button variant='link' asChild>
+              <Link href='/sign-in'>Sign in</Link>
+            </Button>
+          </p>
         </div>
       </form>
     </Form>
