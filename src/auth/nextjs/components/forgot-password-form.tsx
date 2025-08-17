@@ -43,7 +43,7 @@ export function ForgotPasswordForm() {
         </FormBadge>
         <FormHeader title='Check your email'>
           <p className='text-muted-foreground text-center text-sm'>
-            We've sent you a reset link to{' '}
+            We’ve sent you a reset link to{' '}
             <span className='font-medium'>{form.getValues('email')}</span>.
             <br />
             Please check your inbox and follow the instructions.

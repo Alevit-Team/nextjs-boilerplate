@@ -27,14 +27,18 @@ const FormBadge = ({
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
-          const existingClassName = (child.props as any)?.className || '';
-          return React.cloneElement(child as React.ReactElement<any>, {
-            className: cn(
-              'text-primary',
-              iconSizeClasses[iconSize],
-              existingClassName
-            ),
-          });
+          const existingClassName =
+            (child.props as unknown as { className?: string })?.className || '';
+          return React.cloneElement(
+            child as React.ReactElement<{ className?: string }>,
+            {
+              className: cn(
+                'text-primary',
+                iconSizeClasses[iconSize],
+                existingClassName
+              ),
+            }
+          );
         }
         return child;
       })}

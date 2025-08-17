@@ -14,14 +14,12 @@ import {
   FormStatus,
   Input,
   Button,
-  Card,
   FormHeader,
   FormMessage,
 } from '@/components';
 import { resendVerificationEmail } from '../actions';
 import { resendVerificationSchema } from '../schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { FormInfo } from '@/components/ui/form-info';
 import Link from 'next/link';
 
 const defaultValues = {
@@ -54,13 +52,6 @@ export function EmailVerification() {
             registration process.
           </p>
         </FormHeader>
-        <FormInfo
-          items={[
-            'Check your inbox (and spam folder)',
-            'Click the verification link in the email',
-            'Return here to sign in',
-          ]}
-        />
         {!showResendForm ? (
           <Button onClick={handleResendClick} className='w-full'>
             Resend verification email

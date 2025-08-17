@@ -1,7 +1,7 @@
 import { verifyEmail } from '@/auth/nextjs/actions';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { Button, FormBadge, FormHeader, FormInfo } from '@/components';
-import { CheckCircleIcon, XCircleIcon, ArrowLeftIcon } from 'lucide-react';
+import { Button, FormBadge, FormHeader } from '@/components';
+import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 
 interface VerifyEmailTokenPageProps {
@@ -44,12 +44,6 @@ export default async function VerifyEmailTokenPage({
               <FormHeader
                 title='Verification failed'
                 description={getFormErrorMessage(result.errorCode)}
-              />
-              <FormInfo
-                items={[
-                  'Check if you are using the latest email',
-                  'Request a new verification email if needed',
-                ]}
               />
               <Button asChild className='w-full'>
                 <Link href='/verify-email'>Back to email verification</Link>
