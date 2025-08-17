@@ -28,7 +28,7 @@ export default async function HomePage() {
               <Link href='/sign-in'>Sign In</Link>
             </Button>
             <Button asChild variant='outline'>
-              <Link href='/sign-up'>Sign Up</Link>
+              <Link href='/sign-up'>Sign up</Link>
             </Button>
           </CardFooter>
         </Card>

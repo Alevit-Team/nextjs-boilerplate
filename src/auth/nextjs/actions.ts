@@ -184,6 +184,7 @@ export async function forgotPassword(
       try {
         const resetToken = await tokenService.createPasswordResetToken(user.id);
         const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
+        console.log('resetUrl', resetUrl);
 
         await emailService.sendPasswordReset(user.email, {
           userName: user.name,
@@ -332,7 +333,7 @@ export async function resendVerificationEmail(
         user.id
       );
       const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email/${verificationToken}`;
-
+      console.log('verificationUrl', verificationUrl);
       await emailService.sendEmailVerification(user.email, {
         userName: user.name,
         verificationUrl,

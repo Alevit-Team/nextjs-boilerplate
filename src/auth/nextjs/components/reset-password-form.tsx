@@ -11,20 +11,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormError,
+  FormStatus,
   Button,
-  Card,
+  FormBadge,
+  FormHeader,
 } from '@/components';
 import { PasswordInput } from '@/components/ui/password-input';
 import { resetPassword } from '../actions';
 import { resetPasswordSchema } from '../schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { CheckCircleIcon } from 'lucide-react';
+import { ArrowLeftIcon, CheckCircleIcon, Key } from 'lucide-react';
 import Link from 'next/link';
+import { PasswordValidation } from './password-validation';
 
 const defaultValues = {
   password: '',
-  confirmPassword: '',
 };
 
 interface ResetPasswordFormProps {
@@ -45,96 +46,79 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   // If password reset was successful, show success message
   if (state?.ok === true) {
     return (
-      <Card className='p-6'>
-        <div className='text-center'>
-          <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100'>
-            <CheckCircleIcon className='h-8 w-8 text-green-600' />
+      <section className='flex min-h-full w-full flex-col items-center justify-center gap-6 py-8'>
+        <FormBadge>
+          <CheckCircleIcon />
+        </FormBadge>
+        <div className='w-full max-w-sm px-4'>
+          <FormHeader
+            title='Password reset!'
+            description='Your password has been successfully updated. You can now sign in with your new password.'
+          />
+          <div className='mt-8 flex flex-col items-center'>
+            <Button asChild className='w-full'>
+              <Link href='/sign-in'>Continue to sign in</Link>
+            </Button>
           </div>
-
-          <h2 className='mb-2 text-2xl font-bold text-green-900'>
-            Password Reset Successful!
-          </h2>
-
-          <p className='text-muted-foreground mb-6 text-sm'>
-            Your password has been successfully updated. You can now sign in
-            with your new password.
-          </p>
-
-          <div className='mb-6 rounded-lg bg-green-50 p-4'>
-            <p className='text-sm text-green-700'>
-              🔒 For security, all your existing sessions have been logged out.
-            </p>
-          </div>
-
-          <Link
-            href='/sign-in'
-            className='inline-flex w-full items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none'
-          >
-            Continue to Sign In
-          </Link>
         </div>
-      </Card>
+      </section>
     );
   }
 
   return (
-    <Form {...form}>
-      <div className='my-3 h-9'>
-        {state?.ok === false && (
-          <FormError label={getFormErrorMessage(state.errorCode)} />
-        )}
-      </div>
-
-      <form action={action} className='w-full space-y-4'>
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>New Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+    <section className='flex min-h-full w-full flex-col items-center justify-center gap-6 py-8'>
+      <FormBadge>
+        <Key />
+      </FormBadge>
+      <div className='w-full max-w-sm px-4'>
+        <FormHeader
+          title='Enter new password'
+          description='Your new password must be different from your previous passwords.'
         />
-
-        <FormField
-          control={form.control}
-          name='confirmPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm New Password</FormLabel>
-              <FormControl>
-                <PasswordInput {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className='pt-2'>
-          <Button
-            type='submit'
-            className='w-full'
-            disabled={pending || !form.formState.isValid}
-          >
-            {pending ? 'Resetting Password...' : 'Reset Password'}
-          </Button>
-        </div>
-      </form>
-
-      <div className='mt-6 rounded-lg bg-amber-50 p-4'>
-        <div className='text-left text-sm'>
-          <p className='font-medium text-amber-900'>Security Notice:</p>
-          <ul className='mt-2 space-y-1 text-amber-700'>
-            <li>• This link expires in 15 minutes</li>
-            <li>• All existing sessions will be logged out</li>
-            <li>• Choose a strong, unique password</li>
-          </ul>
-        </div>
+        <Form {...form}>
+          <div className='my-3 h-9'>
+            {state?.ok === false && (
+              <FormStatus
+                variant='error'
+                label={getFormErrorMessage(state.errorCode)}
+              />
+            )}
+          </div>
+          <form action={action} className='w-full space-y-6'>
+            <FormField
+              control={form.control}
+              name='password'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <PasswordValidation password={form.watch('password')} />
+            <div className='flex flex-col items-center'>
+              <Button
+                type='submit'
+                className='w-full'
+                disabled={!form.formState.isValid || pending}
+                isLoading={pending}
+              >
+                {pending ? 'Resetting password' : 'Reset password'}
+              </Button>
+              <Link
+                href='/sign-in'
+                className='text-muted-foreground my-5 inline-flex items-center gap-2 text-sm hover:text-gray-900'
+              >
+                <ArrowLeftIcon className='h-4 w-4' />
+                Back to sign in
+              </Link>
+            </div>
+          </form>
+        </Form>
       </div>
-    </Form>
+    </section>
   );
 }
