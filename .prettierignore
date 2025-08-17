@@ -1,0 +1,6 @@
+.next
+.env.*
+
+pnpm-lock.yaml
+
+src/db/migrations
