@@ -2,7 +2,6 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface FormBadgeProps {
-  children: React.ReactNode;
   iconSize?: 'sm' | 'md' | 'lg';
 }
 
@@ -12,9 +11,20 @@ const iconSizeClasses = {
   lg: 'size-8',
 };
 
-const FormBadge = ({ children, iconSize = 'md' }: FormBadgeProps) => {
+const FormBadge = ({
+  children,
+  iconSize = 'md',
+  className,
+  ...props
+}: React.ComponentProps<'div'> & FormBadgeProps) => {
   return (
-    <div className='border-primary/2 flex items-center justify-center rounded-full border-6 bg-[#F4EEFE] p-2'>
+    <div
+      className={cn(
+        'border-primary/2 flex items-center justify-center rounded-full border-6 bg-[#F4EEFE] p-2',
+        className
+      )}
+      {...props}
+    >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           const existingClassName = (child.props as any)?.className || '';
