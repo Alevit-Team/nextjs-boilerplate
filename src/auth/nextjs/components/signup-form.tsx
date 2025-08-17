@@ -7,7 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormError,
+  FormStatus,
   PasswordInput,
   Button,
   Input,
@@ -40,7 +40,10 @@ export function SignUpForm() {
     <Form {...form}>
       <div className='my-3 h-9'>
         {state?.ok === false && (
-          <FormError label={getFormErrorMessage(state.errorCode)} />
+          <FormStatus
+            variant='error'
+            label={getFormErrorMessage(state.errorCode)}
+          />
         )}
       </div>
       <form action={action} className='w-full space-y-4'>

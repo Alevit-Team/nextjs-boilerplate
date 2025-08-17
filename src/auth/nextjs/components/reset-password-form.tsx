@@ -11,9 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormError,
+  FormStatus,
   Button,
-  Card,
   FormBadge,
   FormHeader,
 } from '@/components';
@@ -79,7 +78,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         <Form {...form}>
           <div className='my-3 h-9'>
             {state?.ok === false && (
-              <FormError label={getFormErrorMessage(state.errorCode)} />
+              <FormStatus
+                variant='error'
+                label={getFormErrorMessage(state.errorCode)}
+              />
             )}
           </div>
           <form action={action} className='w-full space-y-6'>

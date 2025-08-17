@@ -7,10 +7,10 @@ interface FormInfoProps {
 
 const FormInfo = ({ title, items }: FormInfoProps) => {
   return (
-    <div className='mt-6 rounded-lg bg-gray-50 p-4'>
+    <div className='bg-muted w-full rounded-lg p-4'>
       <div className='text-left text-sm'>
-        {title && <p className='font-medium text-amber-900'>{title}</p>}
-        <ul className='mt-2 space-y-1'>
+        {title && <p className='text-info mb-2 font-medium'>{title}</p>}
+        <ul className='space-y-1'>
           {items.map((item) => (
             <li key={item}>• {item}</li>
           ))}

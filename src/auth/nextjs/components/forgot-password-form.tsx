@@ -10,7 +10,7 @@ import {
   Input,
   Button,
   FormHeader,
-  FormError,
+  FormStatus,
   FormBadge,
 } from '@/components';
 import { useForm } from 'react-hook-form';
@@ -77,10 +77,13 @@ export function ForgotPasswordForm() {
         <Form {...form}>
           <div className='my-3 h-9'>
             {state?.ok === false && (
-              <FormError label={getFormErrorMessage(state.errorCode)} />
+              <FormStatus
+                variant='error'
+                label={getFormErrorMessage(state.errorCode)}
+              />
             )}
           </div>
-          <form action={action} className='w-full space-y-4'>
+          <form action={action} className='space-y-4'>
             <FormField
               control={form.control}
               name='email'
