@@ -62,11 +62,7 @@ export function EmailVerification() {
           ]}
         />
         {!showResendForm ? (
-          <Button
-            variant='outline'
-            onClick={handleResendClick}
-            className='w-full'
-          >
+          <Button onClick={handleResendClick} className='w-full'>
             Resend verification email
           </Button>
         ) : (
