@@ -1,16 +1,25 @@
-import React from "react";
+import React from 'react';
+
+import { cn } from '@/lib/utils';
 
 interface DividerProps {
   label: string;
-  className?: string;
 }
 
-const Divider = ({ label, className }: DividerProps) => {
+const Divider = ({
+  label,
+  className,
+  ...props
+}: React.ComponentProps<'div'> & DividerProps) => {
   return (
-    <div className={`flex items-center w-full ${className}`}>
-      <div className="flex-1 h-px bg-gray-200"></div>
-      <span className="px-3 text-sm text-gray-400">{label}</span>
-      <div className="flex-1 h-px bg-gray-200"></div>
+    <div
+      data-slot='divider'
+      className={cn('flex w-full items-center', className)}
+      {...props}
+    >
+      <div className='bg-muted-foreground/20 h-px flex-1'></div>
+      <span className='text-muted-foreground px-3 text-sm'>{label}</span>
+      <div className='bg-muted-foreground/20 h-px flex-1'></div>
     </div>
   );
 };
