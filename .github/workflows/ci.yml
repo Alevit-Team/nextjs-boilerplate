@@ -7,39 +7,72 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-type-check:
-    name: Lint and Type Check
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Run linter
         run: pnpm lint
         env:
           SKIP_ENV_VALIDATION: true
 
+  format:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check formatting
+        run: pnpm format:check
+
+  type-check:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - name: Run type check
         run: pnpm type-check || echo "Type checking not configured yet"
 
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: [lint, format, type-check]
 
     steps:
       - name: Checkout code
@@ -60,6 +93,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: pnpm build
+        run: pnpm build --no-lint
         env:
           SKIP_ENV_VALIDATION: true

@@ -1,6 +1,6 @@
 import { SignInForm } from '@/auth/nextjs/components/signin-form';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
-import { Button, Divider, FormHeader } from '@/components';
+import { Button, FormHeader, Separator } from '@/components';
 import Link from 'next/link';
 
 export default function SignInPage() {
@@ -18,7 +18,7 @@ export default function SignInPage() {
             <Link href='/sign-up'>Sign up</Link>
           </Button>
         </p>
-        <Divider label='Or continue with' className='my-6' />
+        <Separator label='Or continue with' className='my-6' />
         <SocialLogin />
       </div>
     </section>
