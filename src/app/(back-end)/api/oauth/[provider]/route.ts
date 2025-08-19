@@ -24,7 +24,7 @@ async function getOAuth(
     },
   });
 
-  const userData = await user.json();
+  // const userData = await user.json();
   return NextResponse.json({ provider, code });
 }
 

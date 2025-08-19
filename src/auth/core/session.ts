@@ -1,7 +1,7 @@
 import { userRoles } from '@/db/schema';
 import { randomBytes } from 'crypto';
 import z from 'zod';
-import redisClient from '@/redis';
+import getRedisClient from '@/redis';
 
 export const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // 7 days
 export const COOKIE_SESSION_KEY = 'sessionId';
@@ -37,6 +37,11 @@ export async function updateUserSessionExpiration(
   const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
   if (sessionId == null) return null;
 
+  // Skip if Redis is not available (e.g., during build)
+  if (!process.env.REDIS_URL) {
+    return null;
+  }
+
   // Throttle refreshes using an httpOnly cookie storing last touch timestamp
   const now = Date.now();
   const throttleMs = SESSION_TOUCH_INTERVAL_SECONDS * 1000;
@@ -49,42 +54,75 @@ export async function updateUserSessionExpiration(
     return; // Skip refresh; too soon
   }
 
-  const user = await getUserSessionById(sessionId);
-  if (user == null) return;
+  try {
+    const user = await getUserSessionById(sessionId);
+    if (user == null) return;
 
-  await redisClient.set(
-    `session:${sessionId}`,
-    JSON.stringify(user),
-    'EX',
-    SESSION_EXPIRATION_SECONDS
-  );
-  setCookie(sessionId, cookies);
+    const redisClient = getRedisClient();
+    await redisClient.set(
+      `session:${sessionId}`,
+      JSON.stringify(user),
+      'EX',
+      SESSION_EXPIRATION_SECONDS
+    );
+    setCookie(sessionId, cookies);
 
-  // Record the last refresh time to enforce throttling
-  cookies.set(COOKIE_SESSION_TOUCH_KEY, String(now), {
-    secure: true,
-    httpOnly: true,
-    sameSite: 'lax',
-    expires: now + SESSION_EXPIRATION_SECONDS * 1000,
-  });
+    // Record the last refresh time to enforce throttling
+    cookies.set(COOKIE_SESSION_TOUCH_KEY, String(now), {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+      expires: now + SESSION_EXPIRATION_SECONDS * 1000,
+    });
 
-  console.log('updated session expiration');
+    console.log('updated session expiration');
+  } catch (error) {
+    // Silently handle Redis unavailability - don't spam logs
+    if (
+      error instanceof Error &&
+      error.message.includes('temporarily unavailable')
+    ) {
+      return null; // Gracefully degrade
+    }
+    console.warn('Failed to update session expiration:', error);
+    return null;
+  }
 }
 
 export async function createUserSession(
   user: UserSession,
   cookies: Pick<Cookies, 'set'>
 ) {
+  // Skip if Redis is not available (e.g., during build)
+  if (!process.env.REDIS_URL) {
+    throw new Error('Redis is required for session management');
+  }
+
   const sessionId = randomBytes(512).toString('hex').normalize();
 
-  await redisClient.set(
-    `session:${sessionId}`,
-    JSON.stringify(sessionSchema.parse(user)),
-    'EX',
-    SESSION_EXPIRATION_SECONDS
-  );
+  try {
+    const redisClient = getRedisClient();
+    await redisClient.set(
+      `session:${sessionId}`,
+      JSON.stringify(sessionSchema.parse(user)),
+      'EX',
+      SESSION_EXPIRATION_SECONDS
+    );
 
-  await setCookie(sessionId, cookies);
+    await setCookie(sessionId, cookies);
+  } catch (error) {
+    // Handle Redis unavailability more gracefully
+    if (
+      error instanceof Error &&
+      error.message.includes('temporarily unavailable')
+    ) {
+      throw new Error(
+        'Session management is temporarily unavailable. Please try again later.'
+      );
+    }
+    console.error('Failed to create user session:', error);
+    throw new Error('Session creation failed');
+  }
 }
 
 export async function removeUserFromSession(
@@ -93,10 +131,29 @@ export async function removeUserFromSession(
   const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
   if (sessionId == null) return;
 
-  await redisClient.del(`session:${sessionId}`);
+  // Always delete cookies, even if Redis is not available
   cookies.delete(COOKIE_SESSION_KEY);
   cookies.delete(COOKIE_SESSION_TOUCH_KEY);
-  console.log('removed user from session');
+
+  // Skip Redis deletion if not available (e.g., during build)
+  if (!process.env.REDIS_URL) {
+    return;
+  }
+
+  try {
+    const redisClient = getRedisClient();
+    await redisClient.del(`session:${sessionId}`);
+    console.log('removed user from session');
+  } catch (error) {
+    // Silently handle Redis unavailability during logout
+    if (
+      error instanceof Error &&
+      !error.message.includes('temporarily unavailable')
+    ) {
+      console.warn('Failed to remove session from Redis:', error);
+    }
+    // Continue anyway since cookies are already deleted
+  }
 }
 
 export async function setCookie(
@@ -112,22 +169,39 @@ export async function setCookie(
 }
 
 async function getUserSessionById(sessionId: string) {
-  const rawUser = await redisClient.get(`session:${sessionId}`);
-
-  if (rawUser == null) return null;
-
-  let userObject = null;
-
-  try {
-    userObject = JSON.parse(rawUser);
-  } catch (error) {
-    console.error('Error parsing session raw user', error);
+  // Skip if Redis is not available (e.g., during build)
+  if (!process.env.REDIS_URL) {
     return null;
   }
 
-  const { success, data: user } = sessionSchema.safeParse(userObject);
+  try {
+    const redisClient = getRedisClient();
+    const rawUser = await redisClient.get(`session:${sessionId}`);
 
-  return success ? user : null;
+    if (rawUser == null) return null;
+
+    let userObject = null;
+
+    try {
+      userObject = JSON.parse(rawUser);
+    } catch (error) {
+      console.error('Error parsing session raw user', error);
+      return null;
+    }
+
+    const { success, data: user } = sessionSchema.safeParse(userObject);
+
+    return success ? user : null;
+  } catch (error) {
+    // Silently handle Redis unavailability
+    if (
+      error instanceof Error &&
+      !error.message.includes('temporarily unavailable')
+    ) {
+      console.warn('Failed to get session from Redis:', error);
+    }
+    return null;
+  }
 }
 
 export async function getUserFromSession(cookies: Pick<Cookies, 'get'>) {
