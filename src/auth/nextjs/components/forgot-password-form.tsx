@@ -11,7 +11,7 @@ import {
   Button,
   FormHeader,
   FormStatus,
-  FormBadge,
+  IconBadge,
 } from '@/components';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -38,9 +38,9 @@ export function ForgotPasswordForm() {
   if (state?.ok === true) {
     return (
       <div className='flex flex-col items-center justify-center gap-6'>
-        <FormBadge>
+        <IconBadge>
           <MailIcon />
-        </FormBadge>
+        </IconBadge>
         <FormHeader title='Check your email'>
           <p className='text-muted-foreground text-center text-sm'>
             We’ve sent you a reset link to{' '}
@@ -66,9 +66,9 @@ export function ForgotPasswordForm() {
 
   return (
     <div className='flex flex-col items-center justify-center gap-6'>
-      <FormBadge>
+      <IconBadge>
         <Key />
-      </FormBadge>
+      </IconBadge>
       <div>
         <FormHeader
           title='Forgot password'

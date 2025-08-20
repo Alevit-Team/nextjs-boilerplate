@@ -1,6 +1,6 @@
 import { ResetPasswordForm } from '@/auth/nextjs/components/reset-password-form';
 import { tokenService } from '@/lib/services/token-service';
-import { Button, FormBadge, FormHeader } from '@/components';
+import { Button, IconBadge, FormHeader } from '@/components';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -17,9 +17,9 @@ export default async function ResetPasswordTokenPage({
   if (!validation.isValid) {
     return (
       <section className='flex min-h-full w-full flex-col items-center justify-center gap-6 py-8'>
-        <FormBadge>
+        <IconBadge>
           <AlertCircleIcon />
-        </FormBadge>
+        </IconBadge>
         <div className='w-full max-w-sm px-4'>
           <FormHeader
             title='Invalid reset link'

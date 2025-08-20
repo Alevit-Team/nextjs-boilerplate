@@ -7,7 +7,7 @@ export * from './ui/input';
 export * from './ui/label';
 export * from './ui/password-input';
 export * from './ui/form-header';
-export * from './ui/form-badge';
+export * from './ui/icon-badge';
 export * from './ui/container';
 export * from './ui/section';
 export * from './ui/separator';

@@ -13,7 +13,7 @@ import {
   FormMessage,
   FormStatus,
   Button,
-  FormBadge,
+  IconBadge,
   FormHeader,
 } from '@/components';
 import { PasswordInput } from '@/components/ui/password-input';
@@ -47,9 +47,9 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   if (state?.ok === true) {
     return (
       <section className='flex min-h-full w-full flex-col items-center justify-center gap-6 py-8'>
-        <FormBadge>
+        <IconBadge>
           <CheckCircleIcon />
-        </FormBadge>
+        </IconBadge>
         <div className='w-full max-w-sm px-4'>
           <FormHeader
             title='Password reset!'
@@ -67,9 +67,9 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
   return (
     <section className='flex min-h-full w-full flex-col items-center justify-center gap-6 py-8'>
-      <FormBadge>
+      <IconBadge>
         <Key />
-      </FormBadge>
+      </IconBadge>
       <div className='w-full max-w-sm px-4'>
         <FormHeader
           title='Enter new password'
