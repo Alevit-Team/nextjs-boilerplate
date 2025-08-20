@@ -1,14 +1,14 @@
 import { LogOutButton } from '@/auth/nextjs/components/logout-button';
 import { getCurrentUser } from '@/auth/nextjs/current-user';
-import { Button } from '@/components';
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components';
 import Link from 'next/link';
 
 export default async function ProfilePage() {

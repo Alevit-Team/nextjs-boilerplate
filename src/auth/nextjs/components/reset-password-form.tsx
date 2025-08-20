@@ -15,8 +15,8 @@ import {
   Button,
   IconBadge,
   FormHeader,
+  PasswordInput,
 } from '@/components';
-import { PasswordInput } from '@/components/ui/password-input';
 import { resetPassword } from '../actions';
 import { resetPasswordSchema } from '../schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
