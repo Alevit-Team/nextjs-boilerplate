@@ -21,6 +21,7 @@ import { createUserSession, removeUserFromSession } from '../core/session';
 import { ActionResult, ErrorCode } from './types';
 import { emailService } from '@/lib/email-service';
 import { tokenService } from '@/lib/token-service';
+import { after } from 'next/server';
 // import { getOAuthClient } from '../core/oauth/base';
 
 export async function signIn(
@@ -127,13 +128,21 @@ export async function signUp(
       );
       const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email/${verificationToken}`;
 
-      await emailService.sendEmailVerification(parsedData.email, {
-        userName: user.name,
-        verificationUrl,
+      after(async () => {
+        try {
+          await emailService.sendEmailVerification(parsedData.email, {
+            userName: user.name,
+            verificationUrl,
+          });
+        } catch (emailError) {
+          console.error(
+            'Failed to send verification email in after callback:',
+            emailError
+          );
+        }
       });
     } catch (emailError) {
-      console.error('Failed to send verification email:', emailError);
-      // Continue with signup even if email fails
+      console.error('Failed to create verification token:', emailError);
     }
 
     // Don't create session yet - user needs to verify email first
@@ -186,12 +195,21 @@ export async function forgotPassword(
         const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
         console.log('resetUrl', resetUrl);
 
-        await emailService.sendPasswordReset(user.email, {
-          userName: user.name,
-          resetUrl,
+        after(async () => {
+          try {
+            await emailService.sendPasswordReset(user.email, {
+              userName: user.name,
+              resetUrl,
+            });
+          } catch (emailError) {
+            console.error(
+              'Failed to send password reset email in after callback:',
+              emailError
+            );
+          }
         });
       } catch (emailError) {
-        console.error('Failed to send password reset email:', emailError);
+        console.error('Failed to create password reset token:', emailError);
         // Still return success for security
       }
     }
@@ -334,12 +352,22 @@ export async function resendVerificationEmail(
       );
       const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email/${verificationToken}`;
       console.log('verificationUrl', verificationUrl);
-      await emailService.sendEmailVerification(user.email, {
-        userName: user.name,
-        verificationUrl,
+
+      after(async () => {
+        try {
+          await emailService.sendEmailVerification(user.email, {
+            userName: user.name,
+            verificationUrl,
+          });
+        } catch (emailError) {
+          console.error(
+            'Failed to send verification email in after callback:',
+            emailError
+          );
+        }
       });
     } catch (emailError) {
-      console.error('Failed to resend verification email:', emailError);
+      console.error('Failed to create verification token:', emailError);
       return { ok: false, errorCode: ErrorCode.UNKNOWN_ERROR };
     }
 
