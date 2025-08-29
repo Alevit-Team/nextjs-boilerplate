@@ -1,6 +1,6 @@
 import { verifyEmail } from '@/auth/nextjs/actions';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { Button, FormBadge, FormHeader } from '@/components';
+import { Button, IconBadge, FormHeader } from '@/components';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -22,9 +22,9 @@ export default async function VerifyEmailTokenPage({
         <div className='flex flex-col items-center justify-center gap-6'>
           {result.ok ? (
             <>
-              <FormBadge>
+              <IconBadge>
                 <CheckCircleIcon />
-              </FormBadge>
+              </IconBadge>
               <FormHeader title='Email verified'>
                 <p className='text-muted-foreground text-sm'>
                   Your email address has been successfully verified.
@@ -38,9 +38,9 @@ export default async function VerifyEmailTokenPage({
             </>
           ) : (
             <>
-              <FormBadge>
+              <IconBadge>
                 <XCircleIcon />
-              </FormBadge>
+              </IconBadge>
               <FormHeader
                 title='Verification failed'
                 description={getFormErrorMessage(result.errorCode)}

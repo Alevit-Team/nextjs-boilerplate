@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-interface FormBadgeProps {
+interface IconBadgeProps {
   iconSize?: 'sm' | 'md' | 'lg';
 }
 
@@ -11,16 +11,16 @@ const iconSizeClasses = {
   lg: 'size-8',
 };
 
-const FormBadge = ({
+const IconBadge = ({
   children,
   iconSize = 'md',
   className,
   ...props
-}: React.ComponentProps<'div'> & FormBadgeProps) => {
+}: React.ComponentProps<'div'> & IconBadgeProps) => {
   return (
     <div
       className={cn(
-        'border-primary/2 flex items-center justify-center rounded-full border-6 bg-[#F4EEFE] p-2',
+        'flex items-center justify-center rounded-full border-2 bg-[#F4EEFE] p-2',
         className
       )}
       {...props}
@@ -46,5 +46,5 @@ const FormBadge = ({
   );
 };
 
-export { FormBadge };
-export type { FormBadgeProps };
+export { IconBadge };
+export type { IconBadgeProps };
