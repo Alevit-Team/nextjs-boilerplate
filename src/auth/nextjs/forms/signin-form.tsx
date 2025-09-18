@@ -34,7 +34,7 @@ export function SignInForm() {
     <Form {...form}>
       <Form.Header
         title='Sign in'
-        description='Please enter your email and password to sign in.'
+        description='Please enter your email and password to sign in'
       />
       <div className='my-3 h-9'>
         {state?.ok === false && (
@@ -44,22 +44,6 @@ export function SignInForm() {
         )}
       </div>
       <form action={action} className='w-full space-y-5'>
-        {/* {error && <p className='text-destructive'>{error}</p>}
-        <div className='flex gap-4'>
-          <Button
-            type='button'
-            onClick={async () => await oAuthSignIn('discord')}
-          >
-            Discord
-          </Button>
-          <Button
-            type='button'
-            onClick={async () => await oAuthSignIn('github')}
-          >
-            GitHub
-          </Button>
-        </div> */}
-
         <Form.Field
           control={form.control}
           name='email'
@@ -104,8 +88,6 @@ export function SignInForm() {
           </Button>
         </div>
       </form>
-
-      {/* Show verification help if email not verified */}
       {state?.ok === false &&
         state.errorCode === ErrorCode.EMAIL_NOT_VERIFIED && (
           <div className='mt-4 rounded-lg bg-blue-50 p-4'>

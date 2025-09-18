@@ -94,7 +94,7 @@ export function SignUpForm() {
               <Form.Item>
                 <Form.Label>Password</Form.Label>
                 <Form.Control>
-                  <PasswordInput {...field} showValidation={false} />
+                  <PasswordInput showValidation={false} {...field} />
                 </Form.Control>
               </Form.Item>
               <PasswordValidation password={field.value} />

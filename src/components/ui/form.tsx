@@ -141,7 +141,9 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
         className
       )}
       {...props}
-    />
+    >
+      {body}
+    </p>
   );
 }
 
