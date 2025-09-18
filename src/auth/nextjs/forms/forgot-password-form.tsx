@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, Input, Button, IconBadge } from '@/components';
+import { Form, Input, Button, IconBadge, AccountPrompt } from '@/components';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
@@ -38,15 +38,14 @@ export function ForgotPasswordForm() {
         </p>
 
         <div className='mt-8 flex w-full flex-col items-center'>
-          <Button asChild className='w-full'>
+          <Button className='w-full' asChild>
             <Link href='/sign-in'>Back to sign in</Link>
           </Button>
-          <p className='text-muted-foreground my-5 text-center text-sm'>
-            Didnt receive the email?
-            <Button variant='link' onClick={() => window.location.reload()}>
-              Send again
-            </Button>
-          </p>
+          <AccountPrompt
+            text='Didnt receive the email?'
+            linkText='Send again'
+            onClick={() => window.location.reload()}
+          />
         </div>
       </div>
     );
@@ -70,7 +69,7 @@ export function ForgotPasswordForm() {
               </Form.Status>
             )}
           </div>
-          <form action={action} className='space-y-4'>
+          <form action={action} className='space-y-6'>
             <Form.Field
               control={form.control}
               name='email'
@@ -84,7 +83,7 @@ export function ForgotPasswordForm() {
                 </Form.Item>
               )}
             />
-            <div className='flex w-full flex-col items-center'>
+            <div className='flex w-full flex-col items-center gap-4'>
               <Button
                 type='submit'
                 className='w-full'
@@ -93,12 +92,11 @@ export function ForgotPasswordForm() {
               >
                 {pending ? 'Sending reset email' : 'Send reset email'}
               </Button>
-              <Link
-                href='/sign-in'
-                className='text-muted-foreground my-5 inline-flex items-center gap-2 text-sm hover:text-gray-900'
-              >
-                <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
-              </Link>
+              <Button variant='link' asChild>
+                <Link href='/sign-in'>
+                  <ArrowLeftIcon /> Back to sign in
+                </Link>
+              </Button>
             </div>
           </form>
         </Form>

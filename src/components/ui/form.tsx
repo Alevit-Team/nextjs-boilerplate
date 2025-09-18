@@ -150,8 +150,12 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
 const FormHeader = React.forwardRef<HTMLDivElement, FormHeaderProps>(
   ({ className, title, description, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn('text-center', className)} {...props}>
-        <h1 className='mb-8 text-2xl font-bold'>{title}</h1>
+      <div
+        ref={ref}
+        className={cn('space-y-4 text-center', className)}
+        {...props}
+      >
+        <h1 className='text-2xl font-bold'>{title}</h1>
         {description && (
           <p className='text-muted-foreground text-sm'>{description}</p>
         )}
