@@ -4,13 +4,19 @@ import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, Button, IconBadge, PasswordInput } from '@/components';
+import {
+  Form,
+  Button,
+  IconBadge,
+  PasswordInput,
+  AccountPrompt,
+} from '@/components';
 import { resetPassword } from '../actions';
 import { resetPasswordSchema } from '../schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { ArrowLeftIcon, CheckCircleIcon, Key } from 'lucide-react';
 import Link from 'next/link';
-import { PasswordValidation } from './password-validation';
+import { PasswordValidation } from '../components/password-validation';
 
 const defaultValues = {
   password: '',
@@ -96,13 +102,12 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
               >
                 {pending ? 'Resetting password' : 'Reset password'}
               </Button>
-              <Link
+              <AccountPrompt
                 href='/sign-in'
                 className='text-muted-foreground my-5 inline-flex items-center gap-2 text-sm hover:text-gray-900'
-              >
-                <ArrowLeftIcon className='h-4 w-4' />
-                Back to sign in
-              </Link>
+                text='Back to sign in'
+                linkText='Back to sign in'
+              />
             </div>
           </form>
         </Form>

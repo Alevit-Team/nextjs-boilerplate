@@ -15,7 +15,7 @@ const defaultValues = {
   email: '',
 };
 
-export function EmailVerification() {
+export function EmailVerificationForm() {
   const [showResendForm, setShowResendForm] = useState(false);
   const [state, action, pending] = useActionState(
     resendVerificationEmail,

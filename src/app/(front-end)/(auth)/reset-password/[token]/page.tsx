@@ -1,6 +1,6 @@
-import { ResetPasswordForm } from '@/auth/nextjs/components/reset-password-form';
+import { ResetPasswordForm } from '@/auth/nextjs/forms/reset-password-form';
 import { tokenService } from '@/lib/services/token-service';
-import { Button, IconBadge, FormHeader } from '@/components';
+import { Button, IconBadge } from '@/components';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -21,16 +21,17 @@ export default async function ResetPasswordTokenPage({
           <AlertCircleIcon />
         </IconBadge>
         <div className='w-full max-w-sm px-4'>
-          <FormHeader
-            title='Invalid reset link'
-            description={`${
-              validation.error === 'EXPIRED'
-                ? 'This password reset link has expired. Please request a new one.'
-                : validation.error === 'ALREADY_USED'
-                  ? 'This password reset link has already been used.'
-                  : 'This password reset link is invalid or malformed.'
-            } Make sure you’re using the correct email and check that the link hasn’t expired.`}
-          />
+          <h1 className='text-2xl font-bold'>Invalid reset link</h1>
+          <p className='text-muted-foreground text-sm'>
+            $
+            {validation.error === 'EXPIRED'
+              ? 'This password reset link has expired. Please request a new one.'
+              : validation.error === 'ALREADY_USED'
+                ? 'This password reset link has already been used.'
+                : 'This password reset link is invalid or malformed.'}{' '}
+            Make sure you’re using the correct email and check that the link
+            hasn’t expired.
+          </p>
           <div className='mt-8 flex flex-col items-center'>
             <Button asChild className='w-full'>
               <Link href='/forgot-password'>Request new reset link</Link>

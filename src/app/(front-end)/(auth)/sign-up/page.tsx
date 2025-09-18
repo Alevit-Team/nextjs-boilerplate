@@ -1,4 +1,4 @@
-import { SignUpForm } from '@/auth/nextjs/components/signup-form';
+import { SignUpForm } from '@/auth/nextjs/forms/signup-form';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
 import { Separator } from '@/components';
 

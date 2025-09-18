@@ -1,35 +1,40 @@
 'use client';
 
-import { Form, PasswordInput, Button, Input, Textarea } from '@/components';
-import { signUp } from '../actions';
+import {
+  Form,
+  Input,
+  PasswordInput,
+  Button,
+  AccountPrompt,
+} from '@/components';
+import { signIn } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
-import { signUpSchema } from '../schemas';
+import { signInSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { PasswordValidation } from './password-validation';
+import { ErrorCode } from '../types';
 import Link from 'next/link';
 
 const defaultValues = {
-  name: '',
   email: '',
   password: '',
 };
 
-export function SignUpForm() {
-  const [state, action, pending] = useActionState(signUp, null);
-  const form = useForm<z.infer<typeof signUpSchema>>({
+export function SignInForm() {
+  const [state, action, pending] = useActionState(signIn, null);
+  const form = useForm<z.infer<typeof signInSchema>>({
     defaultValues,
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signInSchema),
     mode: 'onTouched',
   });
 
   return (
     <Form {...form}>
       <Form.Header
-        title='Sign up'
-        description='Create an account to get started'
+        title='Sign in'
+        description='Please enter your email and password to sign in.'
       />
       <div className='my-3 h-9'>
         {state?.ok === false && (
@@ -38,7 +43,7 @@ export function SignUpForm() {
           </Form.Status>
         )}
       </div>
-      <form action={action} className='w-full space-y-4'>
+      <form action={action} className='w-full space-y-5'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -54,19 +59,7 @@ export function SignUpForm() {
             GitHub
           </Button>
         </div> */}
-        <Form.Field
-          control={form.control}
-          name='name'
-          render={({ field }) => (
-            <Form.Item>
-              <Form.Label>Name</Form.Label>
-              <Form.Control>
-                <Input type='text' {...field} />
-              </Form.Control>
-              <Form.Message />
-            </Form.Item>
-          )}
-        />
+
         <Form.Field
           control={form.control}
           name='email'
@@ -80,21 +73,26 @@ export function SignUpForm() {
             </Form.Item>
           )}
         />
-        <Form.Field
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <>
+        <div>
+          <Form.Field
+            control={form.control}
+            name='password'
+            render={({ field }) => (
               <Form.Item>
                 <Form.Label>Password</Form.Label>
                 <Form.Control>
-                  <PasswordInput {...field} showValidation={false} />
+                  <PasswordInput {...field} />
                 </Form.Control>
+                <Form.Message />
               </Form.Item>
-              <PasswordValidation password={field.value} />
-            </>
-          )}
-        />
+            )}
+          />
+          <div className='flex justify-end pt-1'>
+            <Button variant='link' asChild>
+              <Link href='/forgot-password'>Forgot Password?</Link>
+            </Button>
+          </div>
+        </div>
         <div>
           <Button
             type='submit'
@@ -102,16 +100,29 @@ export function SignUpForm() {
             disabled={!form.formState.isValid || pending}
             isLoading={pending}
           >
-            {pending ? 'Signing up' : 'Sign up'}
+            {pending ? 'Signing in' : 'Sign in'}
           </Button>
-          <p className='text-muted-foreground my-5 text-center text-sm'>
-            Already have an account?
-            <Button variant='link' asChild>
-              <Link href='/sign-in'>Sign in</Link>
-            </Button>
-          </p>
         </div>
       </form>
+
+      {/* Show verification help if email not verified */}
+      {state?.ok === false &&
+        state.errorCode === ErrorCode.EMAIL_NOT_VERIFIED && (
+          <div className='mt-4 rounded-lg bg-blue-50 p-4'>
+            <div className='text-sm'>
+              <p className='font-medium text-blue-900'>
+                Need to verify your email?
+              </p>
+              <p className='mt-1 text-blue-700'>
+                <AccountPrompt
+                  href='/verify-email'
+                  text='Need to verify your email?'
+                  linkText='Click here to resend verification email'
+                />
+              </p>
+            </div>
+          </div>
+        )}
     </Form>
   );
 }

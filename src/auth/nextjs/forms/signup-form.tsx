@@ -1,34 +1,41 @@
 'use client';
 
-import { Form, Input, PasswordInput, Button } from '@/components';
-import { signIn } from '../actions';
+import {
+  Form,
+  PasswordInput,
+  Button,
+  Input,
+  AccountPrompt,
+} from '@/components';
+import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
-import { signInSchema } from '../schemas';
+import { signUpSchema } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { ErrorCode } from '../types';
+import { PasswordValidation } from '../components/password-validation';
 import Link from 'next/link';
 
 const defaultValues = {
+  name: '',
   email: '',
   password: '',
 };
 
-export function SignInForm() {
-  const [state, action, pending] = useActionState(signIn, null);
-  const form = useForm<z.infer<typeof signInSchema>>({
+export function SignUpForm() {
+  const [state, action, pending] = useActionState(signUp, null);
+  const form = useForm<z.infer<typeof signUpSchema>>({
     defaultValues,
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(signUpSchema),
     mode: 'onTouched',
   });
 
   return (
     <Form {...form}>
       <Form.Header
-        title='Sign in'
-        description='Please enter your email and password to sign in.'
+        title='Sign up'
+        description='Create an account to get started'
       />
       <div className='my-3 h-9'>
         {state?.ok === false && (
@@ -37,7 +44,7 @@ export function SignInForm() {
           </Form.Status>
         )}
       </div>
-      <form action={action} className='w-full space-y-5'>
+      <form action={action} className='w-full space-y-4'>
         {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button
@@ -53,7 +60,19 @@ export function SignInForm() {
             GitHub
           </Button>
         </div> */}
-
+        <Form.Field
+          control={form.control}
+          name='name'
+          render={({ field }) => (
+            <Form.Item>
+              <Form.Label>Name</Form.Label>
+              <Form.Control>
+                <Input type='text' {...field} />
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
+          )}
+        />
         <Form.Field
           control={form.control}
           name='email'
@@ -67,26 +86,21 @@ export function SignInForm() {
             </Form.Item>
           )}
         />
-        <div>
-          <Form.Field
-            control={form.control}
-            name='password'
-            render={({ field }) => (
+        <Form.Field
+          control={form.control}
+          name='password'
+          render={({ field }) => (
+            <>
               <Form.Item>
                 <Form.Label>Password</Form.Label>
                 <Form.Control>
-                  <PasswordInput {...field} />
+                  <PasswordInput {...field} showValidation={false} />
                 </Form.Control>
-                <Form.Message />
               </Form.Item>
-            )}
-          />
-          <div className='flex justify-end pt-1'>
-            <Button variant='link' asChild>
-              <Link href='/forgot-password'>Forgot Password?</Link>
-            </Button>
-          </div>
-        </div>
+              <PasswordValidation password={field.value} />
+            </>
+          )}
+        />
         <div>
           <Button
             type='submit'
@@ -94,30 +108,15 @@ export function SignInForm() {
             disabled={!form.formState.isValid || pending}
             isLoading={pending}
           >
-            {pending ? 'Signing in' : 'Sign in'}
+            {pending ? 'Signing up' : 'Sign up'}
           </Button>
+          <AccountPrompt
+            text='Already have an account?'
+            linkText='Sign in'
+            href='/sign-in'
+          />
         </div>
       </form>
-
-      {/* Show verification help if email not verified */}
-      {state?.ok === false &&
-        state.errorCode === ErrorCode.EMAIL_NOT_VERIFIED && (
-          <div className='mt-4 rounded-lg bg-blue-50 p-4'>
-            <div className='text-sm'>
-              <p className='font-medium text-blue-900'>
-                Need to verify your email?
-              </p>
-              <p className='mt-1 text-blue-700'>
-                <Link
-                  href='/verify-email'
-                  className='text-blue-600 hover:underline'
-                >
-                  Click here to resend verification email
-                </Link>
-              </p>
-            </div>
-          </div>
-        )}
     </Form>
   );
 }

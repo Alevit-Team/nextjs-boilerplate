@@ -6,9 +6,9 @@ interface IconBadgeProps {
 }
 
 const iconSizeClasses = {
-  sm: 'size-4',
-  md: 'size-6',
-  lg: 'size-8',
+  sm: 'size-6',
+  md: 'size-8',
+  lg: 'size-10',
 };
 
 const IconBadge = ({
@@ -20,7 +20,7 @@ const IconBadge = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-center rounded-full border-2 bg-[#F4EEFE] p-2',
+        'bg-primary/10 border-primary/5 flex items-center justify-center rounded-full border-2 p-2',
         className
       )}
       {...props}

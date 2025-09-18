@@ -1,4 +1,4 @@
-import { EmailVerification } from '@/auth/nextjs/components/email-verification';
+import { EmailVerificationForm } from '@/auth/nextjs/forms/email-verification-form';
 import { IconBadge } from '@/components';
 import { MailIcon } from 'lucide-react';
 
@@ -9,7 +9,7 @@ export default function VerifyEmailPage() {
         <MailIcon />
       </IconBadge>
       <div className='w-full max-w-md px-4'>
-        <EmailVerification />
+        <EmailVerificationForm />
       </div>
     </section>
   );
