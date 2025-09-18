@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormStatus,
-  PasswordInput,
-  Button,
-  Input,
-} from '@/components';
+import { Form, PasswordInput, Button, Input } from '@/components';
 import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -40,10 +29,9 @@ export function SignUpForm() {
     <Form {...form}>
       <div className='my-3 h-9'>
         {state?.ok === false && (
-          <FormStatus
-            variant='error'
-            label={getFormErrorMessage(state.errorCode)}
-          />
+          <Form.Status variant='error'>
+            {getFormErrorMessage(state.errorCode)}
+          </Form.Status>
         )}
       </div>
       <form action={action} className='w-full space-y-4'>
@@ -62,43 +50,43 @@ export function SignUpForm() {
             GitHub
           </Button>
         </div> */}
-        <FormField
+        <Form.Field
           control={form.control}
           name='name'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Name</Form.Label>
+              <Form.Control>
                 <Input type='text' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
-        <FormField
+        <Form.Field
           control={form.control}
           name='email'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Email</Form.Label>
+              <Form.Control>
                 <Input type='email' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
-        <FormField
+        <Form.Field
           control={form.control}
           name='password'
           render={({ field }) => (
             <>
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Password</Form.Label>
+                <Form.Control>
                   <PasswordInput {...field} showValidation={false} />
-                </FormControl>
-              </FormItem>
+                </Form.Control>
+              </Form.Item>
               <PasswordValidation password={field.value} />
             </>
           )}

@@ -4,19 +4,7 @@ import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormStatus,
-  Button,
-  IconBadge,
-  FormHeader,
-  PasswordInput,
-} from '@/components';
+import { Form, Button, IconBadge, PasswordInput } from '@/components';
 import { resetPassword } from '../actions';
 import { resetPasswordSchema } from '../schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
@@ -51,10 +39,11 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           <CheckCircleIcon />
         </IconBadge>
         <div className='w-full max-w-sm px-4'>
-          <FormHeader
-            title='Password reset!'
-            description='Your password has been successfully updated. You can now sign in with your new password.'
-          />
+          <h1 className='text-2xl font-bold'>Password reset!</h1>
+          <p>
+            Your password has been successfully updated. You can now sign in
+            with your new password.
+          </p>
           <div className='mt-8 flex flex-col items-center'>
             <Button asChild className='w-full'>
               <Link href='/sign-in'>Continue to sign in</Link>
@@ -71,31 +60,30 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         <Key />
       </IconBadge>
       <div className='w-full max-w-sm px-4'>
-        <FormHeader
-          title='Enter new password'
-          description='Your new password must be different from your previous passwords.'
-        />
         <Form {...form}>
+          <Form.Header
+            title='Enter new password'
+            description='Your new password must be different from your previous passwords.'
+          />
           <div className='my-3 h-9'>
             {state?.ok === false && (
-              <FormStatus
-                variant='error'
-                label={getFormErrorMessage(state.errorCode)}
-              />
+              <Form.Status variant='error'>
+                {getFormErrorMessage(state.errorCode)}
+              </Form.Status>
             )}
           </div>
           <form action={action} className='w-full space-y-6'>
-            <FormField
+            <Form.Field
               control={form.control}
               name='password'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>New Password</FormLabel>
-                  <FormControl>
+                <Form.Item>
+                  <Form.Label>New Password</Form.Label>
+                  <Form.Control>
                     <PasswordInput {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  </Form.Control>
+                  <Form.Message />
+                </Form.Item>
               )}
             />
             <PasswordValidation password={form.watch('password')} />

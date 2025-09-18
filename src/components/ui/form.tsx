@@ -16,8 +16,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 
-const Form = FormProvider;
-
+// Context for form field state
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -29,19 +28,15 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
   {} as FormFieldContextValue
 );
 
-const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
-  return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
-  );
+type FormItemContextValue = {
+  id: string;
 };
 
+const FormItemContext = React.createContext<FormItemContextValue>(
+  {} as FormItemContextValue
+);
+
+// Hook to access form field state
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext);
   const itemContext = React.useContext(FormItemContext);
@@ -50,7 +45,7 @@ const useFormField = () => {
   const fieldState = getFieldState(fieldContext.name, formState);
 
   if (!fieldContext) {
-    throw new Error('useFormField should be used within <FormField>');
+    throw new Error('useFormField should be used within <Form.Field>');
   }
 
   const { id } = itemContext;
@@ -65,14 +60,7 @@ const useFormField = () => {
   };
 };
 
-type FormItemContextValue = {
-  id: string;
-};
-
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
-);
-
+// Individual form components
 function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = React.useId();
 
@@ -153,15 +141,83 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
         className
       )}
       {...props}
-    >
-      {body}
-    </p>
+    />
   );
 }
 
+const FormHeader = React.forwardRef<HTMLDivElement, FormHeaderProps>(
+  ({ className, title, description, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn('text-center', className)} {...props}>
+        <h1 className='mb-8 text-2xl font-bold'>{title}</h1>
+        {description && (
+          <p className='text-muted-foreground text-sm'>{description}</p>
+        )}
+      </div>
+    );
+  }
+);
+FormHeader.displayName = 'FormHeader';
+
+interface FormHeaderProps extends React.ComponentProps<'div'> {
+  title: string;
+  description?: string;
+}
+
+const FormStatus = React.forwardRef<HTMLDivElement, FormStatusProps>(
+  ({ className, children, variant = 'default', ...props }, ref) => {
+    return (
+      <div
+        className={cn(
+          'bg-muted rounded-md p-2 text-center text-sm',
+          variant === 'error' && 'text-destructive bg-destructive/10',
+          variant === 'success' && 'bg-green-50 text-green-600'
+        )}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+FormStatus.displayName = 'FormStatus';
+
+interface FormStatusProps extends React.ComponentProps<'div'> {
+  variant: 'default' | 'error' | 'success';
+}
+
+// Form Field component
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
+  );
+};
+
+// Main Form compound component
+const Form = Object.assign(FormProvider, {
+  Provider: FormProvider,
+  Field: FormField,
+  Item: FormItem,
+  Label: FormLabel,
+  Control: FormControl,
+  Description: FormDescription,
+  Message: FormMessage,
+  Header: FormHeader,
+  Status: FormStatus,
+});
+
+// Legacy exports for backward compatibility
 export {
   useFormField,
   Form,
+  FormHeader,
   FormItem,
   FormLabel,
   FormControl,

@@ -1,18 +1,6 @@
 'use client';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Button,
-  FormHeader,
-  FormStatus,
-  IconBadge,
-} from '@/components';
+import { Form, Input, Button, IconBadge } from '@/components';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
@@ -41,14 +29,14 @@ export function ForgotPasswordForm() {
         <IconBadge>
           <MailIcon />
         </IconBadge>
-        <FormHeader title='Check your email'>
-          <p className='text-muted-foreground text-center text-sm'>
-            We’ve sent you a reset link to{' '}
-            <span className='font-medium'>{form.getValues('email')}</span>.
-            <br />
-            Please check your inbox and follow the instructions.
-          </p>
-        </FormHeader>
+        <h1 className='text-2xl font-bold'>Check your email</h1>
+        <p className='text-muted-foreground text-center text-sm'>
+          We’ve sent you a reset link to{' '}
+          <span className='font-medium'>{form.getValues('email')}</span>.
+          <br />
+          Please check your inbox and follow the instructions.
+        </p>
+
         <div className='mt-8 flex w-full flex-col items-center'>
           <Button asChild className='w-full'>
             <Link href='/sign-in'>Back to sign in</Link>
@@ -70,31 +58,30 @@ export function ForgotPasswordForm() {
         <Key />
       </IconBadge>
       <div>
-        <FormHeader
-          title='Forgot password'
-          description='Please enter your email and we will send you a link to reset your password.'
-        />
         <Form {...form}>
+          <Form.Header
+            title='Forgot password'
+            description='Please enter your email and we will send you a link to reset your password.'
+          />
           <div className='my-3 h-9'>
             {state?.ok === false && (
-              <FormStatus
-                variant='error'
-                label={getFormErrorMessage(state.errorCode)}
-              />
+              <Form.Status variant='error'>
+                {getFormErrorMessage(state.errorCode)}
+              </Form.Status>
             )}
           </div>
           <form action={action} className='space-y-4'>
-            <FormField
+            <Form.Field
               control={form.control}
               name='email'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
+                <Form.Item>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control>
                     <Input type='email' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  </Form.Control>
+                  <Form.Message />
+                </Form.Item>
               )}
             />
             <div className='flex w-full flex-col items-center'>

@@ -1,17 +1,6 @@
 'use client';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormStatus,
-  Input,
-  PasswordInput,
-  Button,
-} from '@/components';
+import { Form, Input, PasswordInput, Button } from '@/components';
 import { signIn } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -39,10 +28,9 @@ export function SignInForm() {
     <Form {...form}>
       <div className='my-3 h-9'>
         {state?.ok === false && (
-          <FormStatus
-            variant='error'
-            label={getFormErrorMessage(state.errorCode)}
-          />
+          <Form.Status variant='error'>
+            {getFormErrorMessage(state.errorCode)}
+          </Form.Status>
         )}
       </div>
       <form action={action} className='w-full space-y-5'>
@@ -62,31 +50,31 @@ export function SignInForm() {
           </Button>
         </div> */}
 
-        <FormField
+        <Form.Field
           control={form.control}
           name='email'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Email</Form.Label>
+              <Form.Control>
                 <Input type='email' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
         <div>
-          <FormField
+          <Form.Field
             control={form.control}
             name='password'
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Password</Form.Label>
+                <Form.Control>
                   <PasswordInput {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
           <div className='flex justify-end pt-1'>

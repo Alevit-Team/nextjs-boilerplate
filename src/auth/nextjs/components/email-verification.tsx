@@ -5,18 +5,7 @@ import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormStatus,
-  Input,
-  Button,
-  FormHeader,
-  FormMessage,
-} from '@/components';
+import { Form, Input, Button } from '@/components';
 import { resendVerificationEmail } from '../actions';
 import { resendVerificationSchema } from '../schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
@@ -44,14 +33,8 @@ export function EmailVerification() {
 
   return (
     <>
-      <div className='space-y-6'>
-        <FormHeader title='Verify your email'>
-          <p className='text-muted-foreground text-sm'>
-            We’ve sent a verification link to your email address.
-            <br /> Please click the link to verify your account and complete the
-            registration process.
-          </p>
-        </FormHeader>
+      <div className='space-y-6 text-center'>
+        <h1 className='text-2xl font-bold'>Verify your email</h1>
         {!showResendForm ? (
           <Button onClick={handleResendClick} className='w-full'>
             Resend verification email
@@ -64,30 +47,28 @@ export function EmailVerification() {
             <Form {...form}>
               <div className='my-3 h-9'>
                 {state?.ok === false && (
-                  <FormStatus
-                    variant='error'
-                    label={getFormErrorMessage(state.errorCode)}
-                  />
+                  <Form.Status variant='error'>
+                    {getFormErrorMessage(state.errorCode)}
+                  </Form.Status>
                 )}
                 {state?.ok === true && (
-                  <FormStatus
-                    variant='success'
-                    label='Verification email sent! Please check your inbox.'
-                  />
+                  <Form.Status variant='success'>
+                    Verification email sent! Please check your inbox.
+                  </Form.Status>
                 )}
               </div>
               <form action={action}>
-                <FormField
+                <Form.Field
                   control={form.control}
                   name='email'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
+                    <Form.Item>
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control>
                         <Input type='email' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                      </Form.Control>
+                      <Form.Message />
+                    </Form.Item>
                   )}
                 />
                 <Button
