@@ -4,6 +4,7 @@ export * from './form';
 export * from './input';
 export * from './label';
 export * from './password-input';
+export * from './textarea';
 export * from './icon-badge';
 export * from './container';
 export * from './separator';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, PasswordInput, Button, Input } from '@/components';
+import { Form, PasswordInput, Button, Input, Textarea } from '@/components';
 import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -27,6 +27,10 @@ export function SignUpForm() {
 
   return (
     <Form {...form}>
+      <Form.Header
+        title='Sign up'
+        description='Create an account to get started'
+      />
       <div className='my-3 h-9'>
         {state?.ok === false && (
           <Form.Status variant='error'>

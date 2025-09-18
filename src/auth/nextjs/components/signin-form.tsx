@@ -26,6 +26,10 @@ export function SignInForm() {
 
   return (
     <Form {...form}>
+      <Form.Header
+        title='Sign in'
+        description='Please enter your email and password to sign in.'
+      />
       <div className='my-3 h-9'>
         {state?.ok === false && (
           <Form.Status variant='error'>

@@ -1,16 +1,12 @@
 import { SignInForm } from '@/auth/nextjs/components/signin-form';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
-import { Button, FormHeader, Separator } from '@/components';
+import { Button, Separator } from '@/components';
 import Link from 'next/link';
 
 export default function SignInPage() {
   return (
     <section className='flex min-h-full w-full items-center justify-center py-8'>
       <div className='w-full max-w-sm px-4'>
-        <FormHeader
-          title='Sign in'
-          description='Please enter your email and password to sign in.'
-        />
         <SignInForm />
         <p className='text-muted-foreground my-5 text-center text-sm'>
           Dont have an account?

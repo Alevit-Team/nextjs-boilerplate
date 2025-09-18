@@ -200,7 +200,6 @@ const FormField = <
   );
 };
 
-// Main Form compound component
 const Form = Object.assign(FormProvider, {
   Provider: FormProvider,
   Field: FormField,
@@ -213,15 +212,4 @@ const Form = Object.assign(FormProvider, {
   Status: FormStatus,
 });
 
-// Legacy exports for backward compatibility
-export {
-  useFormField,
-  Form,
-  FormHeader,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-};
+export { Form };
