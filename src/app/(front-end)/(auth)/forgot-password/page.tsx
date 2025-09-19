@@ -1,11 +1,12 @@
-import { ForgotPasswordForm } from '@/auth/nextjs/components/forgot-password-form';
+import { ForgotPasswordForm } from '@/auth/nextjs/components/forms/forgot-password-form';
+import { Container, Section } from '@/components';
 
 export default function ForgotPasswordPage() {
   return (
-    <section className='flex min-h-full w-full items-center justify-center py-8'>
-      <div className='w-full max-w-sm px-4'>
+    <Section className='flex min-h-screen items-center justify-center'>
+      <Container fullWidth className='max-w-md'>
         <ForgotPasswordForm />
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

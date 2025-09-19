@@ -38,15 +38,11 @@ function PasswordInput({
         type='button'
         variant='ghost'
         size='sm'
-        className='absolute top-0 right-0 h-full cursor-pointer px-3 py-2 hover:bg-transparent'
+        className='text-muted-foreground absolute top-0 right-0 h-full cursor-pointer px-3 py-2 hover:bg-transparent'
         onClick={togglePasswordVisibility}
         aria-label={showPassword ? 'Hide password' : 'Show password'}
       >
-        {showPassword ? (
-          <EyeOff className='text-muted-foreground h-4 w-4' />
-        ) : (
-          <Eye className='text-muted-foreground h-4 w-4' />
-        )}
+        {showPassword ? <EyeOff /> : <Eye />}
       </Button>
     </div>
   );

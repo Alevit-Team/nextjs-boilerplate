@@ -1,6 +1,6 @@
-import { ResetPasswordForm } from '@/auth/nextjs/components/reset-password-form';
+import { ResetPasswordForm } from '@/auth/nextjs/components/forms/reset-password-form';
 import { tokenService } from '@/lib/services/token-service';
-import { Button, FormBadge, FormHeader } from '@/components';
+import { Button, IconBadge, Section, Container } from '@/components';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -14,38 +14,39 @@ export default async function ResetPasswordTokenPage({
   const { token } = await params;
   const validation = await tokenService.validatePasswordResetToken(token);
 
-  if (!validation.isValid) {
-    return (
-      <section className='flex min-h-full w-full flex-col items-center justify-center gap-6 py-8'>
-        <FormBadge>
-          <AlertCircleIcon />
-        </FormBadge>
-        <div className='w-full max-w-sm px-4'>
-          <FormHeader
-            title='Invalid reset link'
-            description={`${
-              validation.error === 'EXPIRED'
+  return (
+    <Section className='flex min-h-screen items-center justify-center'>
+      <Container fullWidth className='max-w-md'>
+        {!validation.isValid ? (
+          <div className='space-y-8 text-center'>
+            <IconBadge>
+              <AlertCircleIcon />
+            </IconBadge>
+            <h1 className='text-2xl font-bold'>Invalid reset link</h1>
+            <p className='text-muted-foreground text-sm'>
+              {validation.error === 'EXPIRED'
                 ? 'This password reset link has expired. Please request a new one.'
                 : validation.error === 'ALREADY_USED'
                   ? 'This password reset link has already been used.'
-                  : 'This password reset link is invalid or malformed.'
-            } Make sure you’re using the correct email and check that the link hasn’t expired.`}
-          />
-          <div className='mt-8 flex flex-col items-center'>
-            <Button asChild className='w-full'>
-              <Link href='/forgot-password'>Request new reset link</Link>
-            </Button>
-            <Link
-              href='/sign-in'
-              className='text-muted-foreground my-5 inline-flex items-center gap-2 text-sm hover:text-gray-900'
-            >
-              <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
-            </Link>
+                  : 'This password reset link is invalid or malformed.'}{' '}
+              Make sure you’re using the correct email and check that the link
+              hasn’t expired.
+            </p>
+            <div className='space-y-4'>
+              <Button asChild className='w-full'>
+                <Link href='/forgot-password'>Request new reset link</Link>
+              </Button>
+              <Button variant='link' asChild>
+                <Link href='/sign-in'>
+                  <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
+                </Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      </section>
-    );
-  }
-
-  return <ResetPasswordForm token={token} />;
+        ) : (
+          <ResetPasswordForm token={token} />
+        )}
+      </Container>
+    </Section>
+  );
 }

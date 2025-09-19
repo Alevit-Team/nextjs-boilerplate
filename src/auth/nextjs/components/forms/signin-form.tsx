@@ -1,26 +1,17 @@
 'use client';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormStatus,
-  Input,
-  PasswordInput,
-  Button,
-} from '@/components';
-import { signIn } from '../actions';
+import { Form, Input, PasswordInput, Button, Separator } from '@/components';
+import { signIn } from '@/auth/nextjs/actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
-import { signInSchema } from '../schemas';
+import { signInSchema } from '@/auth/nextjs/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { ErrorCode } from '../types';
+import { ErrorCode } from '@/auth/nextjs/types';
 import Link from 'next/link';
+import { SocialLogin } from '@/auth/nextjs/components/social-login';
+import { ButtonPrompt } from '../button-prompt';
 
 const defaultValues = {
   email: '',
@@ -36,57 +27,43 @@ export function SignInForm() {
   });
 
   return (
-    <Form {...form}>
+    <Form
+      title='Sign in'
+      description='Please enter your email and password to sign in'
+    >
       <div className='my-3 h-9'>
         {state?.ok === false && (
-          <FormStatus
-            variant='error'
-            label={getFormErrorMessage(state.errorCode)}
-          />
+          <Form.Status variant='error'>
+            {getFormErrorMessage(state.errorCode)}
+          </Form.Status>
         )}
       </div>
-      <form action={action} className='w-full space-y-5'>
-        {/* {error && <p className='text-destructive'>{error}</p>}
-        <div className='flex gap-4'>
-          <Button
-            type='button'
-            onClick={async () => await oAuthSignIn('discord')}
-          >
-            Discord
-          </Button>
-          <Button
-            type='button'
-            onClick={async () => await oAuthSignIn('github')}
-          >
-            GitHub
-          </Button>
-        </div> */}
-
-        <FormField
+      <Form.Content action={action} form={form}>
+        <Form.Field
           control={form.control}
           name='email'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Email</Form.Label>
+              <Form.Control>
                 <Input type='email' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
         <div>
-          <FormField
+          <Form.Field
             control={form.control}
             name='password'
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>Password</Form.Label>
+                <Form.Control>
                   <PasswordInput {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
           <div className='flex justify-end pt-1'>
@@ -95,7 +72,7 @@ export function SignInForm() {
             </Button>
           </div>
         </div>
-        <div>
+        <div className='space-y-4'>
           <Button
             type='submit'
             className='w-full'
@@ -104,10 +81,13 @@ export function SignInForm() {
           >
             {pending ? 'Signing in' : 'Sign in'}
           </Button>
+          <ButtonPrompt
+            text="Don't have an account?"
+            linkText='Sign up'
+            href='/sign-up'
+          />
         </div>
-      </form>
-
-      {/* Show verification help if email not verified */}
+      </Form.Content>
       {state?.ok === false &&
         state.errorCode === ErrorCode.EMAIL_NOT_VERIFIED && (
           <div className='mt-4 rounded-lg bg-blue-50 p-4'>
@@ -115,17 +95,16 @@ export function SignInForm() {
               <p className='font-medium text-blue-900'>
                 Need to verify your email?
               </p>
-              <p className='mt-1 text-blue-700'>
-                <Link
-                  href='/verify-email'
-                  className='text-blue-600 hover:underline'
-                >
-                  Click here to resend verification email
-                </Link>
-              </p>
+              <ButtonPrompt
+                href='/verify-email'
+                text='Need to verify your email?'
+                linkText='Click here to resend verification email'
+              />
             </div>
           </div>
         )}
+      <Separator label='Or continue with' className='my-8' />
+      <SocialLogin />
     </Form>
   );
 }
