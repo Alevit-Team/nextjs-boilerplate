@@ -34,24 +34,21 @@ export function EmailVerificationForm() {
   return (
     <>
       {!showResendForm ? (
-        <>
-          <div className='space-y-8'>
-            <h1 className='text-2xl font-bold'>Check your email</h1>
+        <div className='space-y-8 text-center'>
+          <h1 className='text-2xl font-bold'>Check your email</h1>
+          <div className='space-y-4'>
             <p className='text-muted-foreground text-sm'>
               We've sent a verification link to your email address. Please check
               your inbox and click the link to verify your account.
             </p>
-          </div>
-
-          <div className='space-y-4'>
             <p className='text-muted-foreground text-sm'>
               Didn't receive the email?
             </p>
-            <Button onClick={handleResendClick} className='w-full'>
-              Resend verification email
-            </Button>
           </div>
-        </>
+          <Button onClick={handleResendClick} className='w-full'>
+            Resend verification email
+          </Button>
+        </div>
       ) : (
         <Form {...form}>
           <Form.Container
@@ -99,6 +96,7 @@ export function EmailVerificationForm() {
       <ButtonPrompt
         text='Already verified your email?'
         linkText='Sign in'
+        className='mt-4'
         href='/sign-in'
       />
     </>

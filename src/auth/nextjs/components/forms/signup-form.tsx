@@ -39,7 +39,7 @@ export function SignUpForm() {
             </Form.Status>
           )}
         </div>
-        <form action={action} className='w-full space-y-4'>
+        <form action={action} className='space-y-6'>
           {/* {error && <p className='text-destructive'>{error}</p>}
         <div className='flex gap-4'>
           <Button

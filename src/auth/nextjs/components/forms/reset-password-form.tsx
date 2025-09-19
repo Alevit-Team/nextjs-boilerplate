@@ -75,7 +75,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             </Form.Status>
           )}
         </div>
-        <form action={action} className='w-full space-y-6'>
+        <form action={action} className='space-y-6'>
           <Form.Field
             control={form.control}
             name='password'
