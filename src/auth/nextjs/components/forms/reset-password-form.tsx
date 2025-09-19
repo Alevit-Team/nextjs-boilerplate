@@ -15,7 +15,7 @@ import {
 import { resetPassword } from '@/auth/nextjs/actions';
 import { resetPasswordSchema } from '@/auth/nextjs/schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { ArrowLeftIcon, CheckCircleIcon, Key } from 'lucide-react';
+import { ArrowLeftIcon, CheckCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { PasswordValidation } from '@/auth/nextjs/components/password-validation';
 

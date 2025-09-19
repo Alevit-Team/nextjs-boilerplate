@@ -19,7 +19,6 @@ import {
   ComponentProps,
   createContext,
   forwardRef,
-  Ref,
   useContext,
   useId,
 } from 'react';
@@ -42,11 +41,6 @@ type FormItemContextValue = {
 const FormItemContext = createContext<FormItemContextValue>(
   {} as FormItemContextValue
 );
-
-interface FormHeaderProps extends ComponentProps<'div'> {
-  title: string;
-  description?: string;
-}
 
 interface FormStatusProps extends ComponentProps<'div'> {
   variant: 'default' | 'error' | 'success';
@@ -192,7 +186,7 @@ function FormContainer({
 }
 
 const FormStatus = forwardRef<HTMLDivElement, FormStatusProps>(
-  ({ className, children, variant = 'default', ...props }, ref) => {
+  ({ children, variant = 'default', ...props }, ref) => {
     return (
       <div
         ref={ref}
