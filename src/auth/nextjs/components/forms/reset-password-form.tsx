@@ -43,14 +43,15 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     return (
       <Section>
         <Container className='max-w-md'>
-          <div className='space-y-4 text-center'>
+          <div className='space-y-8 text-center'>
             <IconBadge>
               <CheckCircleIcon />
             </IconBadge>
             <h1 className='text-2xl font-bold'>Password reset!</h1>
-            <p>
-              Your password has been successfully updated. You can now sign in
-              with your new password.
+            <p className='text-muted-foreground text-sm'>
+              Your password has been successfully updated.
+              <br />
+              You can now sign in with your new password.
             </p>
             <Button asChild className='w-full'>
               <Link href='/sign-in'>Continue to sign in</Link>
@@ -100,7 +101,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             </Button>
             <Button variant='link' asChild>
               <Link href='/sign-in'>
-                <ArrowLeftIcon /> Back to sign in
+                <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
               </Link>
             </Button>
           </div>

@@ -91,13 +91,11 @@ export function SignInForm() {
                 <p className='font-medium text-blue-900'>
                   Need to verify your email?
                 </p>
-                <p className='mt-1 text-blue-700'>
-                  <AccountPrompt
-                    href='/verify-email'
-                    text='Need to verify your email?'
-                    linkText='Click here to resend verification email'
-                  />
-                </p>
+                <AccountPrompt
+                  href='/verify-email'
+                  text='Need to verify your email?'
+                  linkText='Click here to resend verification email'
+                />
               </div>
             </div>
           )}

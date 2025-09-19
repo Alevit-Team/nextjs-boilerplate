@@ -3,8 +3,8 @@ import { Container, Section } from '@/components';
 
 export default function SignUpPage() {
   return (
-    <Section>
-      <Container className='max-w-md'>
+    <Section className='flex min-h-screen items-center justify-center'>
+      <Container fullWidth className='max-w-md'>
         <SignUpForm />
       </Container>
     </Section>

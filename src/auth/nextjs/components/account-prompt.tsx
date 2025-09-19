@@ -18,11 +18,7 @@ export const AccountPrompt = ({
   onClick,
 }: AccountPromptProps) => {
   return (
-    <p
-      className={cn(
-        `text-muted-foreground my-5 text-center text-sm ${className}`
-      )}
-    >
+    <p className={cn(`text-muted-foreground text-center text-sm ${className}`)}>
       {text}
       {href && (
         <Button variant='link' asChild onClick={onClick}>

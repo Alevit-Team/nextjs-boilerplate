@@ -26,7 +26,7 @@ export function ForgotPasswordForm() {
 
   if (state?.ok === true) {
     return (
-      <div className='flex flex-col items-center justify-center gap-6'>
+      <div className='space-y-8 text-center'>
         <IconBadge>
           <MailIcon />
         </IconBadge>
@@ -38,7 +38,7 @@ export function ForgotPasswordForm() {
           Please check your inbox and follow the instructions.
         </p>
 
-        <div className='mt-8 flex w-full flex-col items-center'>
+        <div className='space-y-4'>
           <Button className='w-full' asChild>
             <Link href='/sign-in'>Back to sign in</Link>
           </Button>

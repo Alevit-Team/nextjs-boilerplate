@@ -1,6 +1,6 @@
 import { verifyEmail } from '@/auth/nextjs/actions';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { Button, IconBadge } from '@/components';
+import { Button, IconBadge, Section, Container } from '@/components';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,14 +11,13 @@ interface VerifyEmailTokenPageProps {
 export default async function VerifyEmailTokenPage({
   params,
 }: VerifyEmailTokenPageProps) {
-  // Await the params promise
   const { token } = await params;
 
   const result = await verifyEmail(token);
 
   return (
-    <section className='flex min-h-full w-full flex-col items-center justify-center py-8'>
-      <div className='w-full max-w-md px-4'>
+    <Section className='flex min-h-screen items-center justify-center'>
+      <Container fullWidth className='max-w-md'>
         <div className='flex flex-col items-center justify-center gap-6 text-center'>
           {result.ok ? (
             <>
@@ -50,7 +49,7 @@ export default async function VerifyEmailTokenPage({
             </>
           )}
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
