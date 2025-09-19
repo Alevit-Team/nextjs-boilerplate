@@ -6,10 +6,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, Input, Button, AccountPrompt } from '@/components';
-import { resendVerificationEmail } from '../actions';
-import { resendVerificationSchema } from '../schemas';
+import { resendVerificationEmail } from '@/auth/nextjs/actions';
+import { resendVerificationSchema } from '@/auth/nextjs/schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import Link from 'next/link';
 
 const defaultValues = {
   email: '',
@@ -32,7 +31,7 @@ export function EmailVerificationForm() {
   };
 
   return (
-    <div className='space-y-6 text-center'>
+    <>
       {!showResendForm ? (
         <>
           <div className='space-y-4'>
@@ -54,45 +53,46 @@ export function EmailVerificationForm() {
         </>
       ) : (
         <Form {...form}>
-          <Form.Header
+          <Form.Container
             title='Resend verification email'
             description='Enter your email address to resend the verification link'
-          />
-          <div className='my-3 h-9'>
-            {state?.ok === false && (
-              <Form.Status variant='error'>
-                {getFormErrorMessage(state.errorCode)}
-              </Form.Status>
-            )}
-            {state?.ok === true && (
-              <Form.Status variant='success'>
-                Verification email sent! Please check your inbox.
-              </Form.Status>
-            )}
-          </div>
-          <form className='space-y-6' action={action}>
-            <Form.Field
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <Form.Item>
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control>
-                    <Input type='email' {...field} />
-                  </Form.Control>
-                  <Form.Message />
-                </Form.Item>
+          >
+            <div className='my-3 h-9'>
+              {state?.ok === false && (
+                <Form.Status variant='error'>
+                  {getFormErrorMessage(state.errorCode)}
+                </Form.Status>
               )}
-            />
-            <Button
-              type='submit'
-              disabled={pending || !form.formState.isValid}
-              isLoading={pending}
-              className='w-full'
-            >
-              {pending ? 'Sending' : 'Resend email'}
-            </Button>
-          </form>
+              {state?.ok === true && (
+                <Form.Status variant='success'>
+                  Verification email sent! Please check your inbox.
+                </Form.Status>
+              )}
+            </div>
+            <form className='space-y-6' action={action}>
+              <Form.Field
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control>
+                      <Input type='email' {...field} />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                )}
+              />
+              <Button
+                type='submit'
+                disabled={pending || !form.formState.isValid}
+                isLoading={pending}
+                className='w-full'
+              >
+                {pending ? 'Sending' : 'Resend email'}
+              </Button>
+            </form>
+          </Form.Container>
         </Form>
       )}
       <AccountPrompt
@@ -100,6 +100,6 @@ export function EmailVerificationForm() {
         linkText='Sign in'
         href='/sign-in'
       />
-    </div>
+    </>
   );
 }

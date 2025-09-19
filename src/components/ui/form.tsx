@@ -51,6 +51,11 @@ interface FormStatusProps extends ComponentProps<'div'> {
   variant: 'default' | 'error' | 'success';
 }
 
+interface FormContainerProps extends ComponentProps<'div'> {
+  title?: string;
+  description?: string;
+}
+
 const useFormField = () => {
   const fieldContext = useContext(FormFieldContext);
   const itemContext = useContext(FormItemContext);
@@ -180,6 +185,30 @@ const FormHeader = forwardRef<HTMLDivElement, FormHeaderProps>(
 
 FormHeader.displayName = 'FormHeader';
 
+function FormContainer({
+  title,
+  description,
+  className,
+  children,
+  ...props
+}: FormContainerProps) {
+  return (
+    <div
+      className={cn(
+        'space-y-6 rounded-xl border p-6 pt-8 text-center',
+        className
+      )}
+      {...props}
+    >
+      {title && <h1 className='text-2xl font-bold'>{title}</h1>}
+      {description && (
+        <p className='text-muted-foreground text-sm'>{description}</p>
+      )}
+      {children}
+    </div>
+  );
+}
+
 const FormStatus = forwardRef<HTMLDivElement, FormStatusProps>(
   ({ className, children, variant = 'default', ...props }, ref) => {
     return (
@@ -216,6 +245,7 @@ const FormField = <
 
 const Form = Object.assign(FormProvider, {
   Provider: FormProvider,
+  Container: FormContainer,
   Field: FormField,
   Item: FormItem,
   Label: FormLabel,

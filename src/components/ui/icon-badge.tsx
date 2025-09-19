@@ -20,7 +20,7 @@ const IconBadge = ({
   return (
     <div
       className={cn(
-        'bg-primary/10 border-primary/5 flex items-center justify-center rounded-full border-2 p-2',
+        'bg-primary/10 border-primary/5 inline-flex items-center justify-center rounded-full border-2 p-2',
         className
       )}
       {...props}
