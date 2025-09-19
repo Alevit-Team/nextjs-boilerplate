@@ -27,94 +27,74 @@ export function SignUpForm() {
   });
 
   return (
-    <Form {...form}>
-      <Form.Container
-        title='Sign up'
-        description='Create an account to get started'
-      >
-        <div className='my-3 h-9'>
-          {state?.ok === false && (
-            <Form.Status variant='error'>
-              {getFormErrorMessage(state.errorCode)}
-            </Form.Status>
+    <Form title='Sign up' description='Create an account to get started'>
+      <div className='my-3 h-9'>
+        {state?.ok === false && (
+          <Form.Status variant='error'>
+            {getFormErrorMessage(state.errorCode)}
+          </Form.Status>
+        )}
+      </div>
+      <Form.Content action={action} form={form}>
+        <Form.Field
+          control={form.control}
+          name='name'
+          render={({ field }) => (
+            <Form.Item>
+              <Form.Label>Name</Form.Label>
+              <Form.Control>
+                <Input type='text' {...field} />
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
+        />
+        <Form.Field
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <Form.Item>
+              <Form.Label>Email</Form.Label>
+              <Form.Control>
+                <Input type='email' {...field} />
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
+          )}
+        />
+        <Form.Field
+          control={form.control}
+          name='password'
+          render={({ field }) => (
+            <>
+              <Form.Item>
+                <Form.Label>Password</Form.Label>
+                <Form.Control>
+                  <PasswordInput showValidation={false} {...field} />
+                </Form.Control>
+              </Form.Item>
+              <PasswordValidation password={field.value} />
+            </>
+          )}
+        />
+        <div className='space-y-4'>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={!form.formState.isValid || pending}
+            isLoading={pending}
+          >
+            {pending ? 'Signing up' : 'Sign up'}
+          </Button>
+          <ButtonPrompt
+            text='Already have an account?'
+            linkText='Sign in'
+            href='/sign-in'
+          />
         </div>
-        <form action={action} className='space-y-6'>
-          {/* {error && <p className='text-destructive'>{error}</p>}
-        <div className='flex gap-4'>
-          <Button
-            type='button'
-            onClick={async () => await oAuthSignIn('discord')}
-          >
-            Discord
-          </Button>
-          <Button
-            type='button'
-            onClick={async () => await oAuthSignIn('github')}
-          >
-            GitHub
-          </Button>
-        </div> */}
-          <Form.Field
-            control={form.control}
-            name='name'
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Name</Form.Label>
-                <Form.Control>
-                  <Input type='text' {...field} />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Email</Form.Label>
-                <Form.Control>
-                  <Input type='email' {...field} />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control}
-            name='password'
-            render={({ field }) => (
-              <>
-                <Form.Item>
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control>
-                    <PasswordInput showValidation={false} {...field} />
-                  </Form.Control>
-                </Form.Item>
-                <PasswordValidation password={field.value} />
-              </>
-            )}
-          />
-          <div className='space-y-4'>
-            <Button
-              type='submit'
-              className='w-full'
-              disabled={!form.formState.isValid || pending}
-              isLoading={pending}
-            >
-              {pending ? 'Signing up' : 'Sign up'}
-            </Button>
-            <ButtonPrompt
-              text='Already have an account?'
-              linkText='Sign in'
-              href='/sign-in'
-            />
-          </div>
-        </form>
-        <Separator label='Or continue with' className='my-8' />
-        <SocialLogin />
-      </Form.Container>
+      </Form.Content>
+      <Separator label='Or continue with' className='my-8' />
+      <SocialLogin />
     </Form>
   );
 }

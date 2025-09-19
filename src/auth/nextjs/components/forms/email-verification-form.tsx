@@ -50,47 +50,45 @@ export function EmailVerificationForm() {
           </Button>
         </div>
       ) : (
-        <Form {...form}>
-          <Form.Container
-            title='Resend verification email'
-            description='Enter your email address to resend the verification link'
-          >
-            <div className='my-3 h-9'>
-              {state?.ok === false && (
-                <Form.Status variant='error'>
-                  {getFormErrorMessage(state.errorCode)}
-                </Form.Status>
+        <Form
+          title='Resend verification email'
+          description='Enter your email address to resend the verification link'
+        >
+          <div className='my-3 h-9'>
+            {state?.ok === false && (
+              <Form.Status variant='error'>
+                {getFormErrorMessage(state.errorCode)}
+              </Form.Status>
+            )}
+            {state?.ok === true && (
+              <Form.Status variant='success'>
+                Verification email sent! Please check your inbox.
+              </Form.Status>
+            )}
+          </div>
+          <Form.Content action={action} form={form}>
+            <Form.Field
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control>
+                    <Input type='email' {...field} />
+                  </Form.Control>
+                  <Form.Message />
+                </Form.Item>
               )}
-              {state?.ok === true && (
-                <Form.Status variant='success'>
-                  Verification email sent! Please check your inbox.
-                </Form.Status>
-              )}
-            </div>
-            <form className='space-y-6' action={action}>
-              <Form.Field
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <Form.Item>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control>
-                      <Input type='email' {...field} />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
-                )}
-              />
-              <Button
-                type='submit'
-                disabled={pending || !form.formState.isValid}
-                isLoading={pending}
-                className='w-full'
-              >
-                {pending ? 'Sending' : 'Resend email'}
-              </Button>
-            </form>
-          </Form.Container>
+            />
+            <Button
+              type='submit'
+              disabled={pending || !form.formState.isValid}
+              isLoading={pending}
+              className='w-full'
+            >
+              {pending ? 'Sending' : 'Resend email'}
+            </Button>
+          </Form.Content>
         </Form>
       )}
       <ButtonPrompt

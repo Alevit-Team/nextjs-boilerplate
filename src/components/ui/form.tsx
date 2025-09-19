@@ -6,6 +6,7 @@ import {
   Controller,
   FormProvider,
   useFormContext,
+  UseFormReturn,
   useFormState,
   type ControllerProps,
   type FieldPath,
@@ -224,9 +225,24 @@ const FormField = <
   );
 };
 
-const Form = Object.assign(FormProvider, {
+const FormContent = <TFieldValues extends FieldValues = FieldValues>({
+  className,
+  children,
+  form,
+  ...props
+}: ComponentProps<'form'> & { form: UseFormReturn<TFieldValues> }) => {
+  return (
+    <FormProvider {...form}>
+      <form className={cn('w-full space-y-5', className)} {...props}>
+        {children}
+      </form>
+    </FormProvider>
+  );
+};
+
+const Form = Object.assign(FormContainer, {
+  Content: FormContent,
   Provider: FormProvider,
-  Container: FormContainer,
   Field: FormField,
   Item: FormItem,
   Label: FormLabel,

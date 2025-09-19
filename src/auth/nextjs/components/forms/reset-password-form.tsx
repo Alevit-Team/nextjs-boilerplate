@@ -63,50 +63,48 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   }
 
   return (
-    <Form {...form}>
-      <Form.Container
-        title='Enter new password'
-        description='Your new password must be different from your previous passwords.'
-      >
-        <div className='my-3 h-9'>
-          {state?.ok === false && (
-            <Form.Status variant='error'>
-              {getFormErrorMessage(state.errorCode)}
-            </Form.Status>
+    <Form
+      title='Enter new password'
+      description='Your new password must be different from your previous passwords.'
+    >
+      <div className='my-3 h-9'>
+        {state?.ok === false && (
+          <Form.Status variant='error'>
+            {getFormErrorMessage(state.errorCode)}
+          </Form.Status>
+        )}
+      </div>
+      <Form.Content action={action} form={form}>
+        <Form.Field
+          control={form.control}
+          name='password'
+          render={({ field }) => (
+            <Form.Item>
+              <Form.Label>New Password</Form.Label>
+              <Form.Control>
+                <PasswordInput {...field} />
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
+        />
+        <PasswordValidation password={form.watch('password')} />
+        <div className='space-y-4'>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={!form.formState.isValid || pending}
+            isLoading={pending}
+          >
+            {pending ? 'Resetting password' : 'Reset password'}
+          </Button>
+          <Button variant='link' asChild>
+            <Link href='/sign-in'>
+              <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
+            </Link>
+          </Button>
         </div>
-        <form action={action} className='space-y-6'>
-          <Form.Field
-            control={form.control}
-            name='password'
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>New Password</Form.Label>
-                <Form.Control>
-                  <PasswordInput {...field} />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <PasswordValidation password={form.watch('password')} />
-          <div className='space-y-4'>
-            <Button
-              type='submit'
-              className='w-full'
-              disabled={!form.formState.isValid || pending}
-              isLoading={pending}
-            >
-              {pending ? 'Resetting password' : 'Reset password'}
-            </Button>
-            <Button variant='link' asChild>
-              <Link href='/sign-in'>
-                <ArrowLeftIcon className='h-4 w-4' /> Back to sign in
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </Form.Container>
+      </Form.Content>
     </Form>
   );
 }

@@ -7,7 +7,7 @@ import { useActionState } from 'react';
 import { forgotPassword } from '@/auth/nextjs/actions';
 import { forgotPasswordSchema } from '@/auth/nextjs/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeftIcon, Key, MailIcon } from 'lucide-react';
+import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 import Link from 'next/link';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { ButtonPrompt } from '../button-prompt';
@@ -53,49 +53,47 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <Form {...form}>
-      <Form.Container
-        title='Forgot password'
-        description='Please enter your email and we will send you a link to reset your password.'
-      >
-        <div className='my-3 h-9'>
-          {state?.ok === false && (
-            <Form.Status variant='error'>
-              {getFormErrorMessage(state.errorCode)}
-            </Form.Status>
+    <Form
+      title='Forgot password'
+      description='Please enter your email and we will send you a link to reset your password.'
+    >
+      <div className='my-3 h-9'>
+        {state?.ok === false && (
+          <Form.Status variant='error'>
+            {getFormErrorMessage(state.errorCode)}
+          </Form.Status>
+        )}
+      </div>
+      <Form.Content action={action} form={form}>
+        <Form.Field
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <Form.Item>
+              <Form.Label>Email</Form.Label>
+              <Form.Control>
+                <Input type='email' {...field} />
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
+        />
+        <div className='space-y-4'>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={!form.formState.isValid || pending}
+            isLoading={pending}
+          >
+            {pending ? 'Sending reset email' : 'Send reset email'}
+          </Button>
+          <Button variant='link' asChild>
+            <Link href='/sign-in'>
+              <ArrowLeftIcon /> Back to sign in
+            </Link>
+          </Button>
         </div>
-        <form action={action} className='space-y-6'>
-          <Form.Field
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Email</Form.Label>
-                <Form.Control>
-                  <Input type='email' {...field} />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <div className='space-y-4'>
-            <Button
-              type='submit'
-              className='w-full'
-              disabled={!form.formState.isValid || pending}
-              isLoading={pending}
-            >
-              {pending ? 'Sending reset email' : 'Send reset email'}
-            </Button>
-            <Button variant='link' asChild>
-              <Link href='/sign-in'>
-                <ArrowLeftIcon /> Back to sign in
-              </Link>
-            </Button>
-          </div>
-        </form>
-      </Form.Container>
+      </Form.Content>
     </Form>
   );
 }
