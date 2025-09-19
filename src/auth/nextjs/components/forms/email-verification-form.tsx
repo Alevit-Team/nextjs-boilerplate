@@ -38,11 +38,11 @@ export function EmailVerificationForm() {
           <h1 className='text-2xl font-bold'>Check your email</h1>
           <div className='space-y-4'>
             <p className='text-muted-foreground text-sm'>
-              We've sent a verification link to your email address. Please check
+              We’ve sent a verification link to your email address. Please check
               your inbox and click the link to verify your account.
             </p>
             <p className='text-muted-foreground text-sm'>
-              Didn't receive the email?
+              Didn’t receive the email?
             </p>
           </div>
           <Button onClick={handleResendClick} className='w-full'>
