@@ -1,6 +1,6 @@
 'use client';
 
-import { Form, Input, Button, IconBadge, AccountPrompt } from '@/components';
+import { Form, Input, Button, IconBadge } from '@/components';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon, Key, MailIcon } from 'lucide-react';
 import Link from 'next/link';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
+import { AccountPrompt } from '../account-prompt';
 
 const defaultValues = {
   email: '',
@@ -78,7 +79,7 @@ export function ForgotPasswordForm() {
               </Form.Item>
             )}
           />
-          <div className='flex w-full flex-col items-center gap-4'>
+          <div className='space-y-4'>
             <Button
               type='submit'
               className='w-full'

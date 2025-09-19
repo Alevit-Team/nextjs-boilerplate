@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Form,
-  Input,
-  PasswordInput,
-  Button,
-  AccountPrompt,
-  Separator,
-} from '@/components';
+import { Form, Input, PasswordInput, Button, Separator } from '@/components';
 import { signIn } from '@/auth/nextjs/actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -18,6 +11,7 @@ import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { ErrorCode } from '@/auth/nextjs/types';
 import Link from 'next/link';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
+import { AccountPrompt } from '../account-prompt';
 
 const defaultValues = {
   email: '',

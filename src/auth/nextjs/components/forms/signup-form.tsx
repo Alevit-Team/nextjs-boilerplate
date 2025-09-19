@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Form,
-  PasswordInput,
-  Button,
-  Input,
-  AccountPrompt,
-  Separator,
-} from '@/components';
+import { Form, PasswordInput, Button, Input, Separator } from '@/components';
 import { signUp } from '@/auth/nextjs/actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { PasswordValidation } from '@/auth/nextjs/components/password-validation';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
+import { AccountPrompt } from '../account-prompt';
 
 const defaultValues = {
   name: '',

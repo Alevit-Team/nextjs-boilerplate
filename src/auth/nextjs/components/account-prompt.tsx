@@ -1,4 +1,4 @@
-import { Button } from './button';
+import { Button } from '@/components';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 

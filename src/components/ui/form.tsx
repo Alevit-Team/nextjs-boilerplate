@@ -166,25 +166,6 @@ function FormMessage({ className, ...props }: ComponentProps<'p'>) {
   );
 }
 
-const FormHeader = forwardRef<HTMLDivElement, FormHeaderProps>(
-  ({ className, title, description, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn('space-y-4 text-center', className)}
-        {...props}
-      >
-        <h1 className='text-2xl font-bold'>{title}</h1>
-        {description && (
-          <p className='text-muted-foreground text-sm'>{description}</p>
-        )}
-      </div>
-    );
-  }
-);
-
-FormHeader.displayName = 'FormHeader';
-
 function FormContainer({
   title,
   description,
@@ -252,7 +233,6 @@ const Form = Object.assign(FormProvider, {
   Control: FormControl,
   Description: FormDescription,
   Message: FormMessage,
-  Header: FormHeader,
   Status: FormStatus,
 });
 
