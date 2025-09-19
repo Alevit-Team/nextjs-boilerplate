@@ -1,5 +1,5 @@
 import { ResetPasswordForm } from '@/auth/nextjs/components/reset-password-form';
-import { tokenService } from '@/lib/token-service';
+import { tokenService } from '@/lib/services/token-service';
 import { Button, FormBadge, FormHeader } from '@/components';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';

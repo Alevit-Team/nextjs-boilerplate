@@ -19,8 +19,8 @@ import {
 import { cookies } from 'next/headers';
 import { createUserSession, removeUserFromSession } from '../core/session';
 import { ActionResult, ErrorCode } from './types';
-import { emailService } from '@/lib/email-service';
-import { tokenService } from '@/lib/token-service';
+import { emailService } from '@/lib/services/email-service';
+import { tokenService } from '@/lib/services/token-service';
 // import { getOAuthClient } from '../core/oauth/base';
 
 export async function signIn(
