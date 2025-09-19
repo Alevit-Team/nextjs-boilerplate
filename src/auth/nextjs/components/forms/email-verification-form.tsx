@@ -35,7 +35,7 @@ export function EmailVerificationForm() {
     <>
       {!showResendForm ? (
         <>
-          <div className='space-y-4'>
+          <div className='space-y-8'>
             <h1 className='text-2xl font-bold'>Check your email</h1>
             <p className='text-muted-foreground text-sm'>
               We've sent a verification link to your email address. Please check
