@@ -3,7 +3,8 @@
     "bradlc.vscode-tailwindcss",
     "esbenp.prettier-vscode",
     "dsznajder.es7-react-js-snippets",
-    "prisma.prisma",
-    "hverlin.mise-vscode"
+    "hverlin.mise-vscode",
+    "rphlmr.vscode-drizzle-orm",
+    "imgildev.vscode-nextjs-generator"
   ]
 }

@@ -1,7 +1,6 @@
 import { userRoles } from '@/db/schema';
-import { randomBytes } from 'crypto';
 import z from 'zod';
-import getRedisClient from '@/redis';
+import { sessionService, SessionData } from '@/lib/services/session-service';
 
 export const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // 7 days
 export const COOKIE_SESSION_KEY = 'sessionId';
@@ -55,37 +54,27 @@ export async function updateUserSessionExpiration(
   }
 
   try {
-    const user = await getUserSessionById(sessionId);
-    if (user == null) return;
+    // Use new session service for touching session
+    const success = await sessionService.touchSession(sessionId, lastTouch);
 
-    const redisClient = getRedisClient();
-    await redisClient.set(
-      `session:${sessionId}`,
-      JSON.stringify(user),
-      'EX',
-      SESSION_EXPIRATION_SECONDS
-    );
-    setCookie(sessionId, cookies);
+    if (success) {
+      setCookie(sessionId, cookies);
 
-    // Record the last refresh time to enforce throttling
-    cookies.set(COOKIE_SESSION_TOUCH_KEY, String(now), {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
-      expires: now + SESSION_EXPIRATION_SECONDS * 1000,
-    });
+      // Record the last refresh time to enforce throttling
+      cookies.set(COOKIE_SESSION_TOUCH_KEY, String(now), {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'lax',
+        expires: now + SESSION_EXPIRATION_SECONDS * 1000,
+      });
 
-    console.log('updated session expiration');
-  } catch (error) {
-    // Silently handle Redis unavailability - don't spam logs
-    if (
-      error instanceof Error &&
-      error.message.includes('temporarily unavailable')
-    ) {
-      return null; // Gracefully degrade
+      console.log('updated session expiration');
     }
+
+    return success;
+  } catch (error) {
     console.warn('Failed to update session expiration:', error);
-    return null;
+    return null; // Graceful degradation
   }
 }
 
@@ -98,29 +87,39 @@ export async function createUserSession(
     throw new Error('Redis is required for session management');
   }
 
-  const sessionId = randomBytes(512).toString('hex').normalize();
-
   try {
-    const redisClient = getRedisClient();
-    await redisClient.set(
-      `session:${sessionId}`,
-      JSON.stringify(sessionSchema.parse(user)),
-      'EX',
-      SESSION_EXPIRATION_SECONDS
-    );
+    // Validate user data
+    const validatedUser = sessionSchema.parse(user);
+
+    // Create session using new session service
+    const sessionId = await sessionService.createSession(validatedUser);
+
+    if (!sessionId) {
+      throw new Error('Failed to create session');
+    }
 
     await setCookie(sessionId, cookies);
+    console.log('User session created successfully');
   } catch (error) {
-    // Handle Redis unavailability more gracefully
-    if (
-      error instanceof Error &&
-      error.message.includes('temporarily unavailable')
-    ) {
-      throw new Error(
-        'Session management is temporarily unavailable. Please try again later.'
-      );
-    }
     console.error('Failed to create user session:', error);
+
+    if (error instanceof Error) {
+      // Re-throw validation errors
+      if (error.name === 'ZodError') {
+        throw new Error('Invalid user data provided for session');
+      }
+
+      // Handle Redis-related errors gracefully
+      if (
+        error.message.includes('Redis') ||
+        error.message.includes('connection')
+      ) {
+        throw new Error(
+          'Session management is temporarily unavailable. Please try again later.'
+        );
+      }
+    }
+
     throw new Error('Session creation failed');
   }
 }
@@ -141,17 +140,16 @@ export async function removeUserFromSession(
   }
 
   try {
-    const redisClient = getRedisClient();
-    await redisClient.del(`session:${sessionId}`);
-    console.log('removed user from session');
-  } catch (error) {
-    // Silently handle Redis unavailability during logout
-    if (
-      error instanceof Error &&
-      !error.message.includes('temporarily unavailable')
-    ) {
-      console.warn('Failed to remove session from Redis:', error);
+    // Use new session service for deletion
+    const success = await sessionService.deleteSession(sessionId);
+
+    if (success) {
+      console.log('removed user from session');
+    } else {
+      console.warn('Session may not have existed in Redis');
     }
+  } catch (error) {
+    console.warn('Failed to remove session from Redis:', error);
     // Continue anyway since cookies are already deleted
   }
 }
@@ -175,31 +173,18 @@ async function getUserSessionById(sessionId: string) {
   }
 
   try {
-    const redisClient = getRedisClient();
-    const rawUser = await redisClient.get(`session:${sessionId}`);
+    // Use new session service for getting session
+    const sessionData = await sessionService.getSession(sessionId);
 
-    if (rawUser == null) return null;
-
-    let userObject = null;
-
-    try {
-      userObject = JSON.parse(rawUser);
-    } catch (error) {
-      console.error('Error parsing session raw user', error);
+    if (!sessionData) {
       return null;
     }
 
-    const { success, data: user } = sessionSchema.safeParse(userObject);
-
+    // Validate session data matches our expected schema
+    const { success, data: user } = sessionSchema.safeParse(sessionData);
     return success ? user : null;
   } catch (error) {
-    // Silently handle Redis unavailability
-    if (
-      error instanceof Error &&
-      !error.message.includes('temporarily unavailable')
-    ) {
-      console.warn('Failed to get session from Redis:', error);
-    }
+    console.warn('Failed to get session from Redis:', error);
     return null;
   }
 }
