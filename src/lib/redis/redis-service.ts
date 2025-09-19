@@ -10,7 +10,7 @@ export interface CacheOptions {
 }
 
 export interface SessionData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -51,7 +51,14 @@ export class RedisService {
         return value ? this.deserialize<T>(value) : null;
       }, `get:${namespacedKey}`);
     } catch (error) {
-      console.warn(`Failed to get key '${namespacedKey}':`, error);
+      if (error instanceof RedisOperationError) {
+        console.warn(
+          `Redis operation failed for key '${namespacedKey}':`,
+          error.originalError
+        );
+      } else {
+        console.warn(`Failed to get key '${namespacedKey}':`, error);
+      }
       return null; // Graceful degradation
     }
   }
@@ -61,7 +68,7 @@ export class RedisService {
    */
   public async set(
     key: string,
-    value: any,
+    value: unknown,
     options: CacheOptions = {}
   ): Promise<boolean> {
     const namespacedKey = this.buildKey(key, options.namespace);
@@ -83,7 +90,14 @@ export class RedisService {
         }
       }, `set:${namespacedKey}`);
     } catch (error) {
-      console.error(`Failed to set key '${namespacedKey}':`, error);
+      if (error instanceof RedisOperationError) {
+        console.error(
+          `Redis operation failed for key '${namespacedKey}':`,
+          error.originalError
+        );
+      } else {
+        console.error(`Failed to set key '${namespacedKey}':`, error);
+      }
       return false; // Graceful degradation
     }
   }
@@ -199,7 +213,7 @@ export class RedisService {
    * Set multiple values at once
    */
   public async mset(
-    keyValuePairs: Record<string, any>,
+    keyValuePairs: Record<string, unknown>,
     options: CacheOptions = {}
   ): Promise<boolean> {
     try {
@@ -263,7 +277,7 @@ export class RedisService {
    */
   public async getHealthStatus(): Promise<{
     isHealthy: boolean;
-    connectionInfo: any;
+    connectionInfo: unknown;
     error?: string;
   }> {
     try {
@@ -281,10 +295,17 @@ export class RedisService {
         connectionInfo: healthInfo,
       };
     } catch (error) {
+      const errorMessage =
+        error instanceof RedisOperationError
+          ? error.originalError.message
+          : error instanceof Error
+            ? error.message
+            : String(error);
+
       return {
         isHealthy: false,
         connectionInfo: null,
-        error: error instanceof Error ? error.message : String(error),
+        error: errorMessage,
       };
     }
   }
@@ -309,7 +330,7 @@ export class RedisService {
   /**
    * Serialize value for storage
    */
-  private serialize(value: any): string {
+  private serialize(value: unknown): string {
     if (typeof value === 'string') {
       return value;
     }

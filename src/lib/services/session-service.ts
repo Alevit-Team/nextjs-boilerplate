@@ -267,7 +267,7 @@ export class SessionService {
   public async getHealthStatus(): Promise<{
     isHealthy: boolean;
     sessionCount?: number;
-    redisHealth: any;
+    redisHealth: unknown;
     error?: string;
   }> {
     try {

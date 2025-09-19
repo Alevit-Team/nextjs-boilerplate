@@ -1,6 +1,6 @@
 import { userRoles } from '@/db/schema';
 import z from 'zod';
-import { sessionService, SessionData } from '@/lib/services/session-service';
+import { sessionService } from '@/lib/services/session-service';
 
 export const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // 7 days
 export const COOKIE_SESSION_KEY = 'sessionId';
