@@ -73,7 +73,7 @@ export function SignInForm() {
               </Button>
             </div>
           </div>
-          <div>
+          <div className='space-y-4'>
             <Button
               type='submit'
               className='w-full'
@@ -82,6 +82,11 @@ export function SignInForm() {
             >
               {pending ? 'Signing in' : 'Sign in'}
             </Button>
+            <AccountPrompt
+              text="Don't have an account?"
+              linkText='Sign up'
+              href='/sign-up'
+            />
           </div>
         </form>
         {state?.ok === false &&
@@ -99,11 +104,6 @@ export function SignInForm() {
               </div>
             </div>
           )}
-        <AccountPrompt
-          text="Don't have an account?"
-          linkText='Sign up'
-          href='/sign-up'
-        />
         <Separator label='Or continue with' className='my-6' />
         <SocialLogin />
       </Form.Container>

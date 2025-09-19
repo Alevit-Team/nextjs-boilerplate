@@ -96,7 +96,7 @@ export function SignUpForm() {
               </>
             )}
           />
-          <div>
+          <div className='space-y-4'>
             <Button
               type='submit'
               className='w-full'
