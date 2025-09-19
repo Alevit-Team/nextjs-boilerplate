@@ -1,4 +1,4 @@
-import { ForgotPasswordForm } from '@/auth/nextjs/forms/forgot-password-form';
+import { ForgotPasswordForm } from '@/auth/nextjs/components/forms/forgot-password-form';
 
 export default function ForgotPasswordPage() {
   return (

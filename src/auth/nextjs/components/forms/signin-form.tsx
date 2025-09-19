@@ -7,14 +7,14 @@ import {
   Button,
   AccountPrompt,
 } from '@/components';
-import { signIn } from '../actions';
+import { signIn } from '@/auth/nextjs/actions';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useActionState } from 'react';
-import { signInSchema } from '../schemas';
+import { signInSchema } from '@/auth/nextjs/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { ErrorCode } from '../types';
+import { ErrorCode } from '@/auth/nextjs/types';
 import Link from 'next/link';
 
 const defaultValues = {

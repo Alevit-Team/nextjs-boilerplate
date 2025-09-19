@@ -1,4 +1,4 @@
-import { EmailVerificationForm } from '@/auth/nextjs/forms/email-verification-form';
+import { EmailVerificationForm } from '@/auth/nextjs/components/forms/email-verification-form';
 import { IconBadge } from '@/components';
 import { MailIcon } from 'lucide-react';
 

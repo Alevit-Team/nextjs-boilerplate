@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
@@ -15,8 +14,15 @@ import {
 
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
+import {
+  ComponentProps,
+  createContext,
+  forwardRef,
+  Ref,
+  useContext,
+  useId,
+} from 'react';
 
-// Context for form field state
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -24,7 +30,7 @@ type FormFieldContextValue<
   name: TName;
 };
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
+const FormFieldContext = createContext<FormFieldContextValue>(
   {} as FormFieldContextValue
 );
 
@@ -32,14 +38,22 @@ type FormItemContextValue = {
   id: string;
 };
 
-const FormItemContext = React.createContext<FormItemContextValue>(
+const FormItemContext = createContext<FormItemContextValue>(
   {} as FormItemContextValue
 );
 
-// Hook to access form field state
+interface FormHeaderProps extends ComponentProps<'div'> {
+  title: string;
+  description?: string;
+}
+
+interface FormStatusProps extends ComponentProps<'div'> {
+  variant: 'default' | 'error' | 'success';
+}
+
 const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext);
-  const itemContext = React.useContext(FormItemContext);
+  const fieldContext = useContext(FormFieldContext);
+  const itemContext = useContext(FormItemContext);
   const { getFieldState } = useFormContext();
   const formState = useFormState({ name: fieldContext.name });
   const fieldState = getFieldState(fieldContext.name, formState);
@@ -61,8 +75,8 @@ const useFormField = () => {
 };
 
 // Individual form components
-function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
-  const id = React.useId();
+function FormItem({ className, ...props }: ComponentProps<'div'>) {
+  const id = useId();
 
   return (
     <FormItemContext.Provider value={{ id }}>
@@ -78,7 +92,7 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 function FormLabel({
   className,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+}: ComponentProps<typeof LabelPrimitive.Root>) {
   const { error, formItemId } = useFormField();
 
   return (
@@ -92,7 +106,7 @@ function FormLabel({
   );
 }
 
-function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
+function FormControl({ ...props }: ComponentProps<typeof Slot>) {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
@@ -111,7 +125,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
   );
 }
 
-function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
+function FormDescription({ className, ...props }: ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField();
 
   return (
@@ -124,7 +138,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   );
 }
 
-function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
+function FormMessage({ className, ...props }: ComponentProps<'p'>) {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? '') : props.children;
 
@@ -147,7 +161,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   );
 }
 
-const FormHeader = React.forwardRef<HTMLDivElement, FormHeaderProps>(
+const FormHeader = forwardRef<HTMLDivElement, FormHeaderProps>(
   ({ className, title, description, ...props }, ref) => {
     return (
       <div
@@ -163,22 +177,20 @@ const FormHeader = React.forwardRef<HTMLDivElement, FormHeaderProps>(
     );
   }
 );
+
 FormHeader.displayName = 'FormHeader';
 
-interface FormHeaderProps extends React.ComponentProps<'div'> {
-  title: string;
-  description?: string;
-}
-
-const FormStatus = React.forwardRef<HTMLDivElement, FormStatusProps>(
+const FormStatus = forwardRef<HTMLDivElement, FormStatusProps>(
   ({ className, children, variant = 'default', ...props }, ref) => {
     return (
       <div
+        ref={ref}
         className={cn(
           'bg-muted rounded-md p-2 text-center text-sm',
           variant === 'error' && 'text-destructive bg-destructive/10',
           variant === 'success' && 'bg-green-50 text-green-600'
         )}
+        {...props}
       >
         {children}
       </div>
@@ -187,10 +199,6 @@ const FormStatus = React.forwardRef<HTMLDivElement, FormStatusProps>(
 );
 
 FormStatus.displayName = 'FormStatus';
-
-interface FormStatusProps extends React.ComponentProps<'div'> {
-  variant: 'default' | 'error' | 'success';
-}
 
 // Form Field component
 const FormField = <
