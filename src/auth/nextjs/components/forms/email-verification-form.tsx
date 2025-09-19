@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, Input, Button } from '@/components';
-import { AccountPrompt } from '@/auth/nextjs/components/account-prompt';
+import { ButtonPrompt } from '@/auth/nextjs/components/button-prompt';
 import { resendVerificationEmail } from '@/auth/nextjs/actions';
 import { resendVerificationSchema } from '@/auth/nextjs/schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
@@ -96,7 +96,7 @@ export function EmailVerificationForm() {
           </Form.Container>
         </Form>
       )}
-      <AccountPrompt
+      <ButtonPrompt
         text='Already verified your email?'
         linkText='Sign in'
         href='/sign-in'

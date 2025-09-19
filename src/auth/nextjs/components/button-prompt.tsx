@@ -2,7 +2,7 @@ import { Button } from '@/components';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-interface AccountPromptProps {
+interface ButtonPromptProps {
   text: string;
   linkText: string;
   href?: string;
@@ -10,13 +10,13 @@ interface AccountPromptProps {
   onClick?: () => void;
 }
 
-export const AccountPrompt = ({
+export const ButtonPrompt = ({
   text,
   linkText,
   href,
   className = '',
   onClick,
-}: AccountPromptProps) => {
+}: ButtonPromptProps) => {
   return (
     <p className={cn(`text-muted-foreground text-center text-sm ${className}`)}>
       {text}

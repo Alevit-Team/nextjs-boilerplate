@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { PasswordValidation } from '@/auth/nextjs/components/password-validation';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
-import { AccountPrompt } from '../account-prompt';
+import { ButtonPrompt } from '../button-prompt';
 
 const defaultValues = {
   name: '',
@@ -105,14 +105,14 @@ export function SignUpForm() {
             >
               {pending ? 'Signing up' : 'Sign up'}
             </Button>
-            <AccountPrompt
+            <ButtonPrompt
               text='Already have an account?'
               linkText='Sign in'
               href='/sign-in'
             />
           </div>
         </form>
-        <Separator label='Or continue with' className='my-6' />
+        <Separator label='Or continue with' className='my-8' />
         <SocialLogin />
       </Form.Container>
     </Form>

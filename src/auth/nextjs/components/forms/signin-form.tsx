@@ -11,7 +11,7 @@ import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { ErrorCode } from '@/auth/nextjs/types';
 import Link from 'next/link';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
-import { AccountPrompt } from '../account-prompt';
+import { ButtonPrompt } from '../button-prompt';
 
 const defaultValues = {
   email: '',
@@ -82,7 +82,7 @@ export function SignInForm() {
             >
               {pending ? 'Signing in' : 'Sign in'}
             </Button>
-            <AccountPrompt
+            <ButtonPrompt
               text="Don't have an account?"
               linkText='Sign up'
               href='/sign-up'
@@ -96,7 +96,7 @@ export function SignInForm() {
                 <p className='font-medium text-blue-900'>
                   Need to verify your email?
                 </p>
-                <AccountPrompt
+                <ButtonPrompt
                   href='/verify-email'
                   text='Need to verify your email?'
                   linkText='Click here to resend verification email'
@@ -104,7 +104,7 @@ export function SignInForm() {
               </div>
             </div>
           )}
-        <Separator label='Or continue with' className='my-6' />
+        <Separator label='Or continue with' className='my-8' />
         <SocialLogin />
       </Form.Container>
     </Form>

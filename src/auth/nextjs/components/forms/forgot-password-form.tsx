@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon, Key, MailIcon } from 'lucide-react';
 import Link from 'next/link';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { AccountPrompt } from '../account-prompt';
+import { ButtonPrompt } from '../button-prompt';
 
 const defaultValues = {
   email: '',
@@ -42,7 +42,7 @@ export function ForgotPasswordForm() {
           <Button className='w-full' asChild>
             <Link href='/sign-in'>Back to sign in</Link>
           </Button>
-          <AccountPrompt
+          <ButtonPrompt
             text='Didnt receive the email?'
             linkText='Send again'
             onClick={() => window.location.reload()}
