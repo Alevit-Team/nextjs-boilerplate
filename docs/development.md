@@ -21,6 +21,19 @@ pnpm lint
 
 # Format code with Prettier
 pnpm format
+
+# Database commands
+pnpm db:generate    # Generate database migrations
+pnpm db:migrate     # Run database migrations
+pnpm db:push        # Push schema changes to database
+pnpm db:studio      # Open Drizzle Studio
+pnpm db:seed        # Seed database with sample data
+pnpm db:test        # Test database connection
+
+# Docker commands
+pnpm docker:up      # Start Docker services
+pnpm docker:down    # Stop Docker services
+pnpm docker:logs    # View Docker logs
 ```
 
 ### Advanced Commands
@@ -143,26 +156,23 @@ npx prettier --check .
 npx prettier --write src/app/page.tsx
 ```
 
-### TailwindCSS
+### TailwindCSS v4
 
-**Configuration:** `tailwind.config.ts`
+**Configuration:** Inline configuration in `src/app/(front-end)/globals.css`
 
 Features:
 
-- CSS variables for theming
-- Custom animations
-- Responsive design utilities
-- Dark mode support (ready to enable)
+- CSS variables for theming with OKLCH color format
+- Fluid responsive typography system
+- Custom design tokens and utilities
+- Dark mode support (fully implemented)
+- Modern CSS features (clamp, text-balance, text-pretty)
 
-**Useful commands:**
+**Key Features:**
 
-```bash
-# Build CSS and watch for changes
-npx tailwindcss -i ./src/app/globals.css -o ./dist/output.css --watch
-
-# Generate Tailwind classes for autocomplete
-npx tailwindcss --init
-```
+- No separate config file needed - uses Tailwind v4 inline configuration
+- Design tokens defined as CSS custom properties
+- Comprehensive design system with semantic color naming
 
 ## Development Workflow
 
@@ -310,13 +320,20 @@ Create `.env.local` for local development:
 
 ```bash
 # .env.local
-NEXT_PUBLIC_API_URL=http://localhost:3001
-DATABASE_URL=postgresql://user:password@localhost:5432/db
-NEXTAUTH_SECRET=your-secret-key
-# Redis
+
+# Database Configuration (required)
+DATABASE_URL=postgresql://postgres:password@localhost:5432/nextjs_boilerplate
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+POSTGRES_DB=nextjs_boilerplate
+
+# Redis Configuration (required)
 REDIS_URL=redis://localhost:6379
-# Optional: throttle session refreshes (seconds); default is 300 (5 minutes)
-SESSION_TOUCH_INTERVAL_SECONDS=300
+REDIS_PASSWORD=optional-password
+REDIS_TOKEN=optional-token
+
+# Optional: Skip environment validation during build
+SKIP_ENV_VALIDATION=false
 ```
 
 **Usage in code:**

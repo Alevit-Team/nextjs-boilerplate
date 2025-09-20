@@ -4,7 +4,6 @@
     "esbenp.prettier-vscode",
     "dsznajder.es7-react-js-snippets",
     "hverlin.mise-vscode",
-    "rphlmr.vscode-drizzle-orm",
-    "imgildev.vscode-nextjs-generator"
+    "rphlmr.vscode-drizzle-orm"
   ]
 }

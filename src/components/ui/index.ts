@@ -5,6 +5,6 @@ export * from './input';
 export * from './label';
 export * from './password-input';
 export * from './icon-badge';
-export * from './container';
+export * from '../layout/container';
 export * from './separator';
-export * from './section';
+export * from '../layout/section';

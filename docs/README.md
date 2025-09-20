@@ -28,6 +28,12 @@ Comprehensive development workflow including commands, tools, code quality, debu
 
 **Great for:** Day-to-day development tasks and troubleshooting.
 
+### [🗄️ Database Setup](./database-setup.md)
+
+Complete guide for setting up PostgreSQL, Redis, and Drizzle ORM. Includes Docker configuration, migrations, and production deployment.
+
+**Essential for:** Understanding the database layer and authentication system.
+
 ### [🚀 Deployment Guide](./deployment.md)
 
 Step-by-step deployment instructions for various hosting platforms including Vercel, Netlify, Railway, and others.
@@ -40,6 +46,8 @@ Step-by-step deployment instructions for various hosting platforms including Ver
 
 **Building features?** → [Project Structure](./project-structure.md) → [Development Guide](./development.md)
 
+**Setting up database?** → [Database Setup](./database-setup.md)
+
 **Ready to deploy?** → [Deployment Guide](./deployment.md)
 
 ## 🔧 What's This Boilerplate?
@@ -48,8 +56,11 @@ This is a modern Next.js boilerplate with:
 
 - **Next.js 15** with App Router and Turbopack
 - **TypeScript** for type safety
-- **TailwindCSS** for styling
-- **Radix UI** components
+- **TailwindCSS v4** with modern design system
+- **Radix UI** components with shadcn/ui
+- **Drizzle ORM** with PostgreSQL database
+- **Redis** for caching and sessions
+- **Authentication system** with OAuth support
 - **ESLint & Prettier** for code quality
 - **mise** for tool version management
 - **Feature-based architecture** for scalability

@@ -18,7 +18,7 @@ export default async function HomePage() {
       {fullUser == null ? (
         <Card className='w-full max-w-[520px]'>
           <CardHeader>
-            <CardTitle className='text-2xl'>Welcome</CardTitle>
+            <CardTitle>Welcome</CardTitle>
             <CardDescription>
               Sign in or create an account to continue.
             </CardDescription>

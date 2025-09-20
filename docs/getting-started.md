@@ -100,13 +100,33 @@ Once mise is installed and activated:
    pnpm install
    ```
 
-2. **Start development server:**
+2. **Set up environment variables:**
+
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your configuration
+   ```
+
+3. **Start Docker services (PostgreSQL & Redis):**
+
+   ```bash
+   pnpm docker:up
+   ```
+
+4. **Set up database:**
+
+   ```bash
+   pnpm db:push     # Push schema to database
+   pnpm db:seed     # Seed with sample data (optional)
+   ```
+
+5. **Start development server:**
 
    ```bash
    pnpm dev
    ```
 
-3. **Open in browser:**
+6. **Open in browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 🛠️ Development Commands
@@ -134,9 +154,13 @@ This boilerplate includes:
 
 - **Next.js 15** with App Router and Turbopack
 - **TypeScript** for type safety
-- **TailwindCSS** for styling
-- **Radix UI** components
+- **TailwindCSS v4** with inline configuration
+- **Radix UI** components with shadcn/ui
 - **Lucide React** icons
+- **Drizzle ORM** for database management
+- **PostgreSQL** database with Docker
+- **Redis** for caching and sessions
+- **Authentication system** with OAuth support
 - **ESLint & Prettier** for code quality
 - **Husky** for Git hooks
 
@@ -167,10 +191,16 @@ This boilerplate includes:
 
 ```
 src/
-├── app/           # Next.js App Router pages and layouts
+├── app/           # Next.js App Router with route groups
+│   ├── (back-end)/    # API routes
+│   └── (front-end)/   # Frontend pages and layouts
+├── auth/          # Authentication system
 ├── components/    # Reusable React components
-│   └── ui/        # UI components (buttons, etc.)
-└── lib/           # Utility functions
+│   ├── ui/        # UI components (buttons, etc.)
+│   └── layout/    # Layout components
+├── db/            # Database schema and migrations
+├── env/           # Environment configuration
+└── lib/           # Utility functions and services
 ```
 
 For detailed structure information, see [Project Structure](./project-structure.md).

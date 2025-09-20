@@ -3,6 +3,7 @@ import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { Button, IconBadge, Section, Container } from '@/components';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Body, Headline } from '@/components/ui/typography';
 
 interface VerifyEmailTokenPageProps {
   params: Promise<{ token: string }>;
@@ -24,12 +25,12 @@ export default async function VerifyEmailTokenPage({
               <IconBadge>
                 <CheckCircleIcon />
               </IconBadge>
-              <h1 className='text-2xl font-bold'>Email verified</h1>
-              <p className='text-muted-foreground text-sm'>
+              <Headline>Email verified</Headline>
+              <Body>
                 Your email address has been successfully verified.
                 <br />
                 You can now sign in to your account.
-              </p>
+              </Body>
               <Button asChild className='w-full'>
                 <Link href='/sign-in'>Back to sign in</Link>
               </Button>
@@ -39,10 +40,8 @@ export default async function VerifyEmailTokenPage({
               <IconBadge>
                 <XCircleIcon />
               </IconBadge>
-              <h1 className='text-2xl font-bold'>Verification failed</h1>
-              <p className='text-muted-foreground text-sm'>
-                {getFormErrorMessage(result.errorCode)}
-              </p>
+              <Headline>Verification failed</Headline>
+              <Body>{getFormErrorMessage(result.errorCode)}</Body>
               <Button asChild className='w-full'>
                 <Link href='/verify-email'>Back to email verification</Link>
               </Button>
