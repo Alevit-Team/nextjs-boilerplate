@@ -56,8 +56,11 @@ This is a modern Next.js boilerplate with:
 
 - **Next.js 15** with App Router and Turbopack
 - **TypeScript** for type safety
-- **TailwindCSS** for styling
-- **Radix UI** components
+- **TailwindCSS v4** with modern design system
+- **Radix UI** components with shadcn/ui
+- **Drizzle ORM** with PostgreSQL database
+- **Redis** for caching and sessions
+- **Authentication system** with OAuth support
 - **ESLint & Prettier** for code quality
 - **mise** for tool version management
 - **Feature-based architecture** for scalability

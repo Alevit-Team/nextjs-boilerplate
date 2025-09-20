@@ -154,9 +154,13 @@ This boilerplate includes:
 
 - **Next.js 15** with App Router and Turbopack
 - **TypeScript** for type safety
-- **TailwindCSS** for styling
-- **Radix UI** components
+- **TailwindCSS v4** with inline configuration
+- **Radix UI** components with shadcn/ui
 - **Lucide React** icons
+- **Drizzle ORM** for database management
+- **PostgreSQL** database with Docker
+- **Redis** for caching and sessions
+- **Authentication system** with OAuth support
 - **ESLint & Prettier** for code quality
 - **Husky** for Git hooks
 
