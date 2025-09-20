@@ -26,7 +26,6 @@ import {
   Label,
   TypographyProps,
   Headline,
-  Caption,
   Body,
 } from './typography';
 

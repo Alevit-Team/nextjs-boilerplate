@@ -6,13 +6,13 @@ import { verifyEmail } from '@/auth/nextjs/actions';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 
 interface VerifyEmailTokenPageProps {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 }
 
 export default async function VerifyEmailTokenPage({
   params,
 }: VerifyEmailTokenPageProps) {
-  const { token } = params;
+  const { token } = await params;
 
   const result = await verifyEmail(token);
 

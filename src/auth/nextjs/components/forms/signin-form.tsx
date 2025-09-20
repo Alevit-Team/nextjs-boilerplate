@@ -8,7 +8,6 @@ import { useActionState } from 'react';
 import { signInSchema } from '@/auth/nextjs/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { ErrorCode } from '@/auth/nextjs/types';
 import Link from 'next/link';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
 import { ButtonPrompt } from '../button-prompt';

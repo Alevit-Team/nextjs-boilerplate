@@ -14,7 +14,6 @@ export const ButtonPrompt = ({
   text,
   linkText,
   href,
-  className = '',
   onClick,
 }: ButtonPromptProps) => {
   return (
