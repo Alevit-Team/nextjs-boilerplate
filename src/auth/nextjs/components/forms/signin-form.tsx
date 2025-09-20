@@ -8,7 +8,6 @@ import { useActionState } from 'react';
 import { signInSchema } from '@/auth/nextjs/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
-import { ErrorCode } from '@/auth/nextjs/types';
 import Link from 'next/link';
 import { SocialLogin } from '@/auth/nextjs/components/social-login';
 import { ButtonPrompt } from '../button-prompt';
@@ -88,21 +87,6 @@ export function SignInForm() {
           />
         </div>
       </Form.Content>
-      {state?.ok === false &&
-        state.errorCode === ErrorCode.EMAIL_NOT_VERIFIED && (
-          <div className='mt-4 rounded-lg bg-blue-50 p-4'>
-            <div className='text-sm'>
-              <p className='font-medium text-blue-900'>
-                Need to verify your email?
-              </p>
-              <ButtonPrompt
-                href='/verify-email'
-                text='Need to verify your email?'
-                linkText='Click here to resend verification email'
-              />
-            </div>
-          </div>
-        )}
       <Separator label='Or continue with' className='my-8' />
       <SocialLogin />
     </Form>

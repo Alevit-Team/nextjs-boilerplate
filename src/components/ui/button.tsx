@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -11,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
+          'bg-primary shadow-xs hover:bg-primary/90 text-primary-foreground',
         destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+          'bg-destructive shadow-xs hover:bg-destructive/90 text-white focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
         secondary:
@@ -23,9 +22,9 @@ const buttonVariants = cva(
         link: 'text-primary/90 font-normal !h-auto !py-0.5 !px-1 hover:text-primary dark:hover:text-primary transition-colors',
       },
       size: {
-        default: 'h-12 px-4 py-2 has-[>svg]:px-3',
+        default: 'h-12 px-4 py-2 has-[>svg]:px-3 body-md',
         sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
+        lg: 'h-14 rounded-md px-6 has-[>svg]:px-4 body-lg',
         icon: 'size-9',
       },
     },
@@ -54,7 +53,7 @@ function Button({
   const content = isLoading ? (
     <>
       <Loader2 className='animate-spin' />
-      {children && <span>{children}</span>}
+      {children}
     </>
   ) : (
     children

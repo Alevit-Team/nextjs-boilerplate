@@ -49,14 +49,23 @@ const typographyVariants = cva('', {
       // Overline variant - Direct CSS class usage from globals.css
       overline: 'overline',
     },
+    color: {
+      default: 'text-foreground',
+      destructive: 'text-destructive',
+      success: 'text-success',
+      warning: 'text-warning',
+      info: 'text-info',
+      'muted-foreground': 'text-muted-foreground',
+    },
   },
   defaultVariants: {
     variant: 'body-md',
+    color: 'default',
   },
 });
 
 export interface TypographyProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
     VariantProps<typeof typographyVariants> {
   as?: React.ElementType;
   children: React.ReactNode;
@@ -67,7 +76,7 @@ export interface TypographyProps
  * Provides full IntelliSense support and type safety
  */
 const Typography = React.forwardRef<HTMLElement, TypographyProps>(
-  ({ className, variant, as, children, ...props }, ref) => {
+  ({ className, variant, color, as, children, ...props }, ref) => {
     // Automatic semantic element selection based on variant
     const getDefaultElement = (
       variant: string | null | undefined
@@ -89,7 +98,7 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
 
     return (
       <Component
-        className={cn(typographyVariants({ variant }), className)}
+        className={cn(typographyVariants({ variant, color }), className)}
         ref={ref}
         {...props}
       >
@@ -137,10 +146,13 @@ export const Body = React.forwardRef<
 Body.displayName = 'Body';
 
 export const Label = React.forwardRef<
-  HTMLElement,
-  Omit<TypographyProps, 'variant'> & { size?: 'sm' | 'md' | 'lg' | 'xl' }
+  HTMLLabelElement,
+  Omit<TypographyProps, 'variant' | 'as'> &
+    React.LabelHTMLAttributes<HTMLLabelElement> & {
+      size?: 'sm' | 'md' | 'lg' | 'xl';
+    }
 >(({ size = 'md', ...props }, ref) => (
-  <Typography variant={`label-${size}`} ref={ref} {...props} />
+  <Typography variant={`label-${size}`} ref={ref} as='label' {...props} />
 ));
 Label.displayName = 'Label';
 

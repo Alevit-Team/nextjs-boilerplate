@@ -695,7 +695,6 @@
     font-weight: 400;
     letter-spacing: var(--letter-spacing-caption);
     line-height: var(--line-height-caption);
-    color: var(--muted-foreground);
   }
 
   .caption-md {
@@ -703,7 +702,6 @@
     font-weight: 400;
     letter-spacing: var(--letter-spacing-caption);
     line-height: var(--line-height-caption);
-    color: var(--muted-foreground);
   }
 
   .caption-sm {
@@ -711,7 +709,6 @@
     font-weight: 400;
     letter-spacing: var(--letter-spacing-caption);
     line-height: var(--line-height-caption);
-    color: var(--muted-foreground);
   }
 
   /* Overline Typography */
