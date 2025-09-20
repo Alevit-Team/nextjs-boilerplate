@@ -10,20 +10,52 @@ nextjs-boilerplate/
 ├── package.json            # Dependencies and scripts
 ├── next.config.ts          # Next.js configuration
 ├── tsconfig.json          # TypeScript configuration
-├── tailwind.config.ts     # TailwindCSS configuration
 ├── components.json        # Shadcn/ui configuration
+├── drizzle.config.ts      # Database configuration
+├── docker-compose.yml     # Docker services
 ├── docs/                  # Documentation (you are here)
 └── src/
     ├── app/               # Next.js App Router
-    │   ├── layout.tsx     # Root layout component
-    │   ├── page.tsx       # Home page
-    │   ├── globals.css    # Global styles
-    │   └── favicon.ico    # App favicon
+    │   ├── (back-end)/    # API routes group
+    │   │   └── api/       # API endpoints
+    │   │       ├── health/
+    │   │       ├── oauth/
+    │   │       └── users/
+    │   ├── (front-end)/   # Frontend routes group
+    │   │   ├── (auth)/    # Authentication pages
+    │   │   │   ├── sign-in/
+    │   │   │   ├── sign-up/
+    │   │   │   ├── forgot-password/
+    │   │   │   ├── reset-password/
+    │   │   │   └── verify-email/
+    │   │   ├── (protected)/ # Protected pages
+    │   │   │   ├── admin/
+    │   │   │   └── profile/
+    │   │   ├── (sample-pages)/ # Demo pages
+    │   │   │   ├── design-system-demo/
+    │   │   │   └── sample-components/
+    │   │   ├── layout.tsx   # Root layout component
+    │   │   ├── page.tsx     # Home page
+    │   │   ├── globals.css  # Global styles & design tokens
+    │   │   └── favicon.ico  # App favicon
+    │   └── middleware.ts    # Next.js middleware
+    ├── auth/              # Authentication system
+    │   ├── core/          # Core auth logic
+    │   └── nextjs/        # Next.js auth components
     ├── components/        # Reusable UI components
     │   ├── ui/           # Basic UI components
-    │   │   └── button.tsx
+    │   ├── layout/       # Layout components
     │   └── index.ts      # Barrel exports
+    ├── db/               # Database layer
+    │   ├── migrations/   # Database migrations
+    │   ├── schema.ts     # Database schema
+    │   └── seed.ts       # Database seeding
+    ├── env/              # Environment configuration
+    │   ├── server.ts     # Server-side env vars
+    │   └── client.ts     # Client-side env vars
     └── lib/              # Shared utilities
+        ├── services/     # Business logic services
+        ├── redis/        # Redis client & services
         └── utils.ts      # Utility functions
 ```
 

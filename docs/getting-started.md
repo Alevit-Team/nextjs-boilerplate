@@ -187,10 +187,16 @@ This boilerplate includes:
 
 ```
 src/
-├── app/           # Next.js App Router pages and layouts
+├── app/           # Next.js App Router with route groups
+│   ├── (back-end)/    # API routes
+│   └── (front-end)/   # Frontend pages and layouts
+├── auth/          # Authentication system
 ├── components/    # Reusable React components
-│   └── ui/        # UI components (buttons, etc.)
-└── lib/           # Utility functions
+│   ├── ui/        # UI components (buttons, etc.)
+│   └── layout/    # Layout components
+├── db/            # Database schema and migrations
+├── env/           # Environment configuration
+└── lib/           # Utility functions and services
 ```
 
 For detailed structure information, see [Project Structure](./project-structure.md).
