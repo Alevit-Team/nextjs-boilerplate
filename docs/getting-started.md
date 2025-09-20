@@ -100,13 +100,33 @@ Once mise is installed and activated:
    pnpm install
    ```
 
-2. **Start development server:**
+2. **Set up environment variables:**
+
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your configuration
+   ```
+
+3. **Start Docker services (PostgreSQL & Redis):**
+
+   ```bash
+   pnpm docker:up
+   ```
+
+4. **Set up database:**
+
+   ```bash
+   pnpm db:push     # Push schema to database
+   pnpm db:seed     # Seed with sample data (optional)
+   ```
+
+5. **Start development server:**
 
    ```bash
    pnpm dev
    ```
 
-3. **Open in browser:**
+6. **Open in browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 🛠️ Development Commands
