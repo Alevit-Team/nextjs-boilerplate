@@ -1,0 +1,919 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* =============================================================================
+   * DESIGN TOKENS - COLORS
+   * ============================================================================= */
+
+  /* Color Palette - Semantic Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* =============================================================================
+   * FLUID RESPONSIVE TYPOGRAPHY SYSTEM (2025 Best Practices)
+   * ============================================================================= */
+
+  /* Fluid Font Sizes using clamp() for responsive scaling */
+
+  /* Display Typography - Large hero text, scales from mobile to desktop */
+  --font-size-display-2xl: clamp(2.5rem, 8vw, 8rem); /* 40px → 128px */
+  --font-size-display-xl: clamp(2.25rem, 7vw, 6rem); /* 36px → 96px */
+  --font-size-display-lg: clamp(2rem, 6vw, 4.5rem); /* 32px → 72px */
+  --font-size-display-md: clamp(1.75rem, 5vw, 3rem); /* 28px → 48px */
+  --font-size-display-sm: clamp(1.5rem, 4vw, 2.25rem); /* 24px → 36px */
+
+  /* Headline Typography - Section headers, moderate scaling */
+  --font-size-headline-xl: clamp(1.875rem, 3.5vw, 2.25rem); /* 30px → 36px */
+  --font-size-headline-lg: clamp(1.5rem, 2.8vw, 1.875rem); /* 24px → 30px */
+  --font-size-headline-md: clamp(1.25rem, 2.2vw, 1.5rem); /* 20px → 24px */
+  --font-size-headline-sm: clamp(1.125rem, 1.8vw, 1.25rem); /* 18px → 20px */
+
+  /* Title Typography - Card/component titles, subtle scaling */
+  --font-size-title-xl: clamp(1.25rem, 1.5vw, 1.5rem); /* 20px → 24px */
+  --font-size-title-lg: clamp(1.125rem, 1.2vw, 1.25rem); /* 18px → 20px */
+  --font-size-title-md: clamp(1rem, 1vw, 1.125rem); /* 16px → 18px */
+  --font-size-title-sm: clamp(0.875rem, 0.8vw, 1rem); /* 14px → 16px */
+
+  /* Body Typography - Content text, minimal scaling for readability */
+  --font-size-body-xl: clamp(1.125rem, 1.2vw, 1.25rem); /* 18px → 20px */
+  --font-size-body-lg: clamp(1rem, 1vw, 1.125rem); /* 16px → 18px */
+  --font-size-body-md: clamp(0.875rem, 0.8vw, 1rem); /* 14px → 16px */
+  --font-size-body-sm: clamp(0.8125rem, 0.6vw, 0.875rem); /* 13px → 14px */
+
+  /* Label Typography - UI labels, small scaling */
+  --font-size-label-xl: clamp(1rem, 1vw, 1.125rem); /* 16px → 18px */
+  --font-size-label-lg: clamp(0.875rem, 0.8vw, 1rem); /* 14px → 16px */
+  --font-size-label-md: clamp(0.8125rem, 0.6vw, 0.875rem); /* 13px → 14px */
+  --font-size-label-sm: clamp(0.75rem, 0.5vw, 0.8125rem); /* 12px → 13px */
+
+  /* Caption Typography - Small descriptive text */
+  --font-size-caption-lg: clamp(0.8125rem, 0.6vw, 0.875rem); /* 13px → 14px */
+  --font-size-caption-md: clamp(0.75rem, 0.5vw, 0.8125rem); /* 12px → 13px */
+  --font-size-caption-sm: clamp(0.6875rem, 0.4vw, 0.75rem); /* 11px → 12px */
+
+  /* Overline Typography - Uppercase labels */
+  --font-size-overline: clamp(0.6875rem, 0.4vw, 0.75rem); /* 11px → 12px */
+
+  /* Fluid Line Heights - Adjust based on screen size for better readability */
+  --line-height-display: clamp(0.9, 0.9 + 0.1vw, 1.1); /* 0.9 → 1.1 */
+  --line-height-headline: clamp(1.1, 1.1 + 0.1vw, 1.3); /* 1.1 → 1.3 */
+  --line-height-title: clamp(1.2, 1.2 + 0.1vw, 1.4); /* 1.2 → 1.4 */
+  --line-height-body: clamp(1.4, 1.4 + 0.2vw, 1.7); /* 1.4 → 1.7 */
+  --line-height-label: clamp(1.2, 1.2 + 0.1vw, 1.4); /* 1.2 → 1.4 */
+  --line-height-caption: clamp(1.3, 1.3 + 0.1vw, 1.5); /* 1.3 → 1.5 */
+
+  /* Fluid Letter Spacing - Better tracking on smaller screens */
+  --letter-spacing-display: clamp(-0.05em, -0.05em + 0.01vw, -0.025em);
+  --letter-spacing-headline: clamp(-0.025em, -0.025em + 0.005vw, -0.015em);
+  --letter-spacing-title: clamp(-0.015em, -0.015em + 0.005vw, -0.01em);
+  --letter-spacing-body: 0em;
+  --letter-spacing-label: clamp(0em, 0em + 0.01vw, 0.025em);
+  --letter-spacing-caption: clamp(0.025em, 0.025em + 0.01vw, 0.05em);
+  --letter-spacing-overline: clamp(0.1em, 0.1em + 0.02vw, 0.15em);
+
+  /* Surface Colors */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Interactive Colors */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar Colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* =============================================================================
+   * DESIGN TOKENS - TYPOGRAPHY
+   * ============================================================================= */
+
+  /* Font Families */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: ui-serif, Georgia, 'Times New Roman', Times, serif;
+
+  /* Font Sizes - Type Scale */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.75rem; /* 60px */
+  --font-size-7xl: 4.5rem; /* 72px */
+  --font-size-8xl: 6rem; /* 96px */
+  --font-size-9xl: 8rem; /* 128px */
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+
+  /* Font Weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* =============================================================================
+   * DESIGN TOKENS - SPACING & LAYOUT
+   * ============================================================================= */
+
+  /* Spacing Scale */
+  --spacing-px: 1px;
+  --spacing-0: 0px;
+  --spacing-0-5: 0.125rem; /* 2px */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-1-5: 0.375rem; /* 6px */
+  --spacing-2: 0.5rem; /* 8px */
+  --spacing-2-5: 0.625rem; /* 10px */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-3-5: 0.875rem; /* 14px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-7: 1.75rem; /* 28px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-9: 2.25rem; /* 36px */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-11: 2.75rem; /* 44px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-14: 3.5rem; /* 56px */
+  --spacing-16: 4rem; /* 64px */
+  --spacing-20: 5rem; /* 80px */
+  --spacing-24: 6rem; /* 96px */
+  --spacing-28: 7rem; /* 112px */
+  --spacing-32: 8rem; /* 128px */
+  --spacing-36: 9rem; /* 144px */
+  --spacing-40: 10rem; /* 160px */
+  --spacing-44: 11rem; /* 176px */
+  --spacing-48: 12rem; /* 192px */
+  --spacing-52: 13rem; /* 208px */
+  --spacing-56: 14rem; /* 224px */
+  --spacing-60: 15rem; /* 240px */
+  --spacing-64: 16rem; /* 256px */
+  --spacing-72: 18rem; /* 288px */
+  --spacing-80: 20rem; /* 320px */
+  --spacing-96: 24rem; /* 384px */
+
+  /* Border Radius */
+  --radius-none: 0px;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-full: 9999px;
+
+  /* Border Widths */
+  --border-width-0: 0px;
+  --border-width: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  --border-width-8: 8px;
+
+  /* =============================================================================
+   * DESIGN TOKENS - SHADOWS & EFFECTS
+   * ============================================================================= */
+
+  /* Box Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  /* =============================================================================
+   * DESIGN TOKENS - ANIMATION & TRANSITIONS
+   * ============================================================================= */
+
+  /* Animation Durations */
+  --duration-75: 75ms;
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --duration-700: 700ms;
+  --duration-1000: 1000ms;
+
+  /* Animation Timing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* =============================================================================
+   * DESIGN TOKENS - BREAKPOINTS & CONTAINERS
+   * ============================================================================= */
+
+  /* Container Max Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  /* =============================================================================
+   * DESIGN TOKENS - Z-INDEX SCALE
+   * ============================================================================= */
+
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-auto: auto;
+}
+
+:root {
+  /* =============================================================================
+   * LIGHT THEME COLOR VALUES
+   * ============================================================================= */
+
+  /* Base Border Radius */
+  --radius: 0.625rem;
+
+  /* Background & Foreground */
+  --background: oklch(1 0 0); /* Pure white */
+  --foreground: oklch(0.145 0 0); /* Near black */
+
+  /* Primary Brand Colors */
+  --primary: oklch(0.4418 0.216 304.15); /* Purple brand */
+  --primary-foreground: oklch(0.985 0 0); /* White text on primary */
+
+  /* Secondary Colors */
+  --secondary: oklch(0.92 0 0); /* Medium light gray */
+  --secondary-foreground: oklch(0.205 0 0); /* Dark gray text */
+
+  /* Muted Colors */
+  --muted: oklch(0.97 0 0); /* Very light gray background */
+  --muted-foreground: oklch(71.547% 0.00008 271.152); /* Medium gray text */
+
+  /* Accent Colors */
+  --accent: oklch(0.88 0.02 304.15); /* Subtle purple tint */
+  --accent-foreground: oklch(0.205 0 0); /* Dark accent text */
+
+  /* Status Colors */
+  --destructive: oklch(0.577 0.245 27.325); /* Red for errors/danger */
+  --destructive-foreground: oklch(0.985 0 0); /* White text on destructive */
+  --success: oklch(0.6 0.15 142); /* Green for success */
+  --success-foreground: oklch(0.985 0 0); /* White text on success */
+  --warning: oklch(0.8 0.15 85); /* Orange for warnings */
+  --warning-foreground: oklch(0.145 0 0); /* Dark text on warning */
+  --info: oklch(0.6 0.15 220); /* Blue for info */
+  --info-foreground: oklch(0.985 0 0); /* White text on info */
+
+  /* Surface Colors */
+  --card: oklch(0.99 0 0); /* Very light card background */
+  --card-foreground: oklch(0.145 0 0); /* Card text */
+  --popover: oklch(0.985 0 0); /* Slightly off-white popover */
+  --popover-foreground: oklch(0.145 0 0); /* Popover text */
+
+  /* Interactive Elements */
+  --border: oklch(0.85 0 0); /* Subtle border for compatibility */
+  --input: oklch(0.85 0 0); /* Input border */
+  --ring: oklch(0.4418 0.216 304.15); /* Focus ring matches primary */
+
+  /* Chart Colors - Professional palette */
+  --chart-1: oklch(0.646 0.222 41.116); /* Orange */
+  --chart-2: oklch(0.6 0.118 184.704); /* Teal */
+  --chart-3: oklch(0.398 0.07 227.392); /* Blue */
+  --chart-4: oklch(0.828 0.189 84.429); /* Yellow */
+  --chart-5: oklch(0.769 0.188 70.08); /* Green */
+
+  /* Sidebar Colors */
+  --sidebar: oklch(0.985 0 0); /* Sidebar background */
+  --sidebar-foreground: oklch(0.145 0 0); /* Sidebar text */
+  --sidebar-primary: oklch(0.205 0 0); /* Sidebar primary */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* Sidebar primary text */
+  --sidebar-accent: oklch(0.97 0 0); /* Sidebar accent */
+  --sidebar-accent-foreground: oklch(0.205 0 0); /* Sidebar accent text */
+  --sidebar-border: oklch(0.922 0 0); /* Sidebar border */
+  --sidebar-ring: oklch(0.708 0 0); /* Sidebar focus ring */
+}
+
+.dark {
+  /* =============================================================================
+   * DARK THEME COLOR VALUES
+   * ============================================================================= */
+
+  /* Background & Foreground */
+  --background: oklch(0.145 0 0); /* Near black */
+  --foreground: oklch(0.985 0 0); /* Near white */
+
+  /* Primary Brand Colors */
+  --primary: oklch(0.65 0.19 304.15); /* Brighter purple for dark theme */
+  --primary-foreground: oklch(0.985 0 0); /* White text on primary */
+
+  /* Secondary Colors */
+  --secondary: oklch(0.269 0 0); /* Dark gray */
+  --secondary-foreground: oklch(0.985 0 0); /* Light text */
+
+  /* Muted Colors */
+  --muted: oklch(0.269 0 0); /* Dark gray background */
+  --muted-foreground: oklch(0.708 0 0); /* Medium gray text */
+
+  /* Accent Colors */
+  --accent: oklch(0.35 0 0); /* Medium gray accent background */
+  --accent-foreground: oklch(0.985 0 0); /* Light accent text */
+
+  /* Status Colors */
+  --destructive: oklch(0.704 0.191 22.216); /* Lighter red for dark theme */
+  --destructive-foreground: oklch(0.985 0 0); /* White text on destructive */
+  --success: oklch(0.7 0.15 142); /* Lighter green for dark theme */
+  --success-foreground: oklch(0.145 0 0); /* Dark text on success */
+  --warning: oklch(0.75 0.15 85); /* Lighter orange for dark theme */
+  --warning-foreground: oklch(0.145 0 0); /* Dark text on warning */
+  --info: oklch(0.7 0.15 220); /* Lighter blue for dark theme */
+  --info-foreground: oklch(0.145 0 0); /* Dark text on info */
+
+  /* Surface Colors */
+  --card: oklch(0.205 0 0); /* Dark card background */
+  --card-foreground: oklch(0.985 0 0); /* Light card text */
+  --popover: oklch(0.205 0 0); /* Dark popover background */
+  --popover-foreground: oklch(0.985 0 0); /* Light popover text */
+
+  /* Interactive Elements */
+  --border: oklch(0.35 0 0); /* Subtle border for dark theme */
+  --input: oklch(0.35 0 0); /* Input border */
+  --ring: oklch(0.65 0.19 304.15); /* Focus ring matches primary */
+
+  /* Chart Colors - Adjusted for dark theme */
+  --chart-1: oklch(0.488 0.243 264.376); /* Purple */
+  --chart-2: oklch(0.696 0.17 162.48); /* Teal */
+  --chart-3: oklch(0.769 0.188 70.08); /* Green */
+  --chart-4: oklch(0.627 0.265 303.9); /* Pink */
+  --chart-5: oklch(0.645 0.246 16.439); /* Orange */
+
+  /* Sidebar Colors */
+  --sidebar: oklch(0.205 0 0); /* Dark sidebar background */
+  --sidebar-foreground: oklch(0.985 0 0); /* Light sidebar text */
+  --sidebar-primary: oklch(0.488 0.243 264.376); /* Purple sidebar primary */
+  --sidebar-primary-foreground: oklch(
+    0.985 0 0
+  ); /* Light sidebar primary text */
+  --sidebar-accent: oklch(0.269 0 0); /* Dark sidebar accent */
+  --sidebar-accent-foreground: oklch(0.985 0 0); /* Light sidebar accent text */
+  --sidebar-border: oklch(1 0 0 / 10%); /* Subtle sidebar border */
+  --sidebar-ring: oklch(0.556 0 0); /* Sidebar focus ring */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    height: 100%;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-variant-ligatures: contextual;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    height: 100%;
+    @apply bg-background text-foreground font-sans text-base leading-normal;
+  }
+
+  button {
+    @apply cursor-pointer;
+    &:focus-visible {
+      @apply outline-ring/50;
+    }
+  }
+
+  /* =============================================================================
+   * TYPOGRAPHY BASE STYLES
+   * ============================================================================= */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+
+  h1 {
+    @apply text-4xl leading-tight lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl leading-tight lg:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl leading-snug lg:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl leading-snug lg:text-2xl;
+  }
+
+  h5 {
+    @apply text-lg leading-snug lg:text-xl;
+  }
+
+  h6 {
+    @apply text-base leading-normal lg:text-lg;
+  }
+
+  p {
+    @apply leading-relaxed;
+    text-wrap: pretty;
+  }
+
+  a {
+    @apply text-primary;
+  }
+
+  code {
+    @apply bg-muted rounded-md px-1.5 py-0.5 font-mono text-sm;
+  }
+
+  pre {
+    @apply bg-muted overflow-x-auto rounded-lg p-4 font-mono text-sm;
+  }
+
+  blockquote {
+    @apply border-primary text-muted-foreground border-l-4 pl-4 italic;
+  }
+
+  hr {
+    @apply border-border;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-ring outline-2 outline-offset-2;
+  }
+}
+
+/* =============================================================================
+ * TYPOGRAPHY UTILITIES
+ * ============================================================================= */
+
+@layer utilities {
+  /* Fluid Responsive Typography */
+
+  /* Display Typography */
+  .display-2xl {
+    font-size: var(--font-size-display-2xl);
+    font-weight: 700;
+    letter-spacing: var(--letter-spacing-display);
+    line-height: var(--line-height-display);
+    text-wrap: balance;
+  }
+
+  .display-xl {
+    font-size: var(--font-size-display-xl);
+    font-weight: 700;
+    letter-spacing: var(--letter-spacing-display);
+    line-height: var(--line-height-display);
+    text-wrap: balance;
+  }
+
+  .display-lg {
+    font-size: var(--font-size-display-lg);
+    font-weight: 700;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-display);
+    text-wrap: balance;
+  }
+
+  .display-md {
+    font-size: var(--font-size-display-md);
+    font-weight: 700;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-headline);
+    text-wrap: balance;
+  }
+
+  .display-sm {
+    font-size: var(--font-size-display-sm);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-headline);
+    text-wrap: balance;
+  }
+
+  /* Headline Typography */
+  .headline-xl {
+    font-size: var(--font-size-headline-xl);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-headline);
+    text-wrap: balance;
+  }
+
+  .headline-lg {
+    font-size: var(--font-size-headline-lg);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-headline);
+    text-wrap: balance;
+  }
+
+  .headline-md {
+    font-size: var(--font-size-headline-md);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-headline);
+    text-wrap: balance;
+  }
+
+  .headline-sm {
+    font-size: var(--font-size-headline-sm);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-headline);
+    line-height: var(--line-height-headline);
+    text-wrap: balance;
+  }
+
+  /* Title Typography */
+  .title-xl {
+    font-size: var(--font-size-title-xl);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-title);
+    line-height: var(--line-height-title);
+    text-wrap: balance;
+  }
+
+  .title-lg {
+    font-size: var(--font-size-title-lg);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-title);
+    line-height: var(--line-height-title);
+    text-wrap: balance;
+  }
+
+  .title-md {
+    font-size: var(--font-size-title-md);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-title);
+    line-height: var(--line-height-title);
+    text-wrap: balance;
+  }
+
+  .title-sm {
+    font-size: var(--font-size-title-sm);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-title);
+    line-height: var(--line-height-title);
+    text-wrap: balance;
+  }
+
+  /* Body Typography */
+  .body-xl {
+    font-size: var(--font-size-body-xl);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-body);
+    line-height: var(--line-height-body);
+    text-wrap: pretty;
+  }
+
+  .body-lg {
+    font-size: var(--font-size-body-lg);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-body);
+    line-height: var(--line-height-body);
+    text-wrap: pretty;
+  }
+
+  .body-md {
+    font-size: var(--font-size-body-md);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-body);
+    line-height: var(--line-height-body);
+    text-wrap: pretty;
+  }
+
+  .body-sm {
+    font-size: var(--font-size-body-sm);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-body);
+    line-height: var(--line-height-body);
+    text-wrap: pretty;
+  }
+
+  /* Label Typography */
+  .label-xl {
+    font-size: var(--font-size-label-xl);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-label);
+    line-height: var(--line-height-label);
+  }
+
+  .label-lg {
+    font-size: var(--font-size-label-lg);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-label);
+    line-height: var(--line-height-label);
+  }
+
+  .label-md {
+    font-size: var(--font-size-label-md);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-label);
+    line-height: var(--line-height-label);
+  }
+
+  .label-sm {
+    font-size: var(--font-size-label-sm);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-caption);
+    line-height: var(--line-height-label);
+  }
+
+  /* Caption Typography */
+  .caption-lg {
+    font-size: var(--font-size-caption-lg);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-caption);
+    line-height: var(--line-height-caption);
+    color: var(--muted-foreground);
+  }
+
+  .caption-md {
+    font-size: var(--font-size-caption-md);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-caption);
+    line-height: var(--line-height-caption);
+    color: var(--muted-foreground);
+  }
+
+  .caption-sm {
+    font-size: var(--font-size-caption-sm);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-caption);
+    line-height: var(--line-height-caption);
+    color: var(--muted-foreground);
+  }
+
+  /* Overline Typography */
+  .overline {
+    font-size: var(--font-size-overline);
+    font-weight: 500;
+    letter-spacing: var(--letter-spacing-overline);
+    line-height: var(--line-height-label);
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  /* =============================================================================
+   * LAYOUT UTILITIES
+   * ============================================================================= */
+
+  /* Container Utilities */
+  .container-fluid {
+    @apply w-full px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-narrow {
+    @apply mx-auto max-w-2xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Grid Utilities */
+  .grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .grid-auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  /* Flex Utilities */
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .flex-around {
+    @apply flex items-center justify-around;
+  }
+
+  .flex-evenly {
+    @apply flex items-center justify-evenly;
+  }
+
+  /* =============================================================================
+   * COMPONENT UTILITIES
+   * ============================================================================= */
+
+  /* Glass Effect */
+  .glass {
+    @apply bg-background/80 border-border/50 border backdrop-blur-md;
+  }
+
+  .glass-dark {
+    @apply bg-background/60 border-border/30 border backdrop-blur-lg;
+  }
+
+  /* Card Variations */
+  .card-elevated {
+    @apply bg-card border-border border shadow-md transition-shadow hover:shadow-lg;
+  }
+
+  .card-flat {
+    @apply bg-card border-border border;
+  }
+
+  .card-ghost {
+    @apply hover:bg-muted/50 bg-transparent transition-colors;
+  }
+
+  /* Button Base Styles */
+  .btn-base {
+    @apply focus-visible:ring-ring inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  /* Interactive States */
+  .interactive {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .interactive:hover {
+    @apply scale-[1.02];
+  }
+
+  .interactive:active {
+    @apply scale-[0.98];
+  }
+
+  /* Focus Ring Utilities */
+  .focus-ring {
+    @apply focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+
+  /* Scrollbar Styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme(colors.border) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-border/80;
+  }
+
+  /* =============================================================================
+   * ANIMATION UTILITIES
+   * ============================================================================= */
+
+  /* Fade Animations */
+  .fade-in {
+    animation: fadeIn var(--duration-300) var(--ease-out);
+  }
+
+  .fade-out {
+    animation: fadeOut var(--duration-300) var(--ease-out);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* Slide Animations */
+  .slide-in-up {
+    animation: slideInUp var(--duration-300) var(--ease-out);
+  }
+
+  .slide-in-down {
+    animation: slideInDown var(--duration-300) var(--ease-out);
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale Animations */
+  .scale-in {
+    animation: scaleIn var(--duration-200) var(--ease-out);
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

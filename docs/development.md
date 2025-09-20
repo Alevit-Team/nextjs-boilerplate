@@ -143,26 +143,23 @@ npx prettier --check .
 npx prettier --write src/app/page.tsx
 ```
 
-### TailwindCSS
+### TailwindCSS v4
 
-**Configuration:** `tailwind.config.ts`
+**Configuration:** Inline configuration in `src/app/(front-end)/globals.css`
 
 Features:
 
-- CSS variables for theming
-- Custom animations
-- Responsive design utilities
-- Dark mode support (ready to enable)
+- CSS variables for theming with OKLCH color format
+- Fluid responsive typography system
+- Custom design tokens and utilities
+- Dark mode support (fully implemented)
+- Modern CSS features (clamp, text-balance, text-pretty)
 
-**Useful commands:**
+**Key Features:**
 
-```bash
-# Build CSS and watch for changes
-npx tailwindcss -i ./src/app/globals.css -o ./dist/output.css --watch
-
-# Generate Tailwind classes for autocomplete
-npx tailwindcss --init
-```
+- No separate config file needed - uses Tailwind v4 inline configuration
+- Design tokens defined as CSS custom properties
+- Comprehensive design system with semantic color naming
 
 ## Development Workflow
 
