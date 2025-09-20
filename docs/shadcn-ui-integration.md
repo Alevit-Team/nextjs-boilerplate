@@ -221,4 +221,3 @@ If dark mode isn't working properly:
 - [shadcn/ui Documentation](https://ui.shadcn.com/)
 - [Design System Demo](/design-system-demo) - See all integrations in action
 - [Color System Guide](./design-system.md#colors) - Understanding our color tokens
-
