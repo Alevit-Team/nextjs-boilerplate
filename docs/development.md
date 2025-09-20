@@ -21,6 +21,19 @@ pnpm lint
 
 # Format code with Prettier
 pnpm format
+
+# Database commands
+pnpm db:generate    # Generate database migrations
+pnpm db:migrate     # Run database migrations
+pnpm db:push        # Push schema changes to database
+pnpm db:studio      # Open Drizzle Studio
+pnpm db:seed        # Seed database with sample data
+pnpm db:test        # Test database connection
+
+# Docker commands
+pnpm docker:up      # Start Docker services
+pnpm docker:down    # Stop Docker services
+pnpm docker:logs    # View Docker logs
 ```
 
 ### Advanced Commands
