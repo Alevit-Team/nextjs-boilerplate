@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import { Typography, TypographyProps } from './typography';
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -28,21 +29,20 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot='card-title'
-      className={cn('leading-none font-semibold', className)}
-      {...props}
-    />
-  );
+function CardTitle({ variant = 'headline-lg', ...props }: TypographyProps) {
+  return <Typography data-slot='card-title' variant={variant} {...props} />;
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
+function CardDescription({
+  variant = 'caption-md',
+  as = 'p',
+  ...props
+}: TypographyProps) {
   return (
-    <div
+    <Typography
       data-slot='card-description'
-      className={cn('text-muted-foreground text-sm', className)}
+      as={as}
+      variant={variant}
       {...props}
     />
   );
