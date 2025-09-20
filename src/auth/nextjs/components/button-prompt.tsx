@@ -1,6 +1,6 @@
 import { Button } from '@/components';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { Body } from '@/components/ui/typography';
 
 interface ButtonPromptProps {
   text: string;
@@ -18,7 +18,7 @@ export const ButtonPrompt = ({
   onClick,
 }: ButtonPromptProps) => {
   return (
-    <p className={cn(`text-muted-foreground text-center text-sm ${className}`)}>
+    <Body color='muted-foreground'>
       {text}
       {href && (
         <Button variant='link' asChild onClick={onClick}>
@@ -30,6 +30,6 @@ export const ButtonPrompt = ({
           {linkText}
         </Button>
       )}
-    </p>
+    </Body>
   );
 };

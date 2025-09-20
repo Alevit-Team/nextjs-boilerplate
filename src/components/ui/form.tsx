@@ -1,6 +1,5 @@
 'use client';
 
-import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
   Controller,
@@ -14,7 +13,7 @@ import {
 } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
+
 import {
   ComponentProps,
   createContext,
@@ -22,6 +21,14 @@ import {
   useContext,
   useId,
 } from 'react';
+import {
+  Typography,
+  Label,
+  TypographyProps,
+  Headline,
+  Caption,
+  Body,
+} from './typography';
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -92,14 +99,15 @@ function FormItem({ className, ...props }: ComponentProps<'div'>) {
 function FormLabel({
   className,
   ...props
-}: ComponentProps<typeof LabelPrimitive.Root>) {
+}: Omit<TypographyProps, 'variant' | 'as'> &
+  React.LabelHTMLAttributes<HTMLLabelElement>) {
   const { error, formItemId } = useFormField();
 
   return (
     <Label
       data-slot='form-label'
       data-error={!!error}
-      className={className}
+      className={cn('text-left', className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -138,7 +146,10 @@ function FormDescription({ className, ...props }: ComponentProps<'p'>) {
   );
 }
 
-function FormMessage({ className, ...props }: ComponentProps<'p'>) {
+function FormMessage({
+  className,
+  ...props
+}: Omit<ComponentProps<'p'>, 'color'>) {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? '') : props.children;
 
@@ -147,17 +158,16 @@ function FormMessage({ className, ...props }: ComponentProps<'p'>) {
   }
 
   return (
-    <p
+    <Typography
+      variant='caption-md'
       data-slot='form-message'
       id={formMessageId}
-      className={cn(
-        'text-destructive absolute bottom-0 px-3 py-1 text-[12px]',
-        className
-      )}
+      color='destructive'
+      className={cn('absolute bottom-0 px-3 py-1', className)}
       {...props}
     >
       {body}
-    </p>
+    </Typography>
   );
 }
 
@@ -176,17 +186,15 @@ function FormContainer({
       )}
       {...props}
     >
-      {title && <h1 className='text-2xl font-bold'>{title}</h1>}
-      {description && (
-        <p className='text-muted-foreground text-sm'>{description}</p>
-      )}
+      {title && <Headline size='lg'>{title}</Headline>}
+      {description && <Body color='muted-foreground'>{description}</Body>}
       {children}
     </div>
   );
 }
 
 const FormStatus = forwardRef<HTMLDivElement, FormStatusProps>(
-  ({ children, variant = 'default', ...props }, ref) => {
+  ({ variant = 'default', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -196,16 +204,13 @@ const FormStatus = forwardRef<HTMLDivElement, FormStatusProps>(
           variant === 'success' && 'bg-green-50 text-green-600'
         )}
         {...props}
-      >
-        {children}
-      </div>
+      />
     );
   }
 );
 
 FormStatus.displayName = 'FormStatus';
 
-// Form Field component
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,

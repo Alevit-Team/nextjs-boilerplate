@@ -11,6 +11,7 @@ import { ArrowLeftIcon, MailIcon } from 'lucide-react';
 import Link from 'next/link';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { ButtonPrompt } from '../button-prompt';
+import { Body, Headline } from '@/components/ui/typography';
 
 const defaultValues = {
   email: '',
@@ -30,14 +31,13 @@ export function ForgotPasswordForm() {
         <IconBadge>
           <MailIcon />
         </IconBadge>
-        <h1 className='text-2xl font-bold'>Check your email</h1>
-        <p className='text-muted-foreground text-center text-sm'>
+        <Headline size='lg'>Check your email</Headline>
+        <Body color='muted-foreground'>
           We’ve sent you a reset link to{' '}
           <span className='font-medium'>{form.getValues('email')}</span>.
           <br />
           Please check your inbox and follow the instructions.
-        </p>
-
+        </Body>
         <div className='space-y-4'>
           <Button className='w-full' asChild>
             <Link href='/sign-in'>Back to sign in</Link>
@@ -55,7 +55,7 @@ export function ForgotPasswordForm() {
   return (
     <Form
       title='Forgot password'
-      description='Please enter your email and we will send you a link to reset your password.'
+      description='Please enter your email and we will send you a link to reset your password'
     >
       <div className='my-3 h-9'>
         {state?.ok === false && (

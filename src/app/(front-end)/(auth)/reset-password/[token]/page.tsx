@@ -3,6 +3,7 @@ import { tokenService } from '@/lib/services/token-service';
 import { Button, IconBadge, Section, Container } from '@/components';
 import { AlertCircleIcon, ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Body, Headline } from '@/components/ui/typography';
 
 interface ResetPasswordTokenPageProps {
   params: Promise<{ token: string }>;
@@ -16,14 +17,14 @@ export default async function ResetPasswordTokenPage({
 
   return (
     <Section className='flex min-h-screen items-center justify-center'>
-      <Container fullWidth className='max-w-md'>
+      <Container fullWidth className='max-w-sm'>
         {!validation.isValid ? (
           <div className='space-y-8 text-center'>
             <IconBadge>
               <AlertCircleIcon />
             </IconBadge>
-            <h1 className='text-2xl font-bold'>Invalid reset link</h1>
-            <p className='text-muted-foreground text-sm'>
+            <Headline>Invalid reset link</Headline>
+            <Body color='muted-foreground'>
               {validation.error === 'EXPIRED'
                 ? 'This password reset link has expired. Please request a new one.'
                 : validation.error === 'ALREADY_USED'
@@ -31,7 +32,7 @@ export default async function ResetPasswordTokenPage({
                   : 'This password reset link is invalid or malformed.'}{' '}
               Make sure you’re using the correct email and check that the link
               hasn’t expired.
-            </p>
+            </Body>
             <div className='space-y-4'>
               <Button asChild className='w-full'>
                 <Link href='/forgot-password'>Request new reset link</Link>

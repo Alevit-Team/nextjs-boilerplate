@@ -5,11 +5,13 @@ import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, Input, Button } from '@/components';
+import { Form, Input, Button, IconBadge } from '@/components';
 import { ButtonPrompt } from '@/auth/nextjs/components/button-prompt';
 import { resendVerificationEmail } from '@/auth/nextjs/actions';
 import { resendVerificationSchema } from '@/auth/nextjs/schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
+import { Body, Headline } from '@/components/ui/typography';
+import { MailIcon } from 'lucide-react';
 
 const defaultValues = {
   email: '',
@@ -35,16 +37,16 @@ export function EmailVerificationForm() {
     <>
       {!showResendForm ? (
         <div className='space-y-8 text-center'>
-          <h1 className='text-2xl font-bold'>Check your email</h1>
-          <div className='space-y-4'>
-            <p className='text-muted-foreground text-sm'>
-              We’ve sent a verification link to your email address. Please check
-              your inbox and click the link to verify your account.
-            </p>
-            <p className='text-muted-foreground text-sm'>
-              Didn’t receive the email?
-            </p>
-          </div>
+          <IconBadge>
+            <MailIcon />
+          </IconBadge>
+          <Headline size='lg'>Check your email</Headline>
+          <Body color='muted-foreground'>
+            We’ve sent a verification link to your email address.
+            <br />
+            Please check your inbox and click the link to verify your account.
+          </Body>
+          <Body color='muted-foreground'>Didn’t receive the email?</Body>
           <Button onClick={handleResendClick} className='w-full'>
             Resend verification email
           </Button>
@@ -88,15 +90,15 @@ export function EmailVerificationForm() {
             >
               {pending ? 'Sending' : 'Resend email'}
             </Button>
+            <ButtonPrompt
+              text='Already verified your email?'
+              linkText='Sign in'
+              className='mt-4'
+              href='/sign-in'
+            />
           </Form.Content>
         </Form>
       )}
-      <ButtonPrompt
-        text='Already verified your email?'
-        linkText='Sign in'
-        className='mt-4'
-        href='/sign-in'
-      />
     </>
   );
 }

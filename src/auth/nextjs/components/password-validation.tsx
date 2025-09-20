@@ -5,6 +5,7 @@ import {
   ValidatedPasswordRule,
   validatePassword,
 } from '@/lib/validate-password';
+import { Typography } from '@/components/ui/typography';
 
 interface PasswordValidationProps {
   password: string;
@@ -19,22 +20,22 @@ const PasswordValidation = ({
   const validatedRules = useMemo(() => validatePassword(password), [password]);
 
   return (
-    <div className={cn('space-y-3', className)}>
-      <ul className='space-y-1'>
-        {validatedRules.map((rule) => (
-          <PasswordValidationItem key={rule.label} rule={rule} />
-        ))}
-      </ul>
-    </div>
+    <ul className={cn('space-y-1', className)}>
+      {validatedRules.map((rule) => (
+        <PasswordValidationItem key={rule.label} rule={rule} />
+      ))}
+    </ul>
   );
 };
 
 const PasswordValidationItem = ({ rule }: { rule: ValidatedPasswordRule }) => {
   return (
-    <li
+    <Typography
       key={rule.label}
+      as='li'
       className={cn(
-        'flex items-center text-sm opacity-70 transition-colors duration-200',
+        rule.isValid && 'line-through',
+        'flex items-center opacity-70 transition-colors duration-200',
         rule.isValid && 'opacity-100'
       )}
     >
@@ -43,8 +44,8 @@ const PasswordValidationItem = ({ rule }: { rule: ValidatedPasswordRule }) => {
       ) : (
         <XIcon className={iconClassName} aria-label='Invalid' />
       )}
-      <span className={cn(rule.isValid && 'line-through')}>{rule.label}</span>
-    </li>
+      {rule.label}
+    </Typography>
   );
 };
 

@@ -4,20 +4,14 @@ import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  Button,
-  IconBadge,
-  PasswordInput,
-  Container,
-  Section,
-} from '@/components';
+import { Form, Button, IconBadge, PasswordInput } from '@/components';
 import { resetPassword } from '@/auth/nextjs/actions';
 import { resetPasswordSchema } from '@/auth/nextjs/schemas';
 import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { ArrowLeftIcon, CheckCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { PasswordValidation } from '@/auth/nextjs/components/password-validation';
+import { Body, Headline } from '@/components/ui/typography';
 
 const defaultValues = {
   password: '',
@@ -41,31 +35,27 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   // If password reset was successful, show success message
   if (state?.ok === true) {
     return (
-      <Section>
-        <Container className='max-w-md'>
-          <div className='space-y-8 text-center'>
-            <IconBadge>
-              <CheckCircleIcon />
-            </IconBadge>
-            <h1 className='text-2xl font-bold'>Password reset!</h1>
-            <p className='text-muted-foreground text-sm'>
-              Your password has been successfully updated.
-              <br />
-              You can now sign in with your new password.
-            </p>
-            <Button asChild className='w-full'>
-              <Link href='/sign-in'>Continue to sign in</Link>
-            </Button>
-          </div>
-        </Container>
-      </Section>
+      <div className='space-y-8 text-center'>
+        <IconBadge>
+          <CheckCircleIcon />
+        </IconBadge>
+        <Headline size='lg'>Password reset!</Headline>
+        <Body color='muted-foreground'>
+          Your password has been successfully updated.
+          <br />
+          You can now sign in with your new password.
+        </Body>
+        <Button asChild className='w-full'>
+          <Link href='/sign-in'>Continue to sign in</Link>
+        </Button>
+      </div>
     );
   }
 
   return (
     <Form
       title='Enter new password'
-      description='Your new password must be different from your previous passwords.'
+      description='Your new password must be different from your previous passwords'
     >
       <div className='my-3 h-9'>
         {state?.ok === false && (

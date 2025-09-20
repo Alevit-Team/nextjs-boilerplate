@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 
 import { cn } from '@/lib/utils';
+import { Caption } from './typography';
 
 function Separator({
   className,
@@ -23,7 +24,9 @@ function Separator({
           orientation='horizontal'
           className={cn('bg-border h-px flex-1 shrink-0')}
         />
-        <span className='text-muted-foreground px-3 text-sm'>{label}</span>
+        <Caption color='muted-foreground' size='lg' className='px-3'>
+          {label}
+        </Caption>
         <SeparatorPrimitive.Root
           decorative
           orientation='horizontal'
