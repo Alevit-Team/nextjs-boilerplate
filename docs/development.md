@@ -320,13 +320,20 @@ Create `.env.local` for local development:
 
 ```bash
 # .env.local
-NEXT_PUBLIC_API_URL=http://localhost:3001
-DATABASE_URL=postgresql://user:password@localhost:5432/db
-NEXTAUTH_SECRET=your-secret-key
-# Redis
+
+# Database Configuration (required)
+DATABASE_URL=postgresql://postgres:password@localhost:5432/nextjs_boilerplate
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+POSTGRES_DB=nextjs_boilerplate
+
+# Redis Configuration (required)
 REDIS_URL=redis://localhost:6379
-# Optional: throttle session refreshes (seconds); default is 300 (5 minutes)
-SESSION_TOUCH_INTERVAL_SECONDS=300
+REDIS_PASSWORD=optional-password
+REDIS_TOKEN=optional-token
+
+# Optional: Skip environment validation during build
+SKIP_ENV_VALIDATION=false
 ```
 
 **Usage in code:**
