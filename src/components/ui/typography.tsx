@@ -108,7 +108,7 @@ export const Display = React.forwardRef<
     size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   }
 >(({ size = 'lg', ...props }, ref) => (
-  <Typography variant={`display-${size}` as any} ref={ref} {...props} />
+  <Typography variant={`display-${size}`} ref={ref} {...props} />
 ));
 Display.displayName = 'Display';
 
@@ -116,7 +116,7 @@ export const Headline = React.forwardRef<
   HTMLElement,
   Omit<TypographyProps, 'variant'> & { size?: 'sm' | 'md' | 'lg' | 'xl' }
 >(({ size = 'lg', ...props }, ref) => (
-  <Typography variant={`headline-${size}` as any} ref={ref} {...props} />
+  <Typography variant={`headline-${size}`} ref={ref} {...props} />
 ));
 Headline.displayName = 'Headline';
 
@@ -124,7 +124,7 @@ export const Title = React.forwardRef<
   HTMLElement,
   Omit<TypographyProps, 'variant'> & { size?: 'sm' | 'md' | 'lg' | 'xl' }
 >(({ size = 'md', ...props }, ref) => (
-  <Typography variant={`title-${size}` as any} ref={ref} {...props} />
+  <Typography variant={`title-${size}`} ref={ref} {...props} />
 ));
 Title.displayName = 'Title';
 
@@ -132,7 +132,7 @@ export const Body = React.forwardRef<
   HTMLElement,
   Omit<TypographyProps, 'variant'> & { size?: 'sm' | 'md' | 'lg' | 'xl' }
 >(({ size = 'md', ...props }, ref) => (
-  <Typography variant={`body-${size}` as any} ref={ref} {...props} />
+  <Typography variant={`body-${size}`} ref={ref} {...props} />
 ));
 Body.displayName = 'Body';
 
@@ -140,7 +140,7 @@ export const Label = React.forwardRef<
   HTMLElement,
   Omit<TypographyProps, 'variant'> & { size?: 'sm' | 'md' | 'lg' | 'xl' }
 >(({ size = 'md', ...props }, ref) => (
-  <Typography variant={`label-${size}` as any} ref={ref} {...props} />
+  <Typography variant={`label-${size}`} ref={ref} {...props} />
 ));
 Label.displayName = 'Label';
 
@@ -148,7 +148,7 @@ export const Caption = React.forwardRef<
   HTMLElement,
   Omit<TypographyProps, 'variant'> & { size?: 'sm' | 'md' | 'lg' }
 >(({ size = 'md', ...props }, ref) => (
-  <Typography variant={`caption-${size}` as any} ref={ref} {...props} />
+  <Typography variant={`caption-${size}`} ref={ref} {...props} />
 ));
 Caption.displayName = 'Caption';
 

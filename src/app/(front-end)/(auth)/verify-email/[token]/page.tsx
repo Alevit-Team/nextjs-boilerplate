@@ -3,7 +3,7 @@ import { getFormErrorMessage } from '@/lib/get-form-error-message';
 import { Button, IconBadge, Section, Container } from '@/components';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
-import { Body, Caption, Display, Headline } from '@/components/ui/typography';
+import { Body, Headline } from '@/components/ui/typography';
 
 interface VerifyEmailTokenPageProps {
   params: Promise<{ token: string }>;
