@@ -13,7 +13,7 @@ importers:
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.0))
       '@next/env':
         specifier: ^15.4.2
-        version: 15.4.6
+        version: 15.5.2
       '@radix-ui/react-label':
         specifier: ^2.1.7
         version: 2.1.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -797,8 +797,8 @@ packages:
   '@next/env@15.4.2-canary.50':
     resolution: {integrity: sha512-a2OCSavCYUZYtT0yL2Iv60xi5FuS8BTlJMtVXxMz6ZHi/UJX5RXD5MVaYNRq88LGEcOSmhQ28WPVm8rVVI/GBw==}
 
-  '@next/env@15.4.6':
-    resolution: {integrity: sha512-yHDKVTcHrZy/8TWhj0B23ylKv5ypocuCwey9ZqPyv4rPdUdRzpGCkSi03t04KBPyU96kxVtUqx6O3nE1kpxASQ==}
+  '@next/env@15.5.2':
+    resolution: {integrity: sha512-Qe06ew4zt12LeO6N7j8/nULSOe3fMXE4dM6xgpBQNvdzyK1sv5y4oAP3bq4LamrvGCZtmRYnW8URFCeX5nFgGg==}
 
   '@next/eslint-plugin-next@15.4.2':
     resolution: {integrity: sha512-k0rjdWjXBY6tAOty1ckrMETE6Mx66d85NsgcAIdDp7/cXOsTJ93ywmbg3uUcpxX5TUHFEcCWI5mb8nPhwCe9jg==}
@@ -3189,7 +3189,7 @@ snapshots:
 
   '@next/env@15.4.2-canary.50': {}
 
-  '@next/env@15.4.6': {}
+  '@next/env@15.5.2': {}
 
   '@next/eslint-plugin-next@15.4.2':
     dependencies:
