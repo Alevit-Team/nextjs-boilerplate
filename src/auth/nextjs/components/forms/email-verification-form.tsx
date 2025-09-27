@@ -54,7 +54,7 @@ export function EmailVerificationForm() {
           title='Resend verification email'
           description='Enter your email address to resend the verification link'
         >
-          <div className='my-3 h-9'>
+          <div className='my-3 min-h-9'>
             {state?.ok === false && (
               <Form.Status variant='error'>
                 {getFormErrorMessage(state.errorCode)}
