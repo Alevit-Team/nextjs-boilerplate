@@ -28,7 +28,7 @@ export function SignUpForm() {
 
   return (
     <Form title='Sign up' description='Create an account to get started'>
-      <div className='my-3 h-9'>
+      <div className='min-min-h-9 my-3'>
         {state?.ok === false && (
           <Form.Status variant='error'>
             {getFormErrorMessage(state.errorCode)}

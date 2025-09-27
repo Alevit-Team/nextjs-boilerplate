@@ -18,7 +18,7 @@ export default async function VerifyEmailTokenPage({
 
   return (
     <Section className='flex min-h-screen items-center justify-center'>
-      <Container fullWidth className='max-w-md'>
+      <Container fullWidth className='max-w-sm'>
         <div className='flex flex-col items-center justify-center gap-6 text-center'>
           {result.ok ? (
             <>

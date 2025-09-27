@@ -42,7 +42,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   if (state?.ok === true) {
     return (
       <Section>
-        <Container className='max-w-md'>
+        <Container className='max-w-sm'>
           <div className='space-y-8 text-center'>
             <IconBadge>
               <CheckCircleIcon />
@@ -67,7 +67,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       title='Enter new password'
       description='Your new password must be different from your previous passwords.'
     >
-      <div className='my-3 h-9'>
+      <div className='my-3 min-h-9'>
         {state?.ok === false && (
           <Form.Status variant='error'>
             {getFormErrorMessage(state.errorCode)}
