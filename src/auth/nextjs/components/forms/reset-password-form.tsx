@@ -42,7 +42,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   if (state?.ok === true) {
     return (
       <Section>
-        <Container className='max-w-md'>
+        <Container className='max-w-sm'>
           <div className='space-y-8 text-center'>
             <IconBadge>
               <CheckCircleIcon />

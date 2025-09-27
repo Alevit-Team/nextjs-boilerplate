@@ -16,7 +16,7 @@ export default async function ResetPasswordTokenPage({
 
   return (
     <Section className='flex min-h-screen items-center justify-center'>
-      <Container fullWidth className='max-w-md'>
+      <Container fullWidth className='max-w-sm'>
         {!validation.isValid ? (
           <div className='space-y-8 text-center'>
             <IconBadge>

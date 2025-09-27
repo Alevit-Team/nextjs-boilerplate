@@ -8,7 +8,7 @@ export default function VerifyEmailPage() {
       <IconBadge>
         <MailIcon />
       </IconBadge>
-      <div className='w-full max-w-md px-4'>
+      <div className='w-full max-w-sm px-4'>
         <EmailVerificationForm />
       </div>
     </section>
